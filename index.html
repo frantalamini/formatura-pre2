@@ -39,10 +39,11 @@
       header {
         background: linear-gradient(
           135deg,
-          #1a237e 0%,
-          #283593 30%,
-          #3949ab 60%,
-          #5c6bc0 100%
+          #ff6f91 0%,
+          #ff9671 25%,
+          #ffc75f 50%,
+          #f9f871 75%,
+          #83d6a0 100%
         );
         color: #fff;
         text-align: center;
@@ -54,20 +55,31 @@
         content: "🎓";
         position: absolute;
         font-size: 8rem;
-        opacity: 0.07;
+        opacity: 0.1;
         top: -10px;
         left: 50%;
         transform: translateX(-50%);
       }
       header::after {
-        content: "✨ ⭐ ✨";
+        content: "🎈 ⭐ 🎉 ⭐ 🎈";
         position: absolute;
         bottom: 8px;
         left: 50%;
         transform: translateX(-50%);
-        font-size: 0.9rem;
-        opacity: 0.6;
-        letter-spacing: 8px;
+        font-size: 0.85rem;
+        opacity: 0.7;
+        letter-spacing: 6px;
+      }
+      header .buffet-info {
+        transition:
+          opacity 0.3s,
+          max-height 0.3s;
+        overflow: hidden;
+      }
+      header .buffet-info.hidden {
+        opacity: 0;
+        max-height: 0;
+        margin: 0;
       }
       header .header-icons {
         font-size: 2.2rem;
@@ -79,7 +91,7 @@
         font-size: 1.7rem;
         font-weight: 800;
         letter-spacing: -0.5px;
-        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
       }
       header .subtitle {
         font-size: 0.95rem;
@@ -666,9 +678,11 @@
       <div class="header-icons">🎓🌟👧🧒🌟🎓</div>
       <h1>Formatura Pré II — 2026</h1>
       <div class="subtitle">Eles cresceram... e nós crescemos com eles 💛</div>
-      <p>Buffet Infantil Star Happy — Planejamento e Votação</p>
-      <div class="endereco">
-        Rod. Dep. João Leopoldo Jacomel, 12482 — Centro, Pinhais - PR
+      <div class="buffet-info hidden" id="buffetInfo">
+        <p>Buffet Infantil Star Happy — Planejamento e Votação</p>
+        <div class="endereco">
+          Rod. Dep. João Leopoldo Jacomel, 12482 — Centro, Pinhais - PR
+        </div>
       </div>
     </header>
 
@@ -1779,6 +1793,12 @@
           .forEach((s) => s.classList.remove("active"));
         document.getElementById(id).classList.add("active");
         updateTabStates();
+        const bi = document.getElementById("buffetInfo");
+        if (id === "comparativo" || id === "quantitativos") {
+          bi.classList.add("hidden");
+        } else {
+          bi.classList.remove("hidden");
+        }
         window.scrollTo({
           top: document.querySelector("#tabNav").offsetTop,
           behavior: "smooth",
