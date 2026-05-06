@@ -1412,7 +1412,10 @@
               "
             >
               Preencha os dados dos responsáveis que assinarão o Anexo I do
-              contrato com o Buffet.
+              contrato com o Buffet.<br />
+              <strong style="color: var(--danger)">Atenção:</strong> o
+              Responsável Legal e o Responsável Financeiro devem ser pessoas
+              diferentes.
             </p>
             <div style="margin-bottom: 20px">
               <label
@@ -2275,6 +2278,20 @@
           }
           if (lc.length < 14 || fc.length < 14) {
             toast("CPF deve ter 11 dígitos (000.000.000-00)", "error");
+            return;
+          }
+          if (lc === fc) {
+            toast(
+              "O CPF do Responsável Financeiro deve ser diferente do Responsável Legal",
+              "error",
+            );
+            return;
+          }
+          if (ln.toLowerCase() === fn.toLowerCase()) {
+            toast(
+              "O Responsável Financeiro deve ser uma pessoa diferente do Responsável Legal",
+              "error",
+            );
             return;
           }
         }
