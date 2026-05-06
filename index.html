@@ -2614,7 +2614,25 @@
           .from("formatura_comprovantes")
           .select("*")
           .order("created_at", { ascending: false });
-        let html = "";
+        const totalFamilias = families.length;
+        const respondidas = votos
+          ? votos.filter((v) => v.confirmado).length
+          : 0;
+        const pendentes = totalFamilias - respondidas;
+        const totalComps = comprovantes ? comprovantes.length : 0;
+        const pct = Math.round((respondidas / totalFamilias) * 100);
+        let html = `<div class="card" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);border:2px solid #43a047;padding:20px;margin-bottom:16px;">
+          <h2 style="color:#2e7d32;font-size:1.15rem;margin-bottom:12px;text-align:center;">Painel de Respostas</h2>
+          <div style="display:flex;justify-content:space-around;text-align:center;flex-wrap:wrap;gap:10px;">
+            <div><p style="font-size:2rem;font-weight:800;color:#2e7d32;">${respondidas}</p><p style="font-size:.75rem;color:#558b2f;">Respondidas</p></div>
+            <div><p style="font-size:2rem;font-weight:800;color:#e65100;">${pendentes}</p><p style="font-size:.75rem;color:#bf360c;">Pendentes</p></div>
+            <div><p style="font-size:2rem;font-weight:800;color:#1565c0;">${totalComps}</p><p style="font-size:.75rem;color:#0d47a1;">Comprovantes</p></div>
+          </div>
+          <div style="background:#fff;border-radius:10px;height:18px;margin-top:14px;overflow:hidden;">
+            <div style="background:linear-gradient(90deg,#43a047,#66bb6a);height:100%;width:${pct}%;border-radius:10px;transition:width .3s;"></div>
+          </div>
+          <p style="text-align:center;font-size:.78rem;color:#2e7d32;margin-top:6px;font-weight:600;">${pct}% concluído (${respondidas} de ${totalFamilias})</p>
+        </div>`;
         families.forEach((f) => {
           const voto = votos?.find((v) => v.familia === f.child);
           const comps =
