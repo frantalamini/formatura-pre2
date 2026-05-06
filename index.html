@@ -30,11 +30,16 @@
         --radius: 14px;
         --shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
       }
+      html {
+        overflow-x: hidden;
+      }
       body {
         font-family: "Poppins", sans-serif;
         background: var(--bg);
         color: var(--txt);
         min-height: 100vh;
+        overflow-x: hidden;
+        width: 100%;
       }
       header {
         background: linear-gradient(
@@ -333,6 +338,7 @@
       .table-wrap {
         overflow-x: auto;
         border-radius: var(--radius);
+        max-width: 100%;
       }
       table {
         width: 100%;
@@ -669,11 +675,30 @@
           padding: 11px 4px;
         }
         main {
-          padding: 10px;
+          padding: 8px;
+        }
+        .gate {
+          padding: 8px;
         }
         .card,
         .alert-card {
-          padding: 14px;
+          padding: 12px;
+          word-wrap: break-word;
+          overflow-wrap: break-word;
+        }
+        .card img,
+        .card video,
+        .card iframe {
+          max-width: 100%;
+        }
+        .validated-banner h2 {
+          font-size: 1rem;
+        }
+        select,
+        input,
+        textarea,
+        button {
+          max-width: 100%;
         }
       }
       @keyframes pulseScroll {
