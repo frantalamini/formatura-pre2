@@ -598,6 +598,17 @@
           padding: 14px;
         }
       }
+      @keyframes pulseScroll {
+        0%,
+        100% {
+          opacity: 0.5;
+          transform: translateX(0);
+        }
+        50% {
+          opacity: 1;
+          transform: translateX(4px);
+        }
+      }
     </style>
   </head>
   <body>
@@ -769,6 +780,21 @@
             >
               Parcelamento em <strong>7 meses</strong>
             </p>
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                margin-bottom: 8px;
+                font-size: 0.75rem;
+                color: var(--muted);
+                animation: pulseScroll 2s infinite;
+              "
+            >
+              <span style="font-size: 1.1rem">👆</span> Deslize para o lado para
+              ver todos os dados
+              <span style="font-size: 1.1rem">→</span>
+            </div>
             <div class="table-wrap">
               <table>
                 <thead>
@@ -813,13 +839,17 @@
             <h2>Equipe da Escola (convidados)</h2>
             <p
               style="
-                font-size: 0.78rem;
-                color: var(--muted);
-                margin-bottom: 12px;
+                font-size: 0.85rem;
+                color: var(--text);
+                margin-bottom: 14px;
+                line-height: 1.5;
               "
             >
-              A equipe da escola será convidada e o custo rateado entre as 23
-              famílias.
+              Gostaríamos de homenagear e convidar todos os colaboradores que
+              fazem parte do dia a dia dos nossos pequenos. Sabemos que nem
+              todos estiveram presentes desde o berçário — que é o caso da
+              maioria das crianças — mas cada um deles contribuiu de forma
+              especial nessa jornada. O custo será rateado entre as 23 famílias.
             </p>
             <div class="school-team" id="schoolTeam"></div>
             <div class="rateio-card">
