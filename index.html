@@ -2137,8 +2137,32 @@
           data.finger_food_complementar ? [data.finger_food_complementar] : [],
           "1",
         );
-        if (data.forma_pagamento)
-          html += `<div class="card"><h2>Pagamento</h2><p style="font-size:.85rem"><strong>Forma:</strong> ${data.forma_pagamento === "avista" ? "À Vista" : "Parcelado 7x"}</p></div>`;
+        if (data.forma_pagamento) {
+          const isParcelado = data.forma_pagamento === "parcelado";
+          let pgtoHtml = `<div class="card"><h2>Pagamento</h2>`;
+          pgtoHtml += `<p style="font-size:.95rem;font-weight:700;color:var(--pri);margin-bottom:8px;">Valor Total: ${fam ? fmt(fam.val) : "—"}</p>`;
+          pgtoHtml += `<p style="font-size:.85rem"><strong>Forma:</strong> ${isParcelado ? "Parcelado 7x" : "À Vista"}</p>`;
+          if (isParcelado && fam) {
+            pgtoHtml += `<p style="font-size:.95rem;font-weight:700;color:#e65100;margin-top:8px;">Parcela: ${fmt(fam.inst)}/mês</p>`;
+            pgtoHtml += `<div style="margin-top:10px;font-size:.82rem;line-height:2;color:var(--txt);">`;
+            pgtoHtml += `<p style="font-weight:600;margin-bottom:4px;">Cronograma de Pagamento:</p>`;
+            const parcelas = [
+              "10/05/2026",
+              "10/06/2026",
+              "10/07/2026",
+              "10/08/2026",
+              "10/09/2026",
+              "10/10/2026",
+              "10/11/2026",
+            ];
+            parcelas.forEach((d, i) => {
+              pgtoHtml += `<p>• ${i + 1}ª parcela — <strong>${d}</strong> — ${fmt(fam.inst)}</p>`;
+            });
+            pgtoHtml += `</div>`;
+          }
+          pgtoHtml += `</div>`;
+          html += pgtoHtml;
+        }
         if (data.responsavel_legal_nome)
           html += `<div class="card"><h2>Responsáveis</h2><p style="font-size:.85rem"><strong>Responsável Legal:</strong> ${data.responsavel_legal_nome} — CPF: ${data.responsavel_legal_cpf}</p><p style="font-size:.85rem;margin-top:6px"><strong>Responsável Financeiro:</strong> ${data.responsavel_financeiro_nome} — CPF: ${data.responsavel_financeiro_cpf}</p></div>`;
         if (data.observacoes)
