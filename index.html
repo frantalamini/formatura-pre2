@@ -639,12 +639,10 @@
     </header>
 
     <nav class="tabs">
-      <button class="active" onclick="showTab('comparativo')">
-        Comparativo
-      </button>
-      <button onclick="showTab('quantitativos')">Quantitativos</button>
+      <button class="active" onclick="showTab('comparativo')">Locais</button>
+      <button onclick="showTab('quantitativos')">Valores</button>
       <button onclick="showTab('cardapio')">Cardápio</button>
-      <button onclick="showTab('observacoes')">Observações</button>
+      <button onclick="showTab('observacoes')">Informações Gerais</button>
     </nav>
 
     <main>
@@ -928,10 +926,79 @@
         </div>
       </section>
 
-      <!-- TAB 4: OBSERVAÇÕES -->
+      <!-- TAB 4: INFORMAÇÕES GERAIS -->
       <section id="observacoes">
         <div class="card">
-          <h2>Considerações e Observações</h2>
+          <h2>Contrato e Responsabilidade</h2>
+          <div style="font-size: 0.84rem; line-height: 1.8; color: var(--txt)">
+            <p>
+              O contrato com o Buffet Star Happy será firmado em nome de
+              <strong>Camila</strong>, que assumirá a responsabilidade geral
+              pela assinatura.
+            </p>
+            <p style="margin-top: 10px">
+              Junto ao contrato, será anexado o <strong>Anexo I</strong>, onde
+              cada família deverá assinar com:
+            </p>
+            <ul style="margin: 8px 0 0 20px; list-style: disc">
+              <li>O <strong>responsável legal pela criança</strong></li>
+              <li>1 <strong>responsável financeiro</strong></li>
+            </ul>
+            <p style="margin-top: 6px; font-size: 0.78rem; color: var(--muted)">
+              Este anexo será incorporado ao contrato do Buffet.
+            </p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Pagamento</h2>
+          <div style="font-size: 0.84rem; line-height: 1.8; color: var(--txt)">
+            <p>
+              Os pagamentos deverão ser realizados
+              <strong>todo dia 10 de cada mês</strong>, diretamente ao Buffet,
+              via PIX conforme chave que será divulgada oportunamente.
+            </p>
+            <div
+              style="
+                background: linear-gradient(135deg, #fff9e6, #fff3cd);
+                border: 1px solid #f0d99c;
+                border-radius: var(--radius);
+                padding: 14px 18px;
+                margin: 12px 0;
+              "
+            >
+              <p
+                style="
+                  font-size: 0.82rem;
+                  color: #7c6800;
+                  font-weight: 600;
+                  margin: 0;
+                "
+              >
+                O comprovante do PIX deverá ser enviado aqui neste portal.
+              </p>
+              <p style="font-size: 0.75rem; color: #7c6800; margin: 4px 0 0 0">
+                <em
+                  >Uma nova aba será disponibilizada em breve para o envio dos
+                  comprovantes.</em
+                >
+              </p>
+            </div>
+            <p style="margin-top: 10px">
+              Nós, que estamos organizando a formatura, assumimos o compromisso
+              de repassar ao Buffet a listagem com os comprovantes e a
+              conciliação de pagamento mensal, para que possam conciliar o
+              financeiro.
+            </p>
+            <p style="margin-top: 10px; font-weight: 600; color: var(--danger)">
+              Por esse motivo, o pagamento deve ser feito exclusivamente no dia
+              10 — não pode ser em qualquer dia do mês.
+            </p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Observações</h2>
           <p
             style="font-size: 0.8rem; color: var(--muted); margin-bottom: 14px"
           >
@@ -947,7 +1014,7 @@
           <div id="obsArea" style="display: none; margin-top: 16px">
             <textarea
               id="obsText"
-              placeholder="Escreva suas considerações ou observações aqui..."
+              placeholder="Escreva suas observações aqui..."
             ></textarea>
             <button
               class="btn btn-primary btn-block"
@@ -957,6 +1024,7 @@
             </button>
           </div>
         </div>
+
         <div class="card" id="allObsCard" style="display: none">
           <h2>Observações Recebidas</h2>
           <div id="allObsList"></div>
