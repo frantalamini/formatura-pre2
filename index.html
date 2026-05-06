@@ -37,25 +37,75 @@
         min-height: 100vh;
       }
       header {
-        background: linear-gradient(135deg, var(--pri), var(--accent));
+        background: linear-gradient(
+          135deg,
+          #1a237e 0%,
+          #283593 30%,
+          #3949ab 60%,
+          #5c6bc0 100%
+        );
         color: #fff;
         text-align: center;
-        padding: 28px 16px 18px;
+        padding: 40px 16px 28px;
+        position: relative;
+        overflow: hidden;
+      }
+      header::before {
+        content: "🎓";
+        position: absolute;
+        font-size: 8rem;
+        opacity: 0.07;
+        top: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      header::after {
+        content: "✨ ⭐ ✨";
+        position: absolute;
+        bottom: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.9rem;
+        opacity: 0.6;
+        letter-spacing: 8px;
+      }
+      header .header-icons {
+        font-size: 2.2rem;
+        margin-bottom: 10px;
+        letter-spacing: 6px;
+        animation: floatIcons 3s ease-in-out infinite;
       }
       header h1 {
-        font-size: 1.6rem;
+        font-size: 1.7rem;
         font-weight: 800;
         letter-spacing: -0.5px;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      }
+      header .subtitle {
+        font-size: 0.95rem;
+        opacity: 0.95;
+        margin-top: 6px;
+        font-weight: 300;
+        font-style: italic;
       }
       header p {
         font-size: 0.85rem;
         opacity: 0.9;
-        margin-top: 4px;
+        margin-top: 10px;
       }
       header .endereco {
         font-size: 0.72rem;
         opacity: 0.8;
         margin-top: 6px;
+      }
+      @keyframes floatIcons {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-4px);
+        }
       }
       .gate {
         max-width: 960px;
@@ -613,7 +663,9 @@
   </head>
   <body>
     <header>
+      <div class="header-icons">🎓🌟👧🧒🌟🎓</div>
       <h1>Formatura Pré II — 2026</h1>
+      <div class="subtitle">Eles cresceram... e nós crescemos com eles 💛</div>
       <p>Buffet Infantil Star Happy — Planejamento e Votação</p>
       <div class="endereco">
         Rod. Dep. João Leopoldo Jacomel, 12482 — Centro, Pinhais - PR
