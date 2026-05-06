@@ -41,7 +41,6 @@
         color: #fff;
         text-align: center;
         padding: 28px 16px 18px;
-        position: relative;
       }
       header h1 {
         font-size: 1.6rem;
@@ -58,6 +57,11 @@
         opacity: 0.8;
         margin-top: 6px;
       }
+      .gate {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 16px;
+      }
       .tabs {
         display: flex;
         background: var(--card);
@@ -66,7 +70,6 @@
         top: 0;
         z-index: 100;
         overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
       }
       .tabs button {
         flex: 1;
@@ -75,20 +78,47 @@
         border: none;
         background: none;
         font-family: inherit;
-        font-size: 0.75rem;
+        font-size: 0.72rem;
         font-weight: 600;
         color: var(--muted);
         cursor: pointer;
         border-bottom: 3px solid transparent;
         transition: 0.2s;
         white-space: nowrap;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
       }
       .tabs button.active {
         color: var(--pri);
         border-bottom-color: var(--pri);
       }
-      .tabs button:hover {
-        color: var(--pri-d);
+      .tabs button.locked {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+      .tabs button.done {
+        color: var(--ok);
+      }
+      .tabs button .tab-icon {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        border: 2px solid var(--border);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.6rem;
+        flex-shrink: 0;
+      }
+      .tabs button.done .tab-icon {
+        background: var(--ok);
+        border-color: var(--ok);
+        color: #fff;
+      }
+      .tabs button.active .tab-icon {
+        border-color: var(--pri);
       }
       main {
         max-width: 960px;
@@ -112,11 +142,6 @@
         font-size: 1.1rem;
         margin-bottom: 12px;
         color: var(--pri);
-      }
-      .card h3 {
-        font-size: 0.95rem;
-        margin-bottom: 10px;
-        color: var(--txt);
       }
       .alert-card {
         background: linear-gradient(135deg, #fdedec, #fadbd8);
@@ -142,6 +167,23 @@
         color: var(--danger);
         display: inline-block;
         margin-top: 4px;
+      }
+      .validated-banner {
+        background: linear-gradient(135deg, #e8f8f5, #d5f5e3);
+        border: 2px solid var(--ok);
+        border-radius: var(--radius);
+        padding: 24px;
+        text-align: center;
+        margin-bottom: 16px;
+      }
+      .validated-banner h2 {
+        color: var(--ok);
+        font-size: 1.2rem;
+        margin-bottom: 6px;
+      }
+      .validated-banner p {
+        font-size: 0.82rem;
+        color: #1e8449;
       }
       .venue-grid {
         display: grid;
@@ -224,7 +266,6 @@
       }
       .table-wrap {
         overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
         border-radius: var(--radius);
       }
       table {
@@ -304,9 +345,6 @@
       .section-title .counter.full {
         background: var(--ok);
       }
-      .section-title .counter.over {
-        background: var(--danger);
-      }
       select.family-select {
         width: 100%;
         padding: 12px 16px;
@@ -381,20 +419,6 @@
         background: var(--pri);
         border-color: var(--pri);
       }
-      .included-items {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-bottom: 16px;
-      }
-      .included-item {
-        background: #e8f8f5;
-        color: #00755e;
-        padding: 6px 14px;
-        border-radius: 20px;
-        font-size: 0.75rem;
-        font-weight: 500;
-      }
       .btn {
         display: inline-flex;
         align-items: center;
@@ -420,6 +444,28 @@
       .btn-primary:disabled {
         opacity: 0.5;
         pointer-events: none;
+      }
+      .btn-ciente {
+        background: linear-gradient(135deg, var(--ok), #27ae60);
+        color: #fff;
+        width: 100%;
+        margin-top: 20px;
+        padding: 16px;
+        font-size: 1rem;
+      }
+      .btn-ciente:hover {
+        box-shadow: 0 4px 15px rgba(0, 184, 148, 0.4);
+      }
+      .btn-validate {
+        background: linear-gradient(135deg, #e74c3c, var(--accent));
+        color: #fff;
+        width: 100%;
+        margin-top: 16px;
+        padding: 18px;
+        font-size: 1.05rem;
+      }
+      .btn-validate:hover {
+        box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
       }
       .btn-secondary {
         background: var(--border);
@@ -468,29 +514,6 @@
       .toast.error {
         background: var(--danger);
       }
-      .summary-box {
-        background: #f8f9fa;
-        border-radius: 10px;
-        padding: 16px;
-        margin: 12px 0;
-      }
-      .summary-box h4 {
-        font-size: 0.85rem;
-        color: var(--pri);
-        margin-bottom: 8px;
-      }
-      .summary-box .items {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px;
-      }
-      .summary-box .item {
-        background: var(--card);
-        padding: 4px 10px;
-        border-radius: 6px;
-        font-size: 0.72rem;
-        border: 1px solid var(--border);
-      }
       .info-banner {
         background: linear-gradient(135deg, #e8f8f5, #d5f5e3);
         border: 1px solid #82e0aa;
@@ -524,44 +547,28 @@
         font-weight: 800;
         color: #7c6800;
       }
-      .results-section {
-        margin-top: 24px;
+      .summary-box {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 16px;
+        margin: 12px 0;
       }
-      .result-bar {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-bottom: 6px;
-        font-size: 0.75rem;
-      }
-      .result-bar .name {
-        flex: 1;
-        min-width: 0;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-      .result-bar .bar {
-        height: 8px;
-        background: var(--ok);
-        border-radius: 4px;
-        transition: 0.3s;
-      }
-      .result-bar .count {
-        font-weight: 600;
-        color: var(--pri);
-        min-width: 20px;
-        text-align: right;
-      }
-      .vote-status {
-        text-align: center;
-        padding: 20px;
+      .summary-box h4 {
         font-size: 0.85rem;
-        color: var(--muted);
+        color: var(--pri);
+        margin-bottom: 8px;
       }
-      .vote-status.voted {
-        color: var(--ok);
-        font-weight: 600;
+      .summary-box .items {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .summary-box .item {
+        background: var(--card);
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 0.72rem;
+        border: 1px solid var(--border);
       }
       footer {
         text-align: center;
@@ -580,52 +587,16 @@
           grid-template-columns: 1fr 1fr;
         }
         .tabs button {
-          font-size: 0.68rem;
-          padding: 11px 6px;
+          font-size: 0.65rem;
+          padding: 11px 4px;
         }
         main {
           padding: 10px;
         }
-        .card {
-          padding: 14px;
-        }
+        .card,
         .alert-card {
           padding: 14px;
         }
-      }
-      .modal-overlay {
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 200;
-        display: none;
-        align-items: center;
-        justify-content: center;
-        padding: 16px;
-      }
-      .modal-overlay.show {
-        display: flex;
-      }
-      .modal {
-        background: var(--card);
-        border-radius: var(--radius);
-        padding: 24px;
-        max-width: 500px;
-        width: 100%;
-        max-height: 80vh;
-        overflow-y: auto;
-      }
-      .modal h3 {
-        margin-bottom: 16px;
-        color: var(--pri);
-      }
-      .modal-actions {
-        display: flex;
-        gap: 10px;
-        margin-top: 20px;
-      }
-      .modal-actions .btn {
-        flex: 1;
       }
     </style>
   </head>
@@ -638,177 +609,237 @@
       </div>
     </header>
 
-    <nav class="tabs">
-      <button class="active" onclick="showTab('comparativo')">Locais</button>
-      <button onclick="showTab('quantitativos')">Valores</button>
-      <button onclick="showTab('cardapio')">Cardápio</button>
-      <button onclick="showTab('observacoes')">Informações Gerais</button>
-    </nav>
+    <!-- SELEÇÃO DA FAMÍLIA -->
+    <div class="gate" id="familyGate">
+      <div class="card">
+        <h2>Identificação da Família</h2>
+        <p style="font-size: 0.8rem; color: var(--muted); margin-bottom: 12px">
+          Selecione o nome da criança para iniciar.
+        </p>
+        <select
+          class="family-select"
+          id="familySelect"
+          onchange="onFamilySelect()"
+        >
+          <option value="">Selecione sua família...</option>
+        </select>
+      </div>
+    </div>
 
-    <main>
-      <!-- TAB 1: COMPARATIVO -->
-      <section id="comparativo" class="active">
-        <div class="alert-card">
-          <h2>ATENÇÃO — ITENS NÃO INCLUSOS NO PACOTE</h2>
-          <p>
-            Os itens particulares de uso de cada criança na formatura
-            <strong>NÃO estão inclusos</strong> no valor do pacote do buffet.
-          </p>
-          <p style="margin-top: 8px">
-            <strong>Itens não inclusos:</strong> Beca + Canudo
-          </p>
-          <span class="valor-destaque"
-            >Valor estimado por aluno: R$ 80,00 a R$ 100,00</span
-          >
-          <p style="margin-top: 8px; font-size: 0.8rem; color: #922b21">
-            <em>Estamos fazendo cotações e repassaremos em breve.</em>
-          </p>
-        </div>
-        <div class="card">
-          <h2>Locais Pesquisados</h2>
-          <p
-            style="font-size: 0.8rem; color: var(--muted); margin-bottom: 16px"
-          >
-            Comparativo entre os 4 locais avaliados para a formatura. Valores
-            para 126 pessoas.
-          </p>
-          <div class="venue-grid" id="venueGrid"></div>
-        </div>
-        <div class="card">
-          <h2>Por que Star Happy?</h2>
-          <div style="font-size: 0.82rem; line-height: 1.8; color: var(--txt)">
+    <!-- LEITURA SOMENTE (família já validou) -->
+    <div id="readOnlyView" style="display: none" class="gate">
+      <div class="validated-banner">
+        <h2>Preenchimento Validado</h2>
+        <p id="readOnlyDate"></p>
+      </div>
+      <div id="readOnlySummary"></div>
+    </div>
+
+    <!-- CONTEÚDO PRINCIPAL (família ainda não validou) -->
+    <div id="mainContent" style="display: none">
+      <nav class="tabs" id="tabNav">
+        <button
+          class="active"
+          data-tab="comparativo"
+          onclick="tryShowTab('comparativo')"
+        >
+          <span class="tab-icon">1</span>Locais
+        </button>
+        <button
+          class="locked"
+          data-tab="quantitativos"
+          onclick="tryShowTab('quantitativos')"
+        >
+          <span class="tab-icon">2</span>Valores
+        </button>
+        <button
+          class="locked"
+          data-tab="cardapio"
+          onclick="tryShowTab('cardapio')"
+        >
+          <span class="tab-icon">3</span>Cardápio
+        </button>
+        <button
+          class="locked"
+          data-tab="observacoes"
+          onclick="tryShowTab('observacoes')"
+        >
+          <span class="tab-icon">4</span>Info Gerais
+        </button>
+      </nav>
+      <main>
+        <!-- TAB 1: LOCAIS -->
+        <section id="comparativo" class="active">
+          <div class="alert-card">
+            <h2>ATENÇÃO — ITENS NÃO INCLUSOS NO PACOTE</h2>
             <p>
-              <strong style="color: var(--ok)">Menor custo total:</strong> R$
-              13.340,00 — economia de R$ 3.832 em relação ao segundo colocado
+              Os itens particulares de uso de cada criança na formatura
+              <strong>NÃO estão inclusos</strong> no valor do pacote do buffet.
             </p>
-            <p>
-              <strong style="color: var(--ok)">Tudo incluso:</strong> espaço,
-              comida, bebida, fotógrafo, decoração, camarim de pintura,
-              lembrancinha para todas as crianças, gerente de festa (5h)
+            <p style="margin-top: 8px">
+              <strong>Itens não inclusos:</strong> Beca + Canudo
             </p>
-            <p>
-              <strong style="color: var(--ok)">Qualidade comprovada:</strong>
-              salgados e doces com qualidade atestada na degustação
-            </p>
-            <p>
-              <strong style="color: var(--ok)">Localização:</strong> Rod. Dep.
-              João Leopoldo Jacomel, 12482 — Centro, Pinhais - PR
+            <span class="valor-destaque"
+              >Valor estimado por aluno: R$ 80,00 a R$ 100,00</span
+            >
+            <p style="margin-top: 8px; font-size: 0.8rem; color: #922b21">
+              <em>Estamos fazendo cotações e repassaremos em breve.</em>
             </p>
           </div>
-        </div>
-      </section>
-
-      <!-- TAB 2: QUANTITATIVOS -->
-      <section id="quantitativos">
-        <div class="alert-card">
-          <h2>ATENÇÃO — ITENS NÃO INCLUSOS NO PACOTE</h2>
-          <p>
-            Os itens particulares de uso de cada criança na formatura
-            <strong>NÃO estão inclusos</strong> no valor abaixo.
-          </p>
-          <p style="margin-top: 8px">
-            <strong>Itens não inclusos:</strong> Beca + Canudo
-          </p>
-          <span class="valor-destaque"
-            >Valor estimado por aluno: R$ 80,00 a R$ 100,00</span
-          >
-          <p style="margin-top: 8px; font-size: 0.8rem; color: #922b21">
-            <em>Estamos fazendo cotações e repassaremos em breve.</em>
-          </p>
-        </div>
-        <div class="card">
-          <h2>Quantitativo por Família</h2>
-          <p
-            style="font-size: 0.78rem; color: var(--muted); margin-bottom: 4px"
-          >
-            Valor por pessoa: <strong>R$ 105,87</strong> (adulto) |
-            <strong>R$ 52,94</strong> (4 a 7 anos = meia) |
-            <strong>Grátis</strong> (menores de 3 anos)
-          </p>
-          <p
-            style="font-size: 0.78rem; color: var(--muted); margin-bottom: 14px"
-          >
-            Parcelamento em <strong>7 meses</strong>
-          </p>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Criança</th>
-                  <th>Responsável</th>
-                  <th>Pessoas</th>
-                  <th>Adultos</th>
-                  <th>&lt;3</th>
-                  <th>4-7</th>
-                  <th>&gt;8</th>
-                  <th>Rateio Escola</th>
-                  <th>Total Família</th>
-                  <th>Parcela 7x</th>
-                </tr>
-              </thead>
-              <tbody id="familyTable"></tbody>
-              <tfoot>
-                <tr
-                  style="background: var(--pri); color: #fff; font-weight: 700"
-                >
-                  <td colspan="3">TOTAL</td>
-                  <td>126</td>
-                  <td>91</td>
-                  <td>2</td>
-                  <td>28</td>
-                  <td>5</td>
-                  <td></td>
-                  <td class="money">R$ 13.340,00</td>
-                  <td></td>
-                </tr>
-              </tfoot>
-            </table>
+          <div class="card">
+            <h2>Locais Pesquisados</h2>
+            <p
+              style="
+                font-size: 0.8rem;
+                color: var(--muted);
+                margin-bottom: 16px;
+              "
+            >
+              Comparativo entre os 4 locais avaliados para a formatura. Valores
+              para 126 pessoas.
+            </p>
+            <div class="venue-grid" id="venueGrid"></div>
           </div>
-        </div>
-        <div class="card">
-          <h2>Equipe da Escola (convidados)</h2>
-          <p
-            style="font-size: 0.78rem; color: var(--muted); margin-bottom: 12px"
-          >
-            A equipe da escola será convidada e o custo rateado entre as 23
-            famílias.
-          </p>
-          <div class="school-team" id="schoolTeam"></div>
-          <div class="rateio-card">
-            <div>
-              <div class="label">16 convidados da escola</div>
-              <div class="label">Total: R$ 1.693,92</div>
-            </div>
-            <div style="text-align: right">
-              <div class="label">Rateio por família</div>
-              <div class="value">R$ 73,65</div>
+          <div class="card">
+            <h2>Por que Star Happy?</h2>
+            <div
+              style="font-size: 0.82rem; line-height: 1.8; color: var(--txt)"
+            >
+              <p>
+                <strong style="color: var(--ok)">Menor custo total:</strong> R$
+                13.340,00 — economia de R$ 3.832 em relação ao segundo colocado
+              </p>
+              <p>
+                <strong style="color: var(--ok)">Tudo incluso:</strong> espaço,
+                comida, bebida, fotógrafo, decoração, camarim de pintura,
+                lembrancinha para todas as crianças, gerente de festa (5h)
+              </p>
+              <p>
+                <strong style="color: var(--ok)">Qualidade comprovada:</strong>
+                salgados e doces com qualidade atestada na degustação
+              </p>
+              <p>
+                <strong style="color: var(--ok)">Localização:</strong> Rod. Dep.
+                João Leopoldo Jacomel, 12482 — Centro, Pinhais - PR
+              </p>
             </div>
           </div>
-        </div>
-      </section>
+          <button class="btn btn-ciente" onclick="darCiente('comparativo')">
+            Li e estou ciente
+          </button>
+        </section>
 
-      <!-- TAB 3: CARDÁPIO -->
-      <section id="cardapio">
-        <div class="card">
-          <h2>Votação do Cardápio</h2>
-          <p
-            style="font-size: 0.8rem; color: var(--muted); margin-bottom: 14px"
-          >
-            Selecione sua família e vote nas opções do cardápio. Os itens mais
-            votados serão escolhidos para a festa.
-          </p>
-          <select
-            class="family-select"
-            id="familySelect"
-            onchange="onFamilySelect()"
-          >
-            <option value="">Selecione sua família...</option>
-          </select>
-          <div id="voteStatus" class="vote-status" style="display: none"></div>
-        </div>
+        <!-- TAB 2: VALORES -->
+        <section id="quantitativos">
+          <div class="alert-card">
+            <h2>ATENÇÃO — ITENS NÃO INCLUSOS NO PACOTE</h2>
+            <p>
+              Os itens particulares de uso de cada criança na formatura
+              <strong>NÃO estão inclusos</strong> no valor abaixo.
+            </p>
+            <p style="margin-top: 8px">
+              <strong>Itens não inclusos:</strong> Beca + Canudo
+            </p>
+            <span class="valor-destaque"
+              >Valor estimado por aluno: R$ 80,00 a R$ 100,00</span
+            >
+            <p style="margin-top: 8px; font-size: 0.8rem; color: #922b21">
+              <em>Estamos fazendo cotações e repassaremos em breve.</em>
+            </p>
+          </div>
+          <div class="card">
+            <h2>Quantitativo por Família</h2>
+            <p
+              style="
+                font-size: 0.78rem;
+                color: var(--muted);
+                margin-bottom: 4px;
+              "
+            >
+              Valor por pessoa: <strong>R$ 105,87</strong> (adulto) |
+              <strong>R$ 52,94</strong> (4 a 7 anos = meia) |
+              <strong>Grátis</strong> (menores de 3 anos)
+            </p>
+            <p
+              style="
+                font-size: 0.78rem;
+                color: var(--muted);
+                margin-bottom: 14px;
+              "
+            >
+              Parcelamento em <strong>7 meses</strong>
+            </p>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Criança</th>
+                    <th>Responsável</th>
+                    <th>Pessoas</th>
+                    <th>Adultos</th>
+                    <th>&lt;3</th>
+                    <th>4-7</th>
+                    <th>&gt;8</th>
+                    <th>Rateio Escola</th>
+                    <th>Total Família</th>
+                    <th>Parcela 7x</th>
+                  </tr>
+                </thead>
+                <tbody id="familyTable"></tbody>
+                <tfoot>
+                  <tr
+                    style="
+                      background: var(--pri);
+                      color: #fff;
+                      font-weight: 700;
+                    "
+                  >
+                    <td colspan="3">TOTAL</td>
+                    <td>126</td>
+                    <td>91</td>
+                    <td>2</td>
+                    <td>28</td>
+                    <td>5</td>
+                    <td></td>
+                    <td class="money">R$ 13.340,00</td>
+                    <td></td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+          <div class="card">
+            <h2>Equipe da Escola (convidados)</h2>
+            <p
+              style="
+                font-size: 0.78rem;
+                color: var(--muted);
+                margin-bottom: 12px;
+              "
+            >
+              A equipe da escola será convidada e o custo rateado entre as 23
+              famílias.
+            </p>
+            <div class="school-team" id="schoolTeam"></div>
+            <div class="rateio-card">
+              <div>
+                <div class="label">16 convidados da escola</div>
+                <div class="label">Total: R$ 1.693,92</div>
+              </div>
+              <div style="text-align: right">
+                <div class="label">Rateio por família</div>
+                <div class="value">R$ 73,65</div>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-ciente" onclick="darCiente('quantitativos')">
+            Li e estou ciente
+          </button>
+        </section>
 
-        <div id="votingArea" style="display: none">
+        <!-- TAB 3: CARDÁPIO -->
+        <section id="cardapio">
           <div class="info-banner">
             <strong>Já inclusos no pacote:</strong><br />
             Dadinho de tapioca com geleia de pimenta, Batata frita, Caldo de
@@ -817,7 +848,6 @@
             normal e zero, Suco integral de laranja, Mate batido com limão<br />
             <strong>Batidinha:</strong> Inclusa — sem álcool
           </div>
-
           <div class="card">
             <div class="section-title">
               Salgados <span class="counter" id="countSalgados">0/10</span>
@@ -833,7 +863,6 @@
             </p>
             <div class="options-grid" id="gridSalgados"></div>
           </div>
-
           <div class="card">
             <div class="section-title">
               Doces Tradicionais
@@ -850,7 +879,6 @@
             </p>
             <div class="options-grid" id="gridDocesTrad"></div>
           </div>
-
           <div class="card">
             <div class="section-title">
               Doces Especiais
@@ -867,7 +895,6 @@
             </p>
             <div class="options-grid" id="gridDocesEsp"></div>
           </div>
-
           <div class="card">
             <div class="section-title">
               Finger Food Principal
@@ -884,7 +911,6 @@
             </p>
             <div class="options-grid" id="gridFFP"></div>
           </div>
-
           <div class="card">
             <div class="section-title">
               Finger Food Complementar
@@ -901,157 +927,143 @@
             </p>
             <div class="options-grid" id="gridFFC"></div>
           </div>
-
           <button
-            class="btn btn-primary btn-block"
-            id="btnConfirm"
-            onclick="showConfirmModal()"
+            class="btn btn-ciente"
+            id="btnCienteCardapio"
+            onclick="darCiente('cardapio')"
           >
-            Confirmar Votação
+            Li e estou ciente
           </button>
-        </div>
+        </section>
 
-        <div
-          class="card results-section"
-          id="resultsCard"
-          style="margin-top: 20px"
-        >
-          <h2>Resultados Parciais</h2>
-          <p
-            style="font-size: 0.78rem; color: var(--muted); margin-bottom: 12px"
-          >
-            <span id="voteCount">0</span> de 23 famílias já votaram
-          </p>
-          <div id="resultsContent"></div>
-        </div>
-      </section>
-
-      <!-- TAB 4: INFORMAÇÕES GERAIS -->
-      <section id="observacoes">
-        <div class="card">
-          <h2>Contrato e Responsabilidade</h2>
-          <div style="font-size: 0.84rem; line-height: 1.8; color: var(--txt)">
-            <p>
-              O contrato com o Buffet Star Happy será firmado em nome de
-              <strong>Camila</strong>, que assumirá a responsabilidade geral
-              pela assinatura.
-            </p>
-            <p style="margin-top: 10px">
-              Junto ao contrato, será anexado o <strong>Anexo I</strong>, onde
-              cada família deverá assinar com:
-            </p>
-            <ul style="margin: 8px 0 0 20px; list-style: disc">
-              <li>O <strong>responsável legal pela criança</strong></li>
-              <li>1 <strong>responsável financeiro</strong></li>
-            </ul>
-            <p style="margin-top: 6px; font-size: 0.78rem; color: var(--muted)">
-              Este anexo será incorporado ao contrato do Buffet.
-            </p>
-          </div>
-        </div>
-
-        <div class="card">
-          <h2>Pagamento</h2>
-          <div style="font-size: 0.84rem; line-height: 1.8; color: var(--txt)">
-            <p>
-              Os pagamentos deverão ser realizados
-              <strong>todo dia 10 de cada mês</strong>, diretamente ao Buffet,
-              via PIX conforme chave que será divulgada oportunamente.
-            </p>
+        <!-- TAB 4: INFORMAÇÕES GERAIS -->
+        <section id="observacoes">
+          <div class="card">
+            <h2>Contrato e Responsabilidade</h2>
             <div
-              style="
-                background: linear-gradient(135deg, #fff9e6, #fff3cd);
-                border: 1px solid #f0d99c;
-                border-radius: var(--radius);
-                padding: 14px 18px;
-                margin: 12px 0;
-              "
+              style="font-size: 0.84rem; line-height: 1.8; color: var(--txt)"
             >
-              <p
-                style="
-                  font-size: 0.82rem;
-                  color: #7c6800;
-                  font-weight: 600;
-                  margin: 0;
-                "
-              >
-                O comprovante do PIX deverá ser enviado aqui neste portal.
+              <p>
+                O contrato com o Buffet Star Happy será firmado em nome de
+                <strong>Camila</strong>, que assumirá a responsabilidade geral
+                pela assinatura.
               </p>
-              <p style="font-size: 0.75rem; color: #7c6800; margin: 4px 0 0 0">
-                <em
-                  >Uma nova aba será disponibilizada em breve para o envio dos
-                  comprovantes.</em
-                >
+              <p style="margin-top: 10px">
+                Junto ao contrato, será anexado o <strong>Anexo I</strong>, onde
+                cada família deverá assinar com:
+              </p>
+              <ul style="margin: 8px 0 0 20px; list-style: disc">
+                <li>O <strong>responsável legal pela criança</strong></li>
+                <li>1 <strong>responsável financeiro</strong></li>
+              </ul>
+              <p
+                style="margin-top: 6px; font-size: 0.78rem; color: var(--muted)"
+              >
+                Este anexo será incorporado ao contrato do Buffet.
               </p>
             </div>
-            <p style="margin-top: 10px">
-              Nós, que estamos organizando a formatura, assumimos o compromisso
-              de repassar ao Buffet a listagem com os comprovantes e a
-              conciliação de pagamento mensal, para que possam conciliar o
-              financeiro.
-            </p>
-            <p style="margin-top: 10px; font-weight: 600; color: var(--danger)">
-              Por esse motivo, o pagamento deve ser feito exclusivamente no dia
-              10 — não pode ser em qualquer dia do mês.
-            </p>
           </div>
-        </div>
-
-        <div class="card">
-          <h2>Observações</h2>
-          <p
-            style="font-size: 0.8rem; color: var(--muted); margin-bottom: 14px"
-          >
-            Tem alguma dúvida, sugestão ou consideração? Escreva aqui.
-          </p>
-          <select
-            class="family-select"
-            id="familySelectObs"
-            onchange="onFamilySelectObs()"
-          >
-            <option value="">Selecione sua família...</option>
-          </select>
-          <div id="obsArea" style="display: none; margin-top: 16px">
+          <div class="card">
+            <h2>Pagamento</h2>
+            <div
+              style="font-size: 0.84rem; line-height: 1.8; color: var(--txt)"
+            >
+              <p>
+                Os pagamentos deverão ser realizados
+                <strong>todo dia 10 de cada mês</strong>, diretamente ao Buffet,
+                via PIX conforme chave que será divulgada oportunamente.
+              </p>
+              <div
+                style="
+                  background: linear-gradient(135deg, #fff9e6, #fff3cd);
+                  border: 1px solid #f0d99c;
+                  border-radius: var(--radius);
+                  padding: 14px 18px;
+                  margin: 12px 0;
+                "
+              >
+                <p
+                  style="
+                    font-size: 0.82rem;
+                    color: #7c6800;
+                    font-weight: 600;
+                    margin: 0;
+                  "
+                >
+                  O comprovante do PIX deverá ser enviado aqui neste portal.
+                </p>
+                <p
+                  style="font-size: 0.75rem; color: #7c6800; margin: 4px 0 0 0"
+                >
+                  <em
+                    >Uma nova aba será disponibilizada em breve para o envio dos
+                    comprovantes.</em
+                  >
+                </p>
+              </div>
+              <p style="margin-top: 10px">
+                Nós, que estamos organizando a formatura, assumimos o
+                compromisso de repassar ao Buffet a listagem com os comprovantes
+                e a conciliação de pagamento mensal, para que possam conciliar o
+                financeiro.
+              </p>
+              <p
+                style="margin-top: 10px; font-weight: 600; color: var(--danger)"
+              >
+                Por esse motivo, o pagamento deve ser feito exclusivamente no
+                dia 10 — não pode ser em qualquer dia do mês.
+              </p>
+            </div>
+          </div>
+          <div class="card">
+            <h2>Observações</h2>
+            <p
+              style="
+                font-size: 0.8rem;
+                color: var(--muted);
+                margin-bottom: 14px;
+              "
+            >
+              Tem alguma dúvida, sugestão ou consideração? Escreva aqui
+              (opcional).
+            </p>
             <textarea
               id="obsText"
               placeholder="Escreva suas observações aqui..."
             ></textarea>
-            <button
-              class="btn btn-primary btn-block"
-              onclick="saveObservation()"
+          </div>
+          <button class="btn btn-ciente" onclick="darCiente('observacoes')">
+            Li e estou ciente
+          </button>
+        </section>
+
+        <!-- RESUMO FINAL -->
+        <section id="resumo">
+          <div class="card">
+            <h2>Resumo do Preenchimento</h2>
+            <p
+              style="
+                font-size: 0.8rem;
+                color: var(--muted);
+                margin-bottom: 16px;
+              "
             >
-              Enviar Observação
+              Revise todas as suas escolhas antes de validar. Após a validação,
+              não será possível alterar.
+            </p>
+            <div id="finalSummary"></div>
+            <button class="btn btn-validate" onclick="validarPreenchimento()">
+              Validar Preenchimento
             </button>
           </div>
-        </div>
-
-        <div class="card" id="allObsCard" style="display: none">
-          <h2>Observações Recebidas</h2>
-          <div id="allObsList"></div>
-        </div>
-      </section>
-    </main>
+        </section>
+      </main>
+    </div>
 
     <footer>
       Formatura Pré II — 2026 | Star Happy Buffet Infantil — Pinhais, PR
     </footer>
-
     <div class="toast" id="toast"></div>
-
-    <div class="modal-overlay" id="confirmModal">
-      <div class="modal">
-        <h3>Confirmar Votação</h3>
-        <div id="modalSummary"></div>
-        <div class="modal-actions">
-          <button class="btn btn-secondary" onclick="closeModal()">
-            Voltar
-          </button>
-          <button class="btn btn-primary" onclick="submitVote()">
-            Confirmar
-          </button>
-        </div>
-      </div>
-    </div>
 
     <script>
       const SUPABASE_URL = "https://www.curitibainoxapp.com/supabase";
@@ -1337,7 +1349,6 @@
           inst: 93.7,
         },
       ];
-
       const venues = [
         {
           name: "ASPP",
@@ -1381,7 +1392,6 @@
           noteClass: "bad",
         },
       ];
-
       const schoolTeam = [
         { n: "Ivete", r: "Proprietária" },
         { n: "Jaque", r: "Diretora" },
@@ -1400,7 +1410,6 @@
         { n: "Rose", r: "Limpeza" },
         { n: "Gilmar", r: "Segurança" },
       ];
-
       const salgados = [
         "Bolinha de queijo",
         "Coxinha de frango",
@@ -1439,7 +1448,6 @@
         "Croissant de presunto e queijo",
         "Croissant de ricota",
       ];
-
       const docesTrad = [
         "Beijinho",
         "Beijinho de abacaxi",
@@ -1459,7 +1467,6 @@
         "Palha italiana",
         "Suspiro com morango",
       ];
-
       const docesEsp = [
         "Banoffee",
         "Bombinha de creme",
@@ -1480,7 +1487,6 @@
         "Copinho de chocolate com geleia de abacaxi e manjericão",
         "Copinho de chocolate com mousse de frutas vermelhas",
       ];
-
       const fingerPrincipal = [
         "Mini hambúrguer (hambúrguer, queijo e barbecue com batata frita)",
         "Mousseline com ragu de linguiça blumenau",
@@ -1491,7 +1497,6 @@
         "Fricassê de frango",
         "Fish and chips",
       ];
-
       const fingerCompl = [
         "Saladinha mista (alface americana, tomate cereja, cenoura ralada, molho rosé e croutons)",
         "Sanduíche frio peito de peru (queijo branco, alface, tomate e maionese)",
@@ -1501,6 +1506,18 @@
         "Polenta cremosa com ragu de carne",
       ];
 
+      const tabOrder = [
+        "comparativo",
+        "quantitativos",
+        "cardapio",
+        "observacoes",
+      ];
+      let ciente = {
+        comparativo: false,
+        quantitativos: false,
+        cardapio: false,
+        observacoes: false,
+      };
       let selected = {
         salgados: [],
         docesTrad: [],
@@ -1510,21 +1527,6 @@
       };
       let currentFamily = "";
       let existingVote = null;
-
-      function showTab(id) {
-        document
-          .querySelectorAll("section")
-          .forEach((s) => s.classList.remove("active"));
-        document
-          .querySelectorAll(".tabs button")
-          .forEach((b) => b.classList.remove("active"));
-        document.getElementById(id).classList.add("active");
-        document
-          .querySelector(`.tabs button[onclick="showTab('${id}')"]`)
-          .classList.add("active");
-        if (id === "cardapio") loadResults();
-        if (id === "observacoes") loadAllObservations();
-      }
 
       function fmt(v) {
         return (
@@ -1536,67 +1538,304 @@
         );
       }
 
+      function populateFamily() {
+        const opts = families
+          .map(
+            (f) =>
+              `<option value="${f.child}">${f.child} (${f.parent})</option>`,
+          )
+          .join("");
+        document.getElementById("familySelect").innerHTML =
+          '<option value="">Selecione sua família...</option>' + opts;
+      }
+
+      async function onFamilySelect() {
+        const sel = document.getElementById("familySelect").value;
+        currentFamily = sel;
+        if (!sel) {
+          document.getElementById("mainContent").style.display = "none";
+          document.getElementById("readOnlyView").style.display = "none";
+          return;
+        }
+        const { data } = await sb
+          .from("formatura_votos")
+          .select("*")
+          .eq("familia", sel)
+          .maybeSingle();
+        existingVote = data;
+        if (data && data.confirmado) {
+          showReadOnly(data);
+        } else {
+          document.getElementById("readOnlyView").style.display = "none";
+          document.getElementById("mainContent").style.display = "block";
+          resetFlow();
+          if (data) {
+            if (data.salgados) {
+              selected.salgados = data.salgados;
+            }
+            if (data.doces_tradicionais) {
+              selected.docesTrad = data.doces_tradicionais;
+            }
+            if (data.doces_especiais) {
+              selected.docesEsp = data.doces_especiais;
+            }
+            if (data.finger_food_principal) {
+              selected.ffp = data.finger_food_principal;
+            }
+            if (data.finger_food_complementar) {
+              selected.ffc = data.finger_food_complementar;
+            }
+            if (data.observacoes) {
+              document.getElementById("obsText").value = data.observacoes;
+            }
+          }
+          renderAllOptions();
+        }
+      }
+
+      function showReadOnly(data) {
+        document.getElementById("mainContent").style.display = "none";
+        document.getElementById("readOnlyView").style.display = "block";
+        const dt = data.updated_at
+          ? new Date(data.updated_at).toLocaleDateString("pt-BR", {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+            })
+          : "";
+        document.getElementById("readOnlyDate").textContent =
+          "Validado em " + dt;
+        const fam = families.find((f) => f.child === data.familia);
+        let html = `<div class="card"><h2>Família</h2><p style="font-size:.9rem"><strong>${data.familia}</strong> (${fam ? fam.parent : ""})</p>`;
+        if (fam)
+          html += `<p style="font-size:.8rem;color:var(--muted);margin-top:4px">Total família: ${fmt(fam.val)} | Parcela: ${fmt(fam.inst)}/mês (7x)</p>`;
+        html += `</div>`;
+        html += makeSummaryBox("Salgados", data.salgados || [], "10");
+        html += makeSummaryBox(
+          "Doces Tradicionais",
+          data.doces_tradicionais || [],
+          "7",
+        );
+        html += makeSummaryBox(
+          "Doces Especiais",
+          data.doces_especiais || [],
+          "4",
+        );
+        html += makeSummaryBox(
+          "Finger Food Principal",
+          data.finger_food_principal ? [data.finger_food_principal] : [],
+          "1",
+        );
+        html += makeSummaryBox(
+          "Finger Food Complementar",
+          data.finger_food_complementar ? [data.finger_food_complementar] : [],
+          "1",
+        );
+        if (data.observacoes)
+          html += `<div class="card"><h2>Observações</h2><p style="font-size:.85rem">${data.observacoes}</p></div>`;
+        document.getElementById("readOnlySummary").innerHTML = html;
+      }
+
+      function resetFlow() {
+        ciente = {
+          comparativo: false,
+          quantitativos: false,
+          cardapio: false,
+          observacoes: false,
+        };
+        selected = {
+          salgados: [],
+          docesTrad: [],
+          docesEsp: [],
+          ffp: "",
+          ffc: "",
+        };
+        document.getElementById("obsText").value = "";
+        updateTabStates();
+        forceShowTab("comparativo");
+      }
+
+      function updateTabStates() {
+        const btns = document.querySelectorAll("#tabNav button");
+        btns.forEach((btn, i) => {
+          const tab = btn.dataset.tab;
+          btn.classList.remove("locked", "done", "active");
+          if (ciente[tab]) {
+            btn.classList.add("done");
+            btn.querySelector(".tab-icon").innerHTML = "&#10003;";
+          } else {
+            btn.querySelector(".tab-icon").textContent = String(i + 1);
+            if (i > 0) {
+              const prevTab = tabOrder[i - 1];
+              if (!ciente[prevTab]) btn.classList.add("locked");
+            }
+          }
+        });
+        const activeSection = document.querySelector("section.active");
+        if (activeSection) {
+          const activeBtn = document.querySelector(
+            `#tabNav button[data-tab="${activeSection.id}"]`,
+          );
+          if (activeBtn) activeBtn.classList.add("active");
+        }
+      }
+
+      function tryShowTab(id) {
+        const idx = tabOrder.indexOf(id);
+        if (idx > 0 && !ciente[tabOrder[idx - 1]]) {
+          toast("Complete a aba anterior primeiro", "error");
+          return;
+        }
+        forceShowTab(id);
+      }
+
+      function forceShowTab(id) {
+        document
+          .querySelectorAll("main section")
+          .forEach((s) => s.classList.remove("active"));
+        document.getElementById(id).classList.add("active");
+        updateTabStates();
+        window.scrollTo({
+          top: document.querySelector("#tabNav").offsetTop,
+          behavior: "smooth",
+        });
+      }
+
+      function darCiente(tab) {
+        if (tab === "cardapio") {
+          if (selected.salgados.length === 0) {
+            toast("Selecione pelo menos os salgados", "error");
+            return;
+          }
+        }
+        ciente[tab] = true;
+        const idx = tabOrder.indexOf(tab);
+        if (idx < tabOrder.length - 1) {
+          forceShowTab(tabOrder[idx + 1]);
+        } else {
+          showFinalSummary();
+        }
+        updateTabStates();
+      }
+
+      function showFinalSummary() {
+        const obs = document.getElementById("obsText").value.trim();
+        const fam = families.find((f) => f.child === currentFamily);
+        let html = `<div class="summary-box"><h4>Família</h4><p style="font-size:.85rem"><strong>${currentFamily}</strong> (${fam ? fam.parent : ""})</p></div>`;
+        html += makeSummaryBox("Salgados", selected.salgados, "10");
+        html += makeSummaryBox("Doces Tradicionais", selected.docesTrad, "7");
+        html += makeSummaryBox("Doces Especiais", selected.docesEsp, "4");
+        html += makeSummaryBox(
+          "Finger Food Principal",
+          selected.ffp ? [selected.ffp] : [],
+          "1",
+        );
+        html += makeSummaryBox(
+          "Finger Food Complementar",
+          selected.ffc ? [selected.ffc] : [],
+          "1",
+        );
+        if (obs)
+          html += `<div class="summary-box"><h4>Observações</h4><p style="font-size:.8rem">${obs}</p></div>`;
+        html += `<div style="background:#FDEDEC;border-radius:10px;padding:14px;margin-top:12px;font-size:.8rem;color:#922B21;text-align:center;font-weight:600">Após validar, não será possível alterar suas escolhas.</div>`;
+        document.getElementById("finalSummary").innerHTML = html;
+        document
+          .querySelectorAll("main section")
+          .forEach((s) => s.classList.remove("active"));
+        document.getElementById("resumo").classList.add("active");
+        document
+          .querySelectorAll("#tabNav button")
+          .forEach((b) => b.classList.remove("active"));
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      function makeSummaryBox(title, items, max) {
+        const wrap = `<div class="summary-box"><h4>${title} (${items.length}/${max})</h4>`;
+        if (!items.length)
+          return (
+            wrap +
+            `<p style="font-size:.75rem;color:var(--muted)">Nenhuma opção selecionada</p></div>`
+          );
+        return (
+          wrap +
+          `<div class="items">${items.map((i) => `<span class="item">${i}</span>`).join("")}</div></div>`
+        );
+      }
+
+      async function validarPreenchimento() {
+        const obs = document.getElementById("obsText").value.trim();
+        const payload = {
+          familia: currentFamily,
+          salgados: selected.salgados,
+          doces_tradicionais: selected.docesTrad,
+          doces_especiais: selected.docesEsp,
+          finger_food_principal: selected.ffp,
+          finger_food_complementar: selected.ffc,
+          batidinha: "Sem álcool",
+          observacoes: obs,
+          confirmado: true,
+          updated_at: new Date().toISOString(),
+        };
+        let error;
+        if (existingVote) {
+          ({ error } = await sb
+            .from("formatura_votos")
+            .update(payload)
+            .eq("familia", currentFamily));
+        } else {
+          ({ error } = await sb.from("formatura_votos").insert(payload));
+        }
+        if (error) {
+          console.error(error);
+          toast("Erro ao salvar. Tente novamente.", "error");
+          return;
+        }
+        toast("Preenchimento validado com sucesso!", "success");
+        existingVote = payload;
+        showReadOnly(payload);
+      }
+
       function renderVenues() {
-        const g = document.getElementById("venueGrid");
-        g.innerHTML = venues
+        document.getElementById("venueGrid").innerHTML = venues
           .map(
             (v) => `
     <div class="venue ${v.winner ? "winner" : ""}">
       ${v.winner ? '<span class="badge">ESCOLHIDO</span>' : ""}
-      <h3>${v.name}</h3>
-      <div class="loc">${v.loc}</div>
+      <h3>${v.name}</h3><div class="loc">${v.loc}</div>
       <div class="price ${v.winner ? "winner-price" : ""}">${fmt(v.total)}</div>
       <div class="per-person">${fmt(v.pp)}/pessoa | Meia: ${fmt(v.half)}</div>
       <div class="includes">${v.inc}</div>
       <div class="note ${v.noteClass}">${v.note}</div>
-    </div>
-  `,
+    </div>`,
           )
           .join("");
       }
-
       function renderFamilyTable() {
-        const t = document.getElementById("familyTable");
-        t.innerHTML = families
+        document.getElementById("familyTable").innerHTML = families
           .map(
-            (f) => `
-    <tr>
-      <td>${f.ref}</td><td><strong>${f.child}</strong></td><td>${f.parent}</td>
-      <td>${f.total}</td><td>${f.adults}</td><td>${f.u3 || "-"}</td><td>${f.a47}</td><td>${f.o8 || "-"}</td>
-      <td class="money">${fmt(73.65)}</td>
-      <td class="money"><strong>${fmt(f.val)}</strong></td>
-      <td class="money">${fmt(f.inst)}</td>
-    </tr>
-  `,
+            (f) =>
+              `<tr><td>${f.ref}</td><td><strong>${f.child}</strong></td><td>${f.parent}</td><td>${f.total}</td><td>${f.adults}</td><td>${f.u3 || "-"}</td><td>${f.a47}</td><td>${f.o8 || "-"}</td><td class="money">${fmt(73.65)}</td><td class="money"><strong>${fmt(f.val)}</strong></td><td class="money">${fmt(f.inst)}</td></tr>`,
           )
           .join("");
       }
-
       function renderSchoolTeam() {
-        const el = document.getElementById("schoolTeam");
-        el.innerHTML = schoolTeam
+        document.getElementById("schoolTeam").innerHTML = schoolTeam
           .map(
-            (m) => `
-    <div class="team-member"><span class="dot"></span><span>${m.n}</span><span class="role">— ${m.r}</span></div>
-  `,
+            (m) =>
+              `<div class="team-member"><span class="dot"></span><span>${m.n}</span><span class="role">— ${m.r}</span></div>`,
           )
           .join("");
       }
-
       function renderOptions(containerId, items, category, max, isRadio) {
-        const grid = document.getElementById(containerId);
-        grid.innerHTML = items
+        document.getElementById(containerId).innerHTML = items
           .map(
-            (item, i) => `
-    <div class="opt ${isRadio ? "radio" : ""}" data-cat="${category}" data-val="${item}" onclick="toggleOption(this,'${category}',${max},${isRadio})">
-      <span class="check">${isRadio ? "" : "&#10003;"}</span>
-      <span>${item}</span>
-    </div>
-  `,
+            (item) =>
+              `<div class="opt ${isRadio ? "radio" : ""}" data-cat="${category}" data-val="${item}" onclick="toggleOption(this,'${category}',${max},${isRadio})"><span class="check">${isRadio ? "" : "&#10003;"}</span><span>${item}</span></div>`,
           )
           .join("");
       }
-
       function toggleOption(el, category, max, isRadio) {
         if (isRadio) {
           el.parentElement
@@ -1619,349 +1858,65 @@
             if (arr.length >= max) return;
             el.classList.add("selected");
             arr.push(val);
-            if (arr.length >= max) {
+            if (arr.length >= max)
               el.parentElement
                 .querySelectorAll(".opt:not(.selected)")
                 .forEach((o) => o.classList.add("disabled"));
-            }
           }
         }
         updateCounters();
       }
-
       function updateCounters() {
-        updateCounter("countSalgados", selected.salgados.length, 10);
-        updateCounter("countDocesTrad", selected.docesTrad.length, 7);
-        updateCounter("countDocesEsp", selected.docesEsp.length, 4);
-        updateCounter("countFFP", selected.ffp ? 1 : 0, 1);
-        updateCounter("countFFC", selected.ffc ? 1 : 0, 1);
+        updC("countSalgados", selected.salgados.length, 10);
+        updC("countDocesTrad", selected.docesTrad.length, 7);
+        updC("countDocesEsp", selected.docesEsp.length, 4);
+        updC("countFFP", selected.ffp ? 1 : 0, 1);
+        updC("countFFC", selected.ffc ? 1 : 0, 1);
       }
-
-      function updateCounter(id, count, max) {
+      function updC(id, count, max) {
         const el = document.getElementById(id);
         el.textContent = `${count}/${max}`;
-        el.className =
-          "counter" + (count === max ? " full" : count > max ? " over" : "");
+        el.className = "counter" + (count === max ? " full" : "");
       }
-
-      function populateFamilyDropdowns() {
-        const opts = families
-          .map(
-            (f) =>
-              `<option value="${f.child}">${f.child} (${f.parent})</option>`,
-          )
-          .join("");
-        document.getElementById("familySelect").innerHTML =
-          '<option value="">Selecione sua família...</option>' + opts;
-        document.getElementById("familySelectObs").innerHTML =
-          '<option value="">Selecione sua família...</option>' + opts;
-      }
-
-      async function onFamilySelect() {
-        const sel = document.getElementById("familySelect").value;
-        currentFamily = sel;
-        if (!sel) {
-          document.getElementById("votingArea").style.display = "none";
-          document.getElementById("voteStatus").style.display = "none";
-          return;
-        }
-        selected = {
-          salgados: [],
-          docesTrad: [],
-          docesEsp: [],
-          ffp: "",
-          ffc: "",
-        };
-        renderAllOptions();
-
-        const { data } = await sb
-          .from("formatura_votos")
-          .select("*")
-          .eq("familia", sel)
-          .maybeSingle();
-        existingVote = data;
-        const status = document.getElementById("voteStatus");
-        if (data && data.confirmado) {
-          status.innerHTML =
-            "Sua família já votou. Você pode alterar suas escolhas abaixo.";
-          status.className = "vote-status voted";
-          status.style.display = "block";
-          restoreSelections(data);
-        } else {
-          status.style.display = "none";
-        }
-        document.getElementById("votingArea").style.display = "block";
-      }
-
-      function restoreSelections(data) {
-        if (data.salgados) {
-          selected.salgados = data.salgados;
-          applySelections("salgados", data.salgados, 10);
-        }
-        if (data.doces_tradicionais) {
-          selected.docesTrad = data.doces_tradicionais;
-          applySelections("docesTrad", data.doces_tradicionais, 7);
-        }
-        if (data.doces_especiais) {
-          selected.docesEsp = data.doces_especiais;
-          applySelections("docesEsp", data.doces_especiais, 4);
-        }
-        if (data.finger_food_principal) {
-          selected.ffp = data.finger_food_principal;
-          applyRadio("ffp", data.finger_food_principal);
-        }
-        if (data.finger_food_complementar) {
-          selected.ffc = data.finger_food_complementar;
-          applyRadio("ffc", data.finger_food_complementar);
-        }
-        updateCounters();
-      }
-
-      function applySelections(cat, items, max) {
-        document.querySelectorAll(`[data-cat="${cat}"]`).forEach((el) => {
-          if (items.includes(el.dataset.val)) el.classList.add("selected");
-        });
-        if (items.length >= max) {
-          document
-            .querySelectorAll(`[data-cat="${cat}"]:not(.selected)`)
-            .forEach((o) => o.classList.add("disabled"));
-        }
-      }
-
-      function applyRadio(cat, val) {
-        document.querySelectorAll(`[data-cat="${cat}"]`).forEach((el) => {
-          if (el.dataset.val === val) el.classList.add("selected");
-        });
-      }
-
       function renderAllOptions() {
         renderOptions("gridSalgados", salgados, "salgados", 10, false);
         renderOptions("gridDocesTrad", docesTrad, "docesTrad", 7, false);
         renderOptions("gridDocesEsp", docesEsp, "docesEsp", 4, false);
         renderOptions("gridFFP", fingerPrincipal, "ffp", 1, true);
         renderOptions("gridFFC", fingerCompl, "ffc", 1, true);
+        if (selected.salgados.length) applyS("salgados", selected.salgados, 10);
+        if (selected.docesTrad.length)
+          applyS("docesTrad", selected.docesTrad, 7);
+        if (selected.docesEsp.length) applyS("docesEsp", selected.docesEsp, 4);
+        if (selected.ffp) applyR("ffp", selected.ffp);
+        if (selected.ffc) applyR("ffc", selected.ffc);
         updateCounters();
       }
-
-      function showConfirmModal() {
-        if (!currentFamily)
-          return toast("Selecione sua família primeiro", "error");
-        if (selected.salgados.length === 0 && !selected.ffp && !selected.ffc)
-          return toast("Selecione pelo menos algumas opções", "error");
-
-        const summary = document.getElementById("modalSummary");
-        summary.innerHTML = `
-    <p style="font-size:.85rem;margin-bottom:12px"><strong>Família:</strong> ${currentFamily}</p>
-    ${makeSummaryBox("Salgados", selected.salgados, "10")}
-    ${makeSummaryBox("Doces Tradicionais", selected.docesTrad, "7")}
-    ${makeSummaryBox("Doces Especiais", selected.docesEsp, "4")}
-    ${makeSummaryBox("Finger Food Principal", selected.ffp ? [selected.ffp] : [], "1")}
-    ${makeSummaryBox("Finger Food Complementar", selected.ffc ? [selected.ffc] : [], "1")}
-  `;
-        document.getElementById("confirmModal").classList.add("show");
+      function applyS(cat, items, max) {
+        document.querySelectorAll(`[data-cat="${cat}"]`).forEach((el) => {
+          if (items.includes(el.dataset.val)) el.classList.add("selected");
+        });
+        if (items.length >= max)
+          document
+            .querySelectorAll(`[data-cat="${cat}"]:not(.selected)`)
+            .forEach((o) => o.classList.add("disabled"));
       }
-
-      function makeSummaryBox(title, items, max) {
-        if (!items.length)
-          return `<div class="summary-box"><h4>${title} (0/${max})</h4><p style="font-size:.75rem;color:var(--muted)">Nenhuma opção selecionada</p></div>`;
-        return `<div class="summary-box"><h4>${title} (${items.length}/${max})</h4><div class="items">${items.map((i) => `<span class="item">${i}</span>`).join("")}</div></div>`;
+      function applyR(cat, val) {
+        document.querySelectorAll(`[data-cat="${cat}"]`).forEach((el) => {
+          if (el.dataset.val === val) el.classList.add("selected");
+        });
       }
-
-      function closeModal() {
-        document.getElementById("confirmModal").classList.remove("show");
-      }
-
-      async function submitVote() {
-        closeModal();
-        const payload = {
-          familia: currentFamily,
-          salgados: selected.salgados,
-          doces_tradicionais: selected.docesTrad,
-          doces_especiais: selected.docesEsp,
-          finger_food_principal: selected.ffp,
-          finger_food_complementar: selected.ffc,
-          batidinha: "Sem álcool",
-          confirmado: true,
-          updated_at: new Date().toISOString(),
-        };
-        let error;
-        if (existingVote) {
-          ({ error } = await sb
-            .from("formatura_votos")
-            .update(payload)
-            .eq("familia", currentFamily));
-        } else {
-          ({ error } = await sb.from("formatura_votos").insert(payload));
-        }
-        if (error) {
-          console.error(error);
-          toast("Erro ao salvar. Tente novamente.", "error");
-        } else {
-          toast("Votação confirmada com sucesso!", "success");
-          existingVote = payload;
-          document.getElementById("voteStatus").innerHTML =
-            "Voto registrado com sucesso!";
-          document.getElementById("voteStatus").className = "vote-status voted";
-          document.getElementById("voteStatus").style.display = "block";
-          loadResults();
-        }
-      }
-
-      async function loadResults() {
-        const { data } = await sb
-          .from("formatura_votos")
-          .select("*")
-          .eq("confirmado", true);
-        if (!data) return;
-        document.getElementById("voteCount").textContent = data.length;
-        if (data.length === 0) {
-          document.getElementById("resultsContent").innerHTML =
-            '<p style="font-size:.8rem;color:var(--muted)">Nenhum voto registrado ainda.</p>';
-          return;
-        }
-
-        const tally = (items, key) => {
-          const counts = {};
-          data.forEach((v) => {
-            (v[key] || []).forEach((item) => {
-              counts[item] = (counts[item] || 0) + 1;
-            });
-          });
-          return Object.entries(counts).sort((a, b) => b[1] - a[1]);
-        };
-
-        const tallyRadio = (key) => {
-          const counts = {};
-          data.forEach((v) => {
-            if (v[key]) counts[v[key]] = (counts[v[key]] || 0) + 1;
-          });
-          return Object.entries(counts).sort((a, b) => b[1] - a[1]);
-        };
-
-        const maxVotes = data.length;
-        const renderBars = (title, entries, limit) => {
-          if (!entries.length) return "";
-          return (
-            `<div style="margin-bottom:20px"><h4 style="font-size:.85rem;color:var(--pri);margin-bottom:8px">${title}</h4>` +
-            entries
-              .map(([name, count], i) => {
-                const pct = Math.round((count / maxVotes) * 100);
-                const isTop = limit ? i < limit : false;
-                return `<div class="result-bar"><span class="name" ${isTop ? 'style="font-weight:600"' : ""}>${isTop ? "&#9733; " : ""} ${name}</span><div style="width:${Math.max(pct, 5)}%;max-width:200px" class="bar" ${!isTop ? 'style="background:var(--border)"' : ""}></div><span class="count">${count}</span></div>`;
-              })
-              .join("") +
-            "</div>"
-          );
-        };
-
-        document.getElementById("resultsContent").innerHTML =
-          renderBars("Salgados (top 10)", tally(salgados, "salgados"), 10) +
-          renderBars(
-            "Doces Tradicionais (top 7)",
-            tally(docesTrad, "doces_tradicionais"),
-            7,
-          ) +
-          renderBars(
-            "Doces Especiais (top 4)",
-            tally(docesEsp, "doces_especiais"),
-            4,
-          ) +
-          renderBars(
-            "Finger Food Principal",
-            tallyRadio("finger_food_principal"),
-          ) +
-          renderBars(
-            "Finger Food Complementar",
-            tallyRadio("finger_food_complementar"),
-          );
-      }
-
-      async function onFamilySelectObs() {
-        const sel = document.getElementById("familySelectObs").value;
-        if (!sel) {
-          document.getElementById("obsArea").style.display = "none";
-          return;
-        }
-        document.getElementById("obsArea").style.display = "block";
-        const { data } = await sb
-          .from("formatura_votos")
-          .select("observacoes")
-          .eq("familia", sel)
-          .maybeSingle();
-        document.getElementById("obsText").value =
-          (data && data.observacoes) || "";
-      }
-
-      async function saveObservation() {
-        const familia = document.getElementById("familySelectObs").value;
-        const obs = document.getElementById("obsText").value.trim();
-        if (!familia) return toast("Selecione sua família", "error");
-
-        const { data: existing } = await sb
-          .from("formatura_votos")
-          .select("id")
-          .eq("familia", familia)
-          .maybeSingle();
-        let error;
-        if (existing) {
-          ({ error } = await sb
-            .from("formatura_votos")
-            .update({ observacoes: obs, updated_at: new Date().toISOString() })
-            .eq("familia", familia));
-        } else {
-          ({ error } = await sb
-            .from("formatura_votos")
-            .insert({ familia, observacoes: obs }));
-        }
-        if (error) {
-          console.error(error);
-          toast("Erro ao salvar", "error");
-        } else {
-          toast("Observação salva com sucesso!", "success");
-          loadAllObservations();
-        }
-      }
-
-      async function loadAllObservations() {
-        const { data } = await sb
-          .from("formatura_votos")
-          .select("familia, observacoes, updated_at")
-          .not("observacoes", "eq", "")
-          .not("observacoes", "is", null)
-          .order("updated_at", { ascending: false });
-        const card = document.getElementById("allObsCard");
-        const list = document.getElementById("allObsList");
-        if (!data || data.length === 0) {
-          card.style.display = "none";
-          return;
-        }
-        card.style.display = "block";
-        list.innerHTML = data
-          .map(
-            (d) => `
-    <div style="padding:12px;border-bottom:1px solid var(--border)">
-      <strong style="font-size:.82rem">${d.familia}</strong>
-      <span style="font-size:.7rem;color:var(--muted);margin-left:8px">${new Date(d.updated_at).toLocaleDateString("pt-BR")}</span>
-      <p style="font-size:.8rem;margin-top:4px;color:var(--txt)">${d.observacoes}</p>
-    </div>
-  `,
-          )
-          .join("");
-      }
-
       function toast(msg, type) {
         const t = document.getElementById("toast");
         t.textContent = msg;
         t.className = "toast show " + (type || "");
-        setTimeout(() => (t.className = "toast"), 3000);
+        setTimeout(() => (t.className = "toast"), 3500);
       }
 
       renderVenues();
       renderFamilyTable();
       renderSchoolTeam();
-      populateFamilyDropdowns();
-      renderAllOptions();
-      loadResults();
+      populateFamily();
     </script>
   </body>
 </html>
