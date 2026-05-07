@@ -2156,7 +2156,10 @@
         if (data.forma_pagamento) {
           const isParcelado = data.forma_pagamento === "parcelado";
           let pgtoHtml = `<div class="card"><h2>Pagamento</h2>`;
-          pgtoHtml += `<p style="font-size:.95rem;font-weight:700;color:var(--pri);margin-bottom:8px;">Valor Total: ${fam ? fmt(fam.val) : "—"}</p>`;
+          const valorTotal = fam ? (isParcelado ? fam.val : fam.val + 70) : 0;
+          pgtoHtml += `<p style="font-size:.95rem;font-weight:700;color:var(--pri);margin-bottom:8px;">Valor Total: ${fam ? fmt(valorTotal) : "—"}</p>`;
+          if (!isParcelado && fam)
+            pgtoHtml += `<p style="font-size:.78rem;color:var(--muted);">(Buffet ${fmt(fam.val)} + Fundo de Reserva R$ 70,00)</p>`;
           pgtoHtml += `<p style="font-size:.85rem"><strong>Forma:</strong> ${isParcelado ? "Parcelado 7x" : "À Vista"}</p>`;
           if (isParcelado && fam) {
             pgtoHtml += `<p style="font-size:.95rem;font-weight:700;color:#e65100;margin-top:8px;">Parcela: ${fmt(fam.inst)}/mês</p>`;
@@ -2186,6 +2189,14 @@
         document.getElementById("readOnlySummary").innerHTML = html;
         updatePixDisplay();
         loadComprovantes();
+        const mesRef = document.getElementById("mesRef");
+        if (data.forma_pagamento === "avista") {
+          mesRef.innerHTML =
+            '<option value="">Selecione...</option><option value="Pagamento Integral">Pagamento Integral (À Vista)</option>';
+        } else {
+          mesRef.innerHTML =
+            '<option value="">Selecione o mês de referência...</option><option value="05/2026">Maio/2026 (1ª parcela)</option><option value="06/2026">Junho/2026 (2ª parcela)</option><option value="07/2026">Julho/2026 (3ª parcela)</option><option value="08/2026">Agosto/2026 (4ª parcela)</option><option value="09/2026">Setembro/2026 (5ª parcela)</option><option value="10/2026">Outubro/2026 (6ª parcela)</option><option value="11/2026">Novembro/2026 (7ª parcela)</option>';
+        }
       }
 
       function resetFlow() {
@@ -2323,7 +2334,12 @@
         const fam = families.find((f) => f.child === currentFamily);
         const pix = getPixInfo(currentFamily);
         let html = `<div class="summary-box"><h4>Família</h4><p style="font-size:.85rem"><strong>${currentFamily}</strong> (${fam ? fam.parent : ""})</p></div>`;
-        html += `<div class="summary-box"><h4>Pagamento</h4><p style="font-size:.8rem"><strong>Forma:</strong> ${formaPagamento === "avista" ? "À Vista" : "Parcelado 7x"}</p>${pix ? `<p style="font-size:.8rem"><strong>PIX:</strong> ${pix.chave} (${pix.titular})</p>` : ""}</div>`;
+        const valorFinal = fam
+          ? formaPagamento === "avista"
+            ? fam.val + 70
+            : fam.val
+          : 0;
+        html += `<div class="summary-box"><h4>Pagamento</h4><p style="font-size:.8rem"><strong>Forma:</strong> ${formaPagamento === "avista" ? "À Vista" : "Parcelado 7x"}</p><p style="font-size:.8rem"><strong>Valor:</strong> ${fam ? fmt(valorFinal) : "—"}${formaPagamento === "avista" && fam ? ` <span style="color:var(--muted);font-size:.75rem">(Buffet ${fmt(fam.val)} + Fundo R$70)</span>` : ""}</p>${pix ? `<p style="font-size:.8rem"><strong>PIX:</strong> ${pix.chave} (${pix.titular})</p>` : ""}</div>`;
         html += makeSummaryBox("Salgados", selected.salgados, "10");
         html += makeSummaryBox("Doces Tradicionais", selected.docesTrad, "7");
         html += makeSummaryBox("Doces Especiais", selected.docesEsp, "4");
@@ -2671,7 +2687,11 @@
         const familiasValidas = families.filter((f) => !f.exclude);
         const totalFamilias = familiasValidas.length;
         const respondidas = votos
-          ? votos.filter((v) => v.confirmado && familiasValidas.some((f) => f.child === v.familia)).length
+          ? votos.filter(
+              (v) =>
+                v.confirmado &&
+                familiasValidas.some((f) => f.child === v.familia),
+            ).length
           : 0;
         const pendentes = totalFamilias - respondidas;
         const totalComps = comprovantes ? comprovantes.length : 0;
