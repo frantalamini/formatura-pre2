@@ -1804,6 +1804,19 @@
           inst: 73.46,
         },
         {
+          ref: 24,
+          child: "Sofia ★",
+          parent: "Diego",
+          total: 4,
+          adults: 3,
+          u3: 0,
+          a47: 1,
+          o8: 0,
+          val: 0,
+          inst: 0,
+          exclude: true,
+        },
+        {
           ref: 23,
           child: "Maria Clara",
           parent: "Cléia",
@@ -2655,9 +2668,10 @@
           .from("formatura_comprovantes")
           .select("*")
           .order("created_at", { ascending: false });
-        const totalFamilias = families.length;
+        const familiasValidas = families.filter((f) => !f.exclude);
+        const totalFamilias = familiasValidas.length;
         const respondidas = votos
-          ? votos.filter((v) => v.confirmado).length
+          ? votos.filter((v) => v.confirmado && familiasValidas.some((f) => f.child === v.familia)).length
           : 0;
         const pendentes = totalFamilias - respondidas;
         const totalComps = comprovantes ? comprovantes.length : 0;
