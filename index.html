@@ -40,6 +40,7 @@
         min-height: 100vh;
         overflow-x: hidden;
         width: 100%;
+        max-width: 100vw;
       }
       header {
         background: linear-gradient(
@@ -141,6 +142,7 @@
         top: 0;
         z-index: 100;
         overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
       }
       .tabs button {
         flex: 1;
@@ -155,11 +157,13 @@
         cursor: pointer;
         border-bottom: 3px solid transparent;
         transition: 0.2s;
-        white-space: nowrap;
+        white-space: normal;
+        text-align: center;
+        line-height: 1.2;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 6px;
+        gap: 4px;
       }
       .tabs button.active {
         color: var(--pri);
@@ -789,7 +793,7 @@
         border-radius: 10px;
         padding: 14px 16px;
         margin-bottom: 10px;
-        box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
         display: flex;
         align-items: center;
         gap: 12px;
@@ -837,9 +841,19 @@
         .options-grid {
           grid-template-columns: 1fr 1fr;
         }
+        .tabs {
+          gap: 0;
+        }
         .tabs button {
-          font-size: 0.65rem;
-          padding: 11px 4px;
+          font-size: 0.62rem;
+          padding: 10px 3px;
+          gap: 2px;
+          flex-direction: column;
+        }
+        .tabs button .tab-icon {
+          width: 16px;
+          height: 16px;
+          font-size: 0.55rem;
         }
         main {
           padding: 8px;
@@ -886,9 +900,13 @@
   </head>
   <body>
     <header>
-      <div class="header-icons">&#127891;&#127775;&#128103;&#129490;&#127775;&#127891;</div>
+      <div class="header-icons">
+        &#127891;&#127775;&#128103;&#129490;&#127775;&#127891;
+      </div>
       <h1>Formatura Pré II — 2026</h1>
-      <div class="subtitle">Eles cresceram... e nós crescemos com eles &#128155;</div>
+      <div class="subtitle">
+        Eles cresceram... e nós crescemos com eles &#128155;
+      </div>
       <div class="buffet-info hidden" id="buffetInfo">
         <p>Buffet Infantil Star Happy — Planejamento e Votação</p>
         <div class="endereco">
@@ -938,36 +956,193 @@
         </div>
 
         <!-- Modal de Senha -->
-        <div id="senhaModal" style="display:none;">
-          <div class="card" style="max-width:400px;margin:20px auto;text-align:center;">
-            <div id="senhaRegistro" style="display:none;">
-              <h2 style="font-size:1rem;margin-bottom:6px;">Cadastre sua senha</h2>
-              <p style="font-size:0.8rem;color:var(--muted);margin-bottom:14px;">Crie uma senha para proteger os dados da sua família.</p>
-              <div style="position:relative;margin-bottom:8px;">
-                <input type="password" id="senhaNew" placeholder="Digite sua senha" class="form-input" style="text-align:center;padding-right:40px;" />
-                <span onclick="toggleSenha('senhaNew',this)" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:1.1rem;user-select:none;">&#128065;</span>
+        <div id="senhaModal" style="display: none">
+          <div
+            class="card"
+            style="max-width: 400px; margin: 20px auto; text-align: center"
+          >
+            <div id="senhaRegistro" style="display: none">
+              <h2 style="font-size: 1rem; margin-bottom: 6px">
+                Cadastre sua senha
+              </h2>
+              <p
+                style="
+                  font-size: 0.8rem;
+                  color: var(--muted);
+                  margin-bottom: 14px;
+                "
+              >
+                Crie uma senha para proteger os dados da sua família.
+              </p>
+              <div style="position: relative; margin-bottom: 8px">
+                <input
+                  type="password"
+                  id="senhaNew"
+                  placeholder="Digite sua senha"
+                  class="form-input"
+                  style="text-align: center; padding-right: 40px"
+                />
+                <span
+                  onclick="toggleSenha('senhaNew', this)"
+                  style="
+                    position: absolute;
+                    right: 10px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    cursor: pointer;
+                    font-size: 1.1rem;
+                    user-select: none;
+                  "
+                  >&#128065;</span
+                >
               </div>
-              <div style="position:relative;margin-bottom:8px;">
-                <input type="password" id="senhaConfirm" placeholder="Confirme sua senha" class="form-input" style="text-align:center;padding-right:40px;" />
-                <span onclick="toggleSenha('senhaConfirm',this)" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:1.1rem;user-select:none;">&#128065;</span>
+              <div style="position: relative; margin-bottom: 8px">
+                <input
+                  type="password"
+                  id="senhaConfirm"
+                  placeholder="Confirme sua senha"
+                  class="form-input"
+                  style="text-align: center; padding-right: 40px"
+                />
+                <span
+                  onclick="toggleSenha('senhaConfirm', this)"
+                  style="
+                    position: absolute;
+                    right: 10px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    cursor: pointer;
+                    font-size: 1.1rem;
+                    user-select: none;
+                  "
+                  >&#128065;</span
+                >
               </div>
-              <p id="senhaRegErro" style="color:#e74c3c;font-size:0.8rem;display:none;margin-bottom:8px;"></p>
-              <button onclick="registrarSenha()" style="background:var(--pri);color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:0.9rem;cursor:pointer;width:100%;">Cadastrar Senha</button>
+              <p
+                id="senhaRegErro"
+                style="
+                  color: #e74c3c;
+                  font-size: 0.8rem;
+                  display: none;
+                  margin-bottom: 8px;
+                "
+              ></p>
+              <button
+                onclick="registrarSenha()"
+                style="
+                  background: var(--pri);
+                  color: #fff;
+                  border: none;
+                  border-radius: 8px;
+                  padding: 10px 24px;
+                  font-size: 0.9rem;
+                  cursor: pointer;
+                  width: 100%;
+                "
+              >
+                Cadastrar Senha
+              </button>
             </div>
-            <div id="senhaLogin" style="display:none;">
-              <h2 style="font-size:1rem;margin-bottom:6px;">Digite sua senha</h2>
-              <p style="font-size:0.8rem;color:var(--muted);margin-bottom:14px;">Acesso protegido por senha.</p>
-              <div style="position:relative;margin-bottom:8px;">
-                <input type="password" id="senhaInput" placeholder="Sua senha" class="form-input" style="text-align:center;padding-right:40px;" onkeydown="if(event.key==='Enter')verificarSenha()" />
-                <span onclick="toggleSenha('senhaInput',this)" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:1.1rem;user-select:none;">&#128065;</span>
+            <div id="senhaLogin" style="display: none">
+              <h2 style="font-size: 1rem; margin-bottom: 6px">
+                Digite sua senha
+              </h2>
+              <p
+                style="
+                  font-size: 0.8rem;
+                  color: var(--muted);
+                  margin-bottom: 14px;
+                "
+              >
+                Acesso protegido por senha.
+              </p>
+              <div style="position: relative; margin-bottom: 8px">
+                <input
+                  type="password"
+                  id="senhaInput"
+                  placeholder="Sua senha"
+                  class="form-input"
+                  style="text-align: center; padding-right: 40px"
+                  onkeydown="if (event.key === 'Enter') verificarSenha();"
+                />
+                <span
+                  onclick="toggleSenha('senhaInput', this)"
+                  style="
+                    position: absolute;
+                    right: 10px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    cursor: pointer;
+                    font-size: 1.1rem;
+                    user-select: none;
+                  "
+                  >&#128065;</span
+                >
               </div>
-              <p id="senhaLoginErro" style="color:#e74c3c;font-size:0.8rem;display:none;margin-bottom:8px;"></p>
-              <button onclick="verificarSenha()" style="background:var(--pri);color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:0.9rem;cursor:pointer;width:100%;margin-bottom:10px;">Entrar</button>
-              <button onclick="esqueciSenha()" style="background:none;border:none;color:var(--muted);font-size:0.78rem;cursor:pointer;text-decoration:underline;">Esqueci minha senha</button>
+              <p
+                id="senhaLoginErro"
+                style="
+                  color: #e74c3c;
+                  font-size: 0.8rem;
+                  display: none;
+                  margin-bottom: 8px;
+                "
+              ></p>
+              <button
+                onclick="verificarSenha()"
+                style="
+                  background: var(--pri);
+                  color: #fff;
+                  border: none;
+                  border-radius: 8px;
+                  padding: 10px 24px;
+                  font-size: 0.9rem;
+                  cursor: pointer;
+                  width: 100%;
+                  margin-bottom: 10px;
+                "
+              >
+                Entrar
+              </button>
+              <button
+                onclick="esqueciSenha()"
+                style="
+                  background: none;
+                  border: none;
+                  color: var(--muted);
+                  font-size: 0.78rem;
+                  cursor: pointer;
+                  text-decoration: underline;
+                "
+              >
+                Esqueci minha senha
+              </button>
             </div>
-            <div id="senhaEsqueci" style="display:none;">
-              <p style="font-size:0.85rem;color:var(--text);margin-bottom:12px;">Entre em contato com a comissão de formatura para resetar sua senha.</p>
-              <button onclick="voltarLogin()" style="background:var(--pri);color:#fff;border:none;border-radius:8px;padding:8px 20px;font-size:0.85rem;cursor:pointer;">Voltar</button>
+            <div id="senhaEsqueci" style="display: none">
+              <p
+                style="
+                  font-size: 0.85rem;
+                  color: var(--text);
+                  margin-bottom: 12px;
+                "
+              >
+                Entre em contato com a comissão de formatura para resetar sua
+                senha.
+              </p>
+              <button
+                onclick="voltarLogin()"
+                style="
+                  background: var(--pri);
+                  color: #fff;
+                  border: none;
+                  border-radius: 8px;
+                  padding: 8px 20px;
+                  font-size: 0.85rem;
+                  cursor: pointer;
+                "
+              >
+                Voltar
+              </button>
             </div>
           </div>
         </div>
@@ -976,20 +1151,52 @@
 
     <!-- LEITURA SOMENTE (família já validou) -->
     <div id="readOnlyView" style="display: none" class="gate">
-      <div class="card" style="background:linear-gradient(135deg,#fff3e0,#ffe0b2);border:2px solid #ff9800;text-align:center;padding:20px 16px;margin-bottom:0;">
-        <div style="font-size:1.8rem;margin-bottom:6px;">&#127891;&#127881;</div>
-        <h2 style="color:#e65100;font-size:1.2rem;margin-bottom:4px;">Formatura Pré II — 2026</h2>
-        <p style="font-size:1.3rem;font-weight:800;color:#bf360c;margin-bottom:2px;">12 de Dezembro de 2026</p>
-        <p style="font-size:1rem;font-weight:600;color:#e65100;">18h às 23h</p>
-        <p style="font-size:0.82rem;color:#6d4c41;margin-top:4px;">Horário de chegada: 17h30</p>
-        <p style="font-size:0.8rem;color:#6d4c41;margin-top:4px;">&#128205; Star Happy Buffet — Pinhais/PR</p>
+      <div
+        class="card"
+        style="
+          background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+          border: 2px solid #ff9800;
+          text-align: center;
+          padding: 20px 16px;
+          margin-bottom: 0;
+        "
+      >
+        <div style="font-size: 1.8rem; margin-bottom: 6px">
+          &#127891;&#127881;
+        </div>
+        <h2 style="color: #e65100; font-size: 1.2rem; margin-bottom: 4px">
+          Formatura Pré II — 2026
+        </h2>
+        <p
+          style="
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #bf360c;
+            margin-bottom: 2px;
+          "
+        >
+          12 de Dezembro de 2026
+        </p>
+        <p style="font-size: 1rem; font-weight: 600; color: #e65100">
+          18h às 23h
+        </p>
+        <p style="font-size: 0.82rem; color: #6d4c41; margin-top: 4px">
+          Horário de chegada: 17h30
+        </p>
+        <p style="font-size: 0.8rem; color: #6d4c41; margin-top: 4px">
+          &#128205; Star Happy Buffet — Pinhais/PR
+        </p>
       </div>
       <div class="validated-banner">
         <h2>Preenchimento Validado</h2>
         <p id="readOnlyDate"></p>
       </div>
       <nav class="tabs" id="roTabNav">
-        <button class="active" data-rotab="roValores" onclick="showRoTab('roValores')">
+        <button
+          class="active"
+          data-rotab="roValores"
+          onclick="showRoTab('roValores')"
+        >
           <span class="tab-icon">1</span>Valores
         </button>
         <button data-rotab="roPrestacao" onclick="showRoTab('roPrestacao')">
@@ -1007,44 +1214,123 @@
         <section id="roValores" class="ro-tab active">
           <div class="card">
             <h2>Como ficou o contrato</h2>
-            <div style="font-size:0.84rem;line-height:1.8;color:var(--txt);">
-              <p>Com a saída de 1 família, o contrato foi recalculado para <strong>22 famílias</strong> e <strong>120 pessoas</strong>.</p>
-              <p style="margin-top:10px;font-weight:600;color:var(--pri);">Composição do contrato:</p>
-              <div style="background:#f8f9fa;border-radius:10px;padding:12px 14px;margin:8px 0;font-size:0.82rem;line-height:1.9;">
+            <div
+              style="font-size: 0.84rem; line-height: 1.8; color: var(--txt)"
+            >
+              <p>
+                Com a saída de 1 família, o contrato foi recalculado para
+                <strong>22 famílias</strong> e <strong>120 pessoas</strong>.
+              </p>
+              <p style="margin-top: 10px; font-weight: 600; color: var(--pri)">
+                Composição do contrato:
+              </p>
+              <div
+                style="
+                  background: #f8f9fa;
+                  border-radius: 10px;
+                  padding: 12px 14px;
+                  margin: 8px 0;
+                  font-size: 0.82rem;
+                  line-height: 1.9;
+                "
+              >
                 <p>96 adultos × R$ 103,14 = <strong>R$ 9.901,12</strong></p>
-                <p>2 crianças +8 anos × R$ 103,14 = <strong>R$ 206,27</strong></p>
-                <p>26 crianças 4-7 anos × R$ 51,57 (meia) = <strong>R$ 1.340,78</strong></p>
+                <p>
+                  2 crianças +8 anos × R$ 103,14 = <strong>R$ 206,27</strong>
+                </p>
+                <p>
+                  26 crianças 4-7 anos × R$ 51,57 (meia) =
+                  <strong>R$ 1.340,78</strong>
+                </p>
                 <p>9 equipe escola × R$ 103,14 = <strong>R$ 928,23</strong></p>
-                <p style="font-weight:700;color:var(--pri);margin-top:6px;font-size:0.88rem;">Valor do contrato: R$ 12.376,40</p>
+                <p
+                  style="
+                    font-weight: 700;
+                    color: var(--pri);
+                    margin-top: 6px;
+                    font-size: 0.88rem;
+                  "
+                >
+                  Valor do contrato: R$ 12.376,40
+                </p>
               </div>
-              <p style="margin-top:10px;font-weight:600;color:var(--pri);">Equipe da escola (16 colaboradores):</p>
-              <div style="background:#f8f9fa;border-radius:10px;padding:12px 14px;margin:8px 0;font-size:0.82rem;line-height:1.9;">
+              <p style="margin-top: 10px; font-weight: 600; color: var(--pri)">
+                Equipe da escola (16 colaboradores):
+              </p>
+              <div
+                style="
+                  background: #f8f9fa;
+                  border-radius: 10px;
+                  padding: 12px 14px;
+                  margin: 8px 0;
+                  font-size: 0.82rem;
+                  line-height: 1.9;
+                "
+              >
                 <p>9 colaboradores inclusos no contrato: R$ 928,23</p>
-                <p>7 colaboradores como convidados extras: 7 × R$ 50 = R$ 350,00</p>
-                <p style="font-weight:700;color:var(--pri);margin-top:4px;">Rateio equipe por família: (R$ 928,23 + R$ 350) ÷ 22 = R$ 58,10</p>
+                <p>
+                  7 colaboradores como convidados extras: 7 × R$ 50 = R$ 350,00
+                </p>
+                <p style="font-weight: 700; color: var(--pri); margin-top: 4px">
+                  Rateio equipe por família: (R$ 928,23 + R$ 350) ÷ 22 = R$
+                  58,10
+                </p>
               </div>
-              <p style="margin-top:10px;font-weight:600;color:var(--pri);">Composição do valor por família:</p>
-              <div style="background:#f8f9fa;border-radius:10px;padding:12px 14px;margin:8px 0;font-size:0.82rem;line-height:1.9;">
+              <p style="margin-top: 10px; font-weight: 600; color: var(--pri)">
+                Composição do valor por família:
+              </p>
+              <div
+                style="
+                  background: #f8f9fa;
+                  border-radius: 10px;
+                  padding: 12px 14px;
+                  margin: 8px 0;
+                  font-size: 0.82rem;
+                  line-height: 1.9;
+                "
+              >
                 <p>Valor buffet (conforme nº de convidados da família)</p>
                 <p>+ Rateio equipe escola: R$ 58,10</p>
                 <p>+ Fundo de reserva: R$ 70,00 (R$ 10/mês × 7 meses)</p>
-                <p style="font-weight:700;color:var(--pri);margin-top:4px;">= Total geral da família</p>
+                <p style="font-weight: 700; color: var(--pri); margin-top: 4px">
+                  = Total geral da família
+                </p>
               </div>
-              <p style="margin-top:8px;font-size:0.8rem;color:var(--muted);font-style:italic;">Parcelas: 7x (maio a novembro/2026) — vencimento dia 10 de cada mês.</p>
+              <p
+                style="
+                  margin-top: 8px;
+                  font-size: 0.8rem;
+                  color: var(--muted);
+                  font-style: italic;
+                "
+              >
+                Parcelas: 7x (maio a novembro/2026) — vencimento dia 10 de cada
+                mês.
+              </p>
             </div>
           </div>
           <div id="readOnlyExtrato"></div>
           <div id="readOnlyResponsaveis"></div>
-          <div class="alert-card" style="margin-top:16px;">
+          <div class="alert-card" style="margin-top: 16px">
             <h2>ATENÇÃO — ITENS NÃO INCLUSOS NO PACOTE</h2>
-            <p>Os itens particulares de uso de cada criança na formatura <strong>NÃO estão inclusos</strong> no valor do pacote do buffet.</p>
-            <p style="margin-top:8px"><strong>Itens não inclusos:</strong> Beca + Faixa + Capelo</p>
-            <p style="margin-top:8px;font-size:0.8rem;color:#922b21;"><em>Estamos fazendo levantamento de valores e repassaremos em breve.</em></p>
+            <p>
+              Os itens particulares de uso de cada criança na formatura
+              <strong>NÃO estão inclusos</strong> no valor do pacote do buffet.
+            </p>
+            <p style="margin-top: 8px">
+              <strong>Itens não inclusos:</strong> Beca + Faixa + Capelo
+            </p>
+            <p style="margin-top: 8px; font-size: 0.8rem; color: #922b21">
+              <em
+                >Estamos fazendo levantamento de valores e repassaremos em
+                breve.</em
+              >
+            </p>
           </div>
-          <div class="card" style="margin-top:16px">
+          <div class="card" style="margin-top: 16px">
             <h2>Envio de Comprovante PIX</h2>
             <div id="readOnlyPixInfo"></div>
-            <select id="mesRef" class="family-select" style="margin:12px 0">
+            <select id="mesRef" class="family-select" style="margin: 12px 0">
               <option value="">Selecione o mês de referência...</option>
               <option value="05/2026">Maio/2026 (1a parcela)</option>
               <option value="06/2026">Junho/2026 (2a parcela)</option>
@@ -1054,9 +1340,20 @@
               <option value="10/2026">Outubro/2026 (6a parcela)</option>
               <option value="11/2026">Novembro/2026 (7a parcela)</option>
             </select>
-            <input type="file" id="comprovanteFile" accept="image/*,.pdf" class="form-input" style="margin-bottom:12px" />
-            <button class="btn btn-primary btn-block" onclick="uploadComprovante()">Enviar Comprovante</button>
-            <div id="comprovantesEnviados" style="margin-top:16px"></div>
+            <input
+              type="file"
+              id="comprovanteFile"
+              accept="image/*,.pdf"
+              class="form-input"
+              style="margin-bottom: 12px"
+            />
+            <button
+              class="btn btn-primary btn-block"
+              onclick="uploadComprovante()"
+            >
+              Enviar Comprovante
+            </button>
+            <div id="comprovantesEnviados" style="margin-top: 16px"></div>
           </div>
         </section>
 
@@ -1064,7 +1361,17 @@
         <section id="roPrestacao" class="ro-tab">
           <div id="readOnlyDocumentos" class="card">
             <h2>Prestação de Contas</h2>
-            <p style="font-size:.82rem;color:var(--muted);margin-bottom:12px;line-height:1.6;">Extratos bancários e comprovantes de pagamentos realizados pela comissão de formatura. Transparência total para todas as famílias.</p>
+            <p
+              style="
+                font-size: 0.82rem;
+                color: var(--muted);
+                margin-bottom: 12px;
+                line-height: 1.6;
+              "
+            >
+              Extratos bancários e comprovantes de pagamentos realizados pela
+              comissão de formatura. Transparência total para todas as famílias.
+            </p>
             <div id="readOnlyDocumentosContent"></div>
           </div>
         </section>
@@ -1078,7 +1385,16 @@
         <section id="roFotos" class="ro-tab">
           <div id="readOnlyFotos" class="card">
             <h2>Fotos para Homenagem</h2>
-            <p style="font-size:.8rem;color:var(--muted);margin-bottom:12px;">Essas fotos serão usadas na homenagem de formatura (antes e depois). Aceita JPG ou PNG. Máximo 5MB por foto.</p>
+            <p
+              style="
+                font-size: 0.8rem;
+                color: var(--muted);
+                margin-bottom: 12px;
+              "
+            >
+              Essas fotos serão usadas na homenagem de formatura (antes e
+              depois). Aceita JPG ou PNG. Máximo 5MB por foto.
+            </p>
             <div id="readOnlyFotosContent"></div>
           </div>
         </section>
@@ -1109,11 +1425,7 @@
         >
           <span class="tab-icon">3</span>Cardápio
         </button>
-        <button
-          class="locked"
-          data-tab="fotos"
-          onclick="tryShowTab('fotos')"
-        >
+        <button class="locked" data-tab="fotos" onclick="tryShowTab('fotos')">
           <span class="tab-icon">4</span>Fotos
         </button>
         <button
@@ -1127,45 +1439,144 @@
       <main>
         <!-- TAB 1: EXTRATO -->
         <section id="extrato" class="active">
-          <div class="card" style="background:linear-gradient(135deg,#fff3e0,#ffe0b2);border:2px solid #ff9800;text-align:center;padding:20px 16px;">
-            <div style="font-size:1.8rem;margin-bottom:6px;">&#127891;&#127881;</div>
-            <h2 style="color:#e65100;font-size:1.2rem;margin-bottom:4px;">Formatura Pré II — 2026</h2>
-            <p style="font-size:1.3rem;font-weight:800;color:#bf360c;margin-bottom:2px;">12 de Dezembro de 2026</p>
-            <p style="font-size:1rem;font-weight:600;color:#e65100;">18h às 23h</p>
-            <p style="font-size:0.82rem;color:#6d4c41;margin-top:4px;">Horário de chegada: 17h30</p>
-            <p style="font-size:0.8rem;color:#6d4c41;margin-top:4px;">&#128205; Star Happy Buffet — Pinhais/PR</p>
+          <div
+            class="card"
+            style="
+              background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+              border: 2px solid #ff9800;
+              text-align: center;
+              padding: 20px 16px;
+            "
+          >
+            <div style="font-size: 1.8rem; margin-bottom: 6px">
+              &#127891;&#127881;
+            </div>
+            <h2 style="color: #e65100; font-size: 1.2rem; margin-bottom: 4px">
+              Formatura Pré II — 2026
+            </h2>
+            <p
+              style="
+                font-size: 1.3rem;
+                font-weight: 800;
+                color: #bf360c;
+                margin-bottom: 2px;
+              "
+            >
+              12 de Dezembro de 2026
+            </p>
+            <p style="font-size: 1rem; font-weight: 600; color: #e65100">
+              18h às 23h
+            </p>
+            <p style="font-size: 0.82rem; color: #6d4c41; margin-top: 4px">
+              Horário de chegada: 17h30
+            </p>
+            <p style="font-size: 0.8rem; color: #6d4c41; margin-top: 4px">
+              &#128205; Star Happy Buffet — Pinhais/PR
+            </p>
           </div>
           <div class="card">
-            <p style="font-size:0.82rem;color:var(--muted);line-height:1.6;">
-              Valores atualizados em maio/2026 para 22 famílias (120 pessoas). Vencimento: dia 10 de cada mês.
+            <p
+              style="font-size: 0.82rem; color: var(--muted); line-height: 1.6"
+            >
+              Valores atualizados em maio/2026 para 22 famílias (120 pessoas).
+              Vencimento: dia 10 de cada mês.
             </p>
           </div>
           <div class="card">
             <h2>Como ficou o contrato</h2>
-            <div style="font-size:0.84rem;line-height:1.8;color:var(--txt);">
-              <p>Com a saída de 1 família, o contrato foi recalculado para <strong>22 famílias</strong> e <strong>120 pessoas</strong>.</p>
-              <p style="margin-top:10px;font-weight:600;color:var(--pri);">Composição do contrato:</p>
-              <div style="background:#f8f9fa;border-radius:10px;padding:12px 14px;margin:8px 0;font-size:0.82rem;line-height:1.9;">
+            <div
+              style="font-size: 0.84rem; line-height: 1.8; color: var(--txt)"
+            >
+              <p>
+                Com a saída de 1 família, o contrato foi recalculado para
+                <strong>22 famílias</strong> e <strong>120 pessoas</strong>.
+              </p>
+              <p style="margin-top: 10px; font-weight: 600; color: var(--pri)">
+                Composição do contrato:
+              </p>
+              <div
+                style="
+                  background: #f8f9fa;
+                  border-radius: 10px;
+                  padding: 12px 14px;
+                  margin: 8px 0;
+                  font-size: 0.82rem;
+                  line-height: 1.9;
+                "
+              >
                 <p>96 adultos × R$ 103,14 = <strong>R$ 9.901,12</strong></p>
-                <p>2 crianças +8 anos × R$ 103,14 = <strong>R$ 206,27</strong></p>
-                <p>26 crianças 4-7 anos × R$ 51,57 (meia) = <strong>R$ 1.340,78</strong></p>
+                <p>
+                  2 crianças +8 anos × R$ 103,14 = <strong>R$ 206,27</strong>
+                </p>
+                <p>
+                  26 crianças 4-7 anos × R$ 51,57 (meia) =
+                  <strong>R$ 1.340,78</strong>
+                </p>
                 <p>9 equipe escola × R$ 103,14 = <strong>R$ 928,23</strong></p>
-                <p style="font-weight:700;color:var(--pri);margin-top:6px;font-size:0.88rem;">Valor do contrato: R$ 12.376,40</p>
+                <p
+                  style="
+                    font-weight: 700;
+                    color: var(--pri);
+                    margin-top: 6px;
+                    font-size: 0.88rem;
+                  "
+                >
+                  Valor do contrato: R$ 12.376,40
+                </p>
               </div>
-              <p style="margin-top:10px;font-weight:600;color:var(--pri);">Equipe da escola (16 colaboradores):</p>
-              <div style="background:#f8f9fa;border-radius:10px;padding:12px 14px;margin:8px 0;font-size:0.82rem;line-height:1.9;">
+              <p style="margin-top: 10px; font-weight: 600; color: var(--pri)">
+                Equipe da escola (16 colaboradores):
+              </p>
+              <div
+                style="
+                  background: #f8f9fa;
+                  border-radius: 10px;
+                  padding: 12px 14px;
+                  margin: 8px 0;
+                  font-size: 0.82rem;
+                  line-height: 1.9;
+                "
+              >
                 <p>9 colaboradores inclusos no contrato: R$ 928,23</p>
-                <p>7 colaboradores como convidados extras: 7 × R$ 50 = R$ 350,00</p>
-                <p style="font-weight:700;color:var(--pri);margin-top:4px;">Rateio equipe por família: (R$ 928,23 + R$ 350) ÷ 22 = R$ 58,10</p>
+                <p>
+                  7 colaboradores como convidados extras: 7 × R$ 50 = R$ 350,00
+                </p>
+                <p style="font-weight: 700; color: var(--pri); margin-top: 4px">
+                  Rateio equipe por família: (R$ 928,23 + R$ 350) ÷ 22 = R$
+                  58,10
+                </p>
               </div>
-              <p style="margin-top:10px;font-weight:600;color:var(--pri);">Composição do valor por família:</p>
-              <div style="background:#f8f9fa;border-radius:10px;padding:12px 14px;margin:8px 0;font-size:0.82rem;line-height:1.9;">
+              <p style="margin-top: 10px; font-weight: 600; color: var(--pri)">
+                Composição do valor por família:
+              </p>
+              <div
+                style="
+                  background: #f8f9fa;
+                  border-radius: 10px;
+                  padding: 12px 14px;
+                  margin: 8px 0;
+                  font-size: 0.82rem;
+                  line-height: 1.9;
+                "
+              >
                 <p>Valor buffet (conforme nº de convidados da família)</p>
                 <p>+ Rateio equipe escola: R$ 58,10</p>
                 <p>+ Fundo de reserva: R$ 70,00 (R$ 10/mês × 7 meses)</p>
-                <p style="font-weight:700;color:var(--pri);margin-top:4px;">= Total geral da família</p>
+                <p style="font-weight: 700; color: var(--pri); margin-top: 4px">
+                  = Total geral da família
+                </p>
               </div>
-              <p style="margin-top:8px;font-size:0.8rem;color:var(--muted);font-style:italic;">Parcelas: 7x (maio a novembro/2026) — vencimento dia 10 de cada mês.</p>
+              <p
+                style="
+                  margin-top: 8px;
+                  font-size: 0.8rem;
+                  color: var(--muted);
+                  font-style: italic;
+                "
+              >
+                Parcelas: 7x (maio a novembro/2026) — vencimento dia 10 de cada
+                mês.
+              </p>
             </div>
           </div>
           <div id="extratoIndividual"></div>
@@ -1186,7 +1597,9 @@
               padding: 24px 16px;
             "
           >
-            <div style="font-size: 2rem; margin-bottom: 8px">&#127891;&#127881;</div>
+            <div style="font-size: 2rem; margin-bottom: 8px">
+              &#127891;&#127881;
+            </div>
             <h2 style="color: #e65100; font-size: 1.3rem; margin-bottom: 6px">
               Data da Formatura
             </h2>
@@ -1220,7 +1633,10 @@
               <strong>Itens não inclusos:</strong> Beca + Faixa + Capelo
             </p>
             <p style="margin-top: 8px; font-size: 0.8rem; color: #922b21">
-              <em>Estamos fazendo levantamento de valores e repassaremos em breve.</em>
+              <em
+                >Estamos fazendo levantamento de valores e repassaremos em
+                breve.</em
+              >
             </p>
           </div>
           <div class="card">
@@ -1292,8 +1708,8 @@
               box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
             "
           >
-            &#128499;&#65039; Selecione abaixo os itens da sua preferência, conforme
-            quantidades indicadas.
+            &#128499;&#65039; Selecione abaixo os itens da sua preferência,
+            conforme quantidades indicadas.
           </div>
           <div class="card">
             <div class="section-title">
@@ -1387,9 +1803,16 @@
         <section id="fotos">
           <div class="card">
             <h2>Fotos para Homenagem</h2>
-            <p style="font-size:0.82rem;color:var(--muted);margin-bottom:16px;line-height:1.6;">
-              Essas fotos serão usadas na homenagem de formatura (antes e depois).
-              Aceita JPG ou PNG. Máximo 5MB por foto.
+            <p
+              style="
+                font-size: 0.82rem;
+                color: var(--muted);
+                margin-bottom: 16px;
+                line-height: 1.6;
+              "
+            >
+              Essas fotos serão usadas na homenagem de formatura (antes e
+              depois). Aceita JPG ou PNG. Máximo 5MB por foto.
             </p>
             <div id="fotosContent"></div>
           </div>
@@ -1736,28 +2159,358 @@
       const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
       const families = [
-        {ref:1,child:"Alana",parent:"Dayene",total:3,adults:2,u3:0,a47:1,o8:0,val:315.94,extra:0,extraQty:0,totalGeral:385.94,pagoMai:58.33,pgtoTipo:"parcelado"},
-        {ref:2,child:"Aurora de Paula",parent:"Hanna",total:8,adults:5,u3:0,a47:2,o8:1,val:780.06,extra:0,extraQty:0,totalGeral:850.06,pagoMai:126.39,pgtoTipo:"parcelado"},
-        {ref:3,child:"Aurora Rogoni",parent:"Vanessa",total:5,adults:4,u3:0,a47:1,o8:0,val:522.22,extra:0,extraQty:0,totalGeral:592.22,pagoMai:88.58,pgtoTipo:"parcelado"},
-        {ref:4,child:"Beatriz",parent:"Gizele",total:5,adults:4,u3:0,a47:1,o8:0,val:522.22,extra:0,extraQty:0,totalGeral:592.22,pagoMai:88.58,pgtoTipo:"parcelado"},
-        {ref:5,child:"Benjamin",parent:"Deborah",total:5,adults:4,u3:0,a47:1,o8:0,val:522.22,extra:0,extraQty:0,totalGeral:592.22,pagoMai:88.58,pgtoTipo:"parcelado"},
-        {ref:6,child:"Dante",parent:"Ana Leila",total:6,adults:5,u3:1,a47:1,o8:0,val:625.35,extra:0,extraQty:0,totalGeral:695.35,pagoMai:103.70,pgtoTipo:"parcelado"},
-        {ref:7,child:"Eloah",parent:"Angela",total:11,adults:10,u3:0,a47:1,o8:0,val:1141.04,extra:50,extraQty:1,totalGeral:1261.04,pagoMai:236.47,pgtoTipo:"parcelado"},
-        {ref:8,child:"Gabriela",parent:"Rafaella",total:5,adults:4,u3:0,a47:1,o8:0,val:522.22,extra:0,extraQty:0,totalGeral:592.22,pagoMai:88.58,pgtoTipo:"parcelado"},
-        {ref:9,child:"Helena",parent:"Isabelle",total:9,adults:7,u3:0,a47:2,o8:0,val:883.19,extra:0,extraQty:0,totalGeral:953.19,pagoMai:141.52,pgtoTipo:"parcelado"},
-        {ref:10,child:"Heron",parent:"Fran",total:8,adults:7,u3:0,a47:1,o8:0,val:831.63,extra:0,extraQty:0,totalGeral:901.63,pagoMai:133.95,pgtoTipo:"parcelado"},
-        {ref:11,child:"Joaquim",parent:"Erica",total:4,adults:2,u3:0,a47:1,o8:1,val:419.08,extra:0,extraQty:0,totalGeral:489.08,pagoMai:514.19,pgtoTipo:"avista"},
-        {ref:12,child:"Laura",parent:"Ana Quadros",total:6,adults:5,u3:0,a47:1,o8:0,val:625.35,extra:0,extraQty:0,totalGeral:695.35,pagoMai:103.70,pgtoTipo:"parcelado"},
-        {ref:13,child:"Lavínia",parent:"Dayane",total:6,adults:5,u3:0,a47:1,o8:0,val:625.35,extra:0,extraQty:0,totalGeral:695.35,pagoMai:103.70,pgtoTipo:"parcelado"},
-        {ref:14,child:"Lívia",parent:"Rosemeri",total:3,adults:1,u3:0,a47:2,o8:0,val:264.37,extra:0,extraQty:0,totalGeral:334.37,pagoMai:50.77,pgtoTipo:"parcelado"},
-        {ref:15,child:"Louise",parent:"Luma",total:4,adults:3,u3:0,a47:1,o8:0,val:419.08,extra:0,extraQty:0,totalGeral:489.08,pagoMai:73.46,pgtoTipo:"parcelado"},
-        {ref:16,child:"Luiz Gustavo",parent:"Tiele",total:7,adults:6,u3:0,a47:1,o8:0,val:728.49,extra:0,extraQty:0,totalGeral:798.49,pagoMai:111.27,pgtoTipo:"parcelado"},
-        {ref:17,child:"Luiza",parent:"Camila",total:5,adults:4,u3:0,a47:1,o8:0,val:522.22,extra:0,extraQty:0,totalGeral:592.22,pagoMai:88.58,pgtoTipo:"parcelado"},
-        {ref:18,child:"Marcela",parent:"Laís",total:6,adults:5,u3:0,a47:1,o8:0,val:625.35,extra:0,extraQty:0,totalGeral:695.35,pagoMai:655.93,pgtoTipo:"avista"},
-        {ref:19,child:"Sofia",parent:"Jéssica",total:4,adults:3,u3:0,a47:1,o8:0,val:419.08,extra:100,extraQty:2,totalGeral:589.08,pagoMai:173.74,pgtoTipo:"parcelado"},
-        {ref:20,child:"Teresa",parent:"Marina",total:5,adults:2,u3:1,a47:2,o8:0,val:367.51,extra:0,extraQty:0,totalGeral:437.51,pagoMai:65.89,pgtoTipo:"parcelado"},
-        {ref:21,child:"Miguel",parent:"Daniel",total:4,adults:3,u3:0,a47:1,o8:0,val:419.08,extra:0,extraQty:0,totalGeral:489.08,pagoMai:73.46,pgtoTipo:"parcelado"},
-        {ref:22,child:"Maria Clara",parent:"Cléia",total:6,adults:5,u3:0,a47:1,o8:0,val:625.35,extra:0,extraQty:0,totalGeral:695.35,pagoMai:103.70,pgtoTipo:"parcelado"},
+        {
+          ref: 1,
+          child: "Alana",
+          parent: "Dayene",
+          total: 3,
+          adults: 2,
+          u3: 0,
+          a47: 1,
+          o8: 0,
+          val: 315.94,
+          extra: 0,
+          extraQty: 0,
+          totalGeral: 385.94,
+          pagoMai: 58.33,
+          pgtoTipo: "parcelado",
+        },
+        {
+          ref: 2,
+          child: "Aurora de Paula",
+          parent: "Hanna",
+          total: 8,
+          adults: 5,
+          u3: 0,
+          a47: 2,
+          o8: 1,
+          val: 780.06,
+          extra: 0,
+          extraQty: 0,
+          totalGeral: 850.06,
+          pagoMai: 126.39,
+          pgtoTipo: "parcelado",
+        },
+        {
+          ref: 3,
+          child: "Aurora Rogoni",
+          parent: "Vanessa",
+          total: 5,
+          adults: 4,
+          u3: 0,
+          a47: 1,
+          o8: 0,
+          val: 522.22,
+          extra: 0,
+          extraQty: 0,
+          totalGeral: 592.22,
+          pagoMai: 88.58,
+          pgtoTipo: "parcelado",
+        },
+        {
+          ref: 4,
+          child: "Beatriz",
+          parent: "Gizele",
+          total: 5,
+          adults: 4,
+          u3: 0,
+          a47: 1,
+          o8: 0,
+          val: 522.22,
+          extra: 0,
+          extraQty: 0,
+          totalGeral: 592.22,
+          pagoMai: 88.58,
+          pgtoTipo: "parcelado",
+        },
+        {
+          ref: 5,
+          child: "Benjamin",
+          parent: "Deborah",
+          total: 5,
+          adults: 4,
+          u3: 0,
+          a47: 1,
+          o8: 0,
+          val: 522.22,
+          extra: 0,
+          extraQty: 0,
+          totalGeral: 592.22,
+          pagoMai: 88.58,
+          pgtoTipo: "parcelado",
+        },
+        {
+          ref: 6,
+          child: "Dante",
+          parent: "Ana Leila",
+          total: 6,
+          adults: 5,
+          u3: 1,
+          a47: 1,
+          o8: 0,
+          val: 625.35,
+          extra: 0,
+          extraQty: 0,
+          totalGeral: 695.35,
+          pagoMai: 103.7,
+          pgtoTipo: "parcelado",
+        },
+        {
+          ref: 7,
+          child: "Eloah",
+          parent: "Angela",
+          total: 11,
+          adults: 10,
+          u3: 0,
+          a47: 1,
+          o8: 0,
+          val: 1141.04,
+          extra: 50,
+          extraQty: 1,
+          totalGeral: 1261.04,
+          pagoMai: 236.47,
+          pgtoTipo: "parcelado",
+        },
+        {
+          ref: 8,
+          child: "Gabriela",
+          parent: "Rafaella",
+          total: 5,
+          adults: 4,
+          u3: 0,
+          a47: 1,
+          o8: 0,
+          val: 522.22,
+          extra: 0,
+          extraQty: 0,
+          totalGeral: 592.22,
+          pagoMai: 88.58,
+          pgtoTipo: "parcelado",
+        },
+        {
+          ref: 9,
+          child: "Helena",
+          parent: "Isabelle",
+          total: 9,
+          adults: 7,
+          u3: 0,
+          a47: 2,
+          o8: 0,
+          val: 883.19,
+          extra: 0,
+          extraQty: 0,
+          totalGeral: 953.19,
+          pagoMai: 141.52,
+          pgtoTipo: "parcelado",
+        },
+        {
+          ref: 10,
+          child: "Heron",
+          parent: "Fran",
+          total: 8,
+          adults: 7,
+          u3: 0,
+          a47: 1,
+          o8: 0,
+          val: 831.63,
+          extra: 0,
+          extraQty: 0,
+          totalGeral: 901.63,
+          pagoMai: 133.95,
+          pgtoTipo: "parcelado",
+        },
+        {
+          ref: 11,
+          child: "Joaquim",
+          parent: "Erica",
+          total: 4,
+          adults: 2,
+          u3: 0,
+          a47: 1,
+          o8: 1,
+          val: 419.08,
+          extra: 0,
+          extraQty: 0,
+          totalGeral: 489.08,
+          pagoMai: 514.19,
+          pgtoTipo: "avista",
+        },
+        {
+          ref: 12,
+          child: "Laura",
+          parent: "Ana Quadros",
+          total: 6,
+          adults: 5,
+          u3: 0,
+          a47: 1,
+          o8: 0,
+          val: 625.35,
+          extra: 0,
+          extraQty: 0,
+          totalGeral: 695.35,
+          pagoMai: 103.7,
+          pgtoTipo: "parcelado",
+        },
+        {
+          ref: 13,
+          child: "Lavínia",
+          parent: "Dayane",
+          total: 6,
+          adults: 5,
+          u3: 0,
+          a47: 1,
+          o8: 0,
+          val: 625.35,
+          extra: 0,
+          extraQty: 0,
+          totalGeral: 695.35,
+          pagoMai: 103.7,
+          pgtoTipo: "parcelado",
+        },
+        {
+          ref: 14,
+          child: "Lívia",
+          parent: "Rosemeri",
+          total: 3,
+          adults: 1,
+          u3: 0,
+          a47: 2,
+          o8: 0,
+          val: 264.37,
+          extra: 0,
+          extraQty: 0,
+          totalGeral: 334.37,
+          pagoMai: 50.77,
+          pgtoTipo: "parcelado",
+        },
+        {
+          ref: 15,
+          child: "Louise",
+          parent: "Luma",
+          total: 4,
+          adults: 3,
+          u3: 0,
+          a47: 1,
+          o8: 0,
+          val: 419.08,
+          extra: 0,
+          extraQty: 0,
+          totalGeral: 489.08,
+          pagoMai: 73.46,
+          pgtoTipo: "parcelado",
+        },
+        {
+          ref: 16,
+          child: "Luiz Gustavo",
+          parent: "Tiele",
+          total: 7,
+          adults: 6,
+          u3: 0,
+          a47: 1,
+          o8: 0,
+          val: 728.49,
+          extra: 0,
+          extraQty: 0,
+          totalGeral: 798.49,
+          pagoMai: 111.27,
+          pgtoTipo: "parcelado",
+        },
+        {
+          ref: 17,
+          child: "Luiza",
+          parent: "Camila",
+          total: 5,
+          adults: 4,
+          u3: 0,
+          a47: 1,
+          o8: 0,
+          val: 522.22,
+          extra: 0,
+          extraQty: 0,
+          totalGeral: 592.22,
+          pagoMai: 88.58,
+          pgtoTipo: "parcelado",
+        },
+        {
+          ref: 18,
+          child: "Marcela",
+          parent: "Laís",
+          total: 6,
+          adults: 5,
+          u3: 0,
+          a47: 1,
+          o8: 0,
+          val: 625.35,
+          extra: 0,
+          extraQty: 0,
+          totalGeral: 695.35,
+          pagoMai: 655.93,
+          pgtoTipo: "avista",
+        },
+        {
+          ref: 19,
+          child: "Sofia",
+          parent: "Jéssica",
+          total: 4,
+          adults: 3,
+          u3: 0,
+          a47: 1,
+          o8: 0,
+          val: 419.08,
+          extra: 100,
+          extraQty: 2,
+          totalGeral: 589.08,
+          pagoMai: 173.74,
+          pgtoTipo: "parcelado",
+        },
+        {
+          ref: 20,
+          child: "Teresa",
+          parent: "Marina",
+          total: 5,
+          adults: 2,
+          u3: 1,
+          a47: 2,
+          o8: 0,
+          val: 367.51,
+          extra: 0,
+          extraQty: 0,
+          totalGeral: 437.51,
+          pagoMai: 65.89,
+          pgtoTipo: "parcelado",
+        },
+        {
+          ref: 21,
+          child: "Miguel",
+          parent: "Daniel",
+          total: 4,
+          adults: 3,
+          u3: 0,
+          a47: 1,
+          o8: 0,
+          val: 419.08,
+          extra: 0,
+          extraQty: 0,
+          totalGeral: 489.08,
+          pagoMai: 73.46,
+          pgtoTipo: "parcelado",
+        },
+        {
+          ref: 22,
+          child: "Maria Clara",
+          parent: "Cléia",
+          total: 6,
+          adults: 5,
+          u3: 0,
+          a47: 1,
+          o8: 0,
+          val: 625.35,
+          extra: 0,
+          extraQty: 0,
+          totalGeral: 695.35,
+          pagoMai: 103.7,
+          pgtoTipo: "parcelado",
+        },
       ];
       const venues = [
         {
@@ -1773,7 +2526,7 @@
         {
           name: "Star Happy",
           loc: "Rod. Dep. João Leopoldo Jacomel, 12482 — Pinhais",
-          total: 12376.40,
+          total: 12376.4,
           pp: 103.14,
           half: 51.57,
           inc: "Espaço + comida + bebida + fotógrafo + decoração + camarim de pintura + lembrancinha para todas as crianças + gerente de festa (5h) + brinquedão + eletrônicos + mini baladinha",
@@ -1940,90 +2693,114 @@
       let currentFamily = "";
       let existingVote = null;
       let senhaHash = null;
+      let loadedDocumentos = [];
 
       async function hashSenha(senha) {
         var enc = new TextEncoder();
         var data = enc.encode(senha);
-        var buf = await crypto.subtle.digest('SHA-256', data);
+        var buf = await crypto.subtle.digest("SHA-256", data);
         var arr = Array.from(new Uint8Array(buf));
-        return arr.map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
+        return arr
+          .map(function (b) {
+            return b.toString(16).padStart(2, "0");
+          })
+          .join("");
       }
 
       async function registrarSenha() {
-        var s1 = document.getElementById('senhaNew').value.trim();
-        var s2 = document.getElementById('senhaConfirm').value.trim();
-        var erro = document.getElementById('senhaRegErro');
+        var s1 = document.getElementById("senhaNew").value.trim();
+        var s2 = document.getElementById("senhaConfirm").value.trim();
+        var erro = document.getElementById("senhaRegErro");
         if (!s1 || s1.length < 4) {
-          erro.textContent = 'A senha deve ter pelo menos 4 caracteres.';
-          erro.style.display = 'block';
+          erro.textContent = "A senha deve ter pelo menos 4 caracteres.";
+          erro.style.display = "block";
           return;
         }
         if (s1 !== s2) {
-          erro.textContent = 'As senhas não conferem.';
-          erro.style.display = 'block';
+          erro.textContent = "As senhas não conferem.";
+          erro.style.display = "block";
           return;
         }
-        erro.style.display = 'none';
+        erro.style.display = "none";
         var hash = await hashSenha(s1);
         if (existingVote) {
-          await sb.from('formatura_votos').update({ senha: hash }).eq('familia', currentFamily);
+          await sb
+            .from("formatura_votos")
+            .update({ senha: hash })
+            .eq("familia", currentFamily);
         } else {
-          await sb.from('formatura_votos').insert({ familia: currentFamily, senha: hash, confirmado: false });
-          var { data } = await sb.from('formatura_votos').select('*').eq('familia', currentFamily).maybeSingle();
+          await sb
+            .from("formatura_votos")
+            .insert({ familia: currentFamily, senha: hash, confirmado: false });
+          var { data } = await sb
+            .from("formatura_votos")
+            .select("*")
+            .eq("familia", currentFamily)
+            .maybeSingle();
           existingVote = data;
         }
         senhaHash = hash;
-        document.getElementById('senhaModal').style.display = 'none';
-        document.getElementById('senhaNew').value = '';
-        document.getElementById('senhaConfirm').value = '';
+        document.getElementById("senhaModal").style.display = "none";
+        document.getElementById("senhaNew").value = "";
+        document.getElementById("senhaConfirm").value = "";
         mostrarConteudoFamilia();
       }
 
       async function verificarSenha() {
-        var s = document.getElementById('senhaInput').value.trim();
-        var erro = document.getElementById('senhaLoginErro');
+        var s = document.getElementById("senhaInput").value.trim();
+        var erro = document.getElementById("senhaLoginErro");
         if (!s) {
-          erro.textContent = 'Digite sua senha.';
-          erro.style.display = 'block';
+          erro.textContent = "Digite sua senha.";
+          erro.style.display = "block";
           return;
         }
         var hash = await hashSenha(s);
         if (hash === senhaHash) {
-          erro.style.display = 'none';
-          document.getElementById('senhaModal').style.display = 'none';
-          document.getElementById('senhaInput').value = '';
+          erro.style.display = "none";
+          document.getElementById("senhaModal").style.display = "none";
+          document.getElementById("senhaInput").value = "";
           mostrarConteudoFamilia();
         } else {
-          erro.textContent = 'Senha incorreta.';
-          erro.style.display = 'block';
+          erro.textContent = "Senha incorreta.";
+          erro.style.display = "block";
         }
       }
 
       function esqueciSenha() {
-        document.getElementById('senhaLogin').style.display = 'none';
-        document.getElementById('senhaEsqueci').style.display = 'block';
+        document.getElementById("senhaLogin").style.display = "none";
+        document.getElementById("senhaEsqueci").style.display = "block";
       }
 
       function toggleSenha(inputId, icon) {
         var inp = document.getElementById(inputId);
-        if (inp.type === 'password') {
-          inp.type = 'text';
-          icon.style.opacity = '0.4';
+        if (inp.type === "password") {
+          inp.type = "text";
+          icon.style.opacity = "0.4";
         } else {
-          inp.type = 'password';
-          icon.style.opacity = '1';
+          inp.type = "password";
+          icon.style.opacity = "1";
         }
       }
 
       function voltarLogin() {
-        document.getElementById('senhaEsqueci').style.display = 'none';
-        document.getElementById('senhaLogin').style.display = 'block';
+        document.getElementById("senhaEsqueci").style.display = "none";
+        document.getElementById("senhaLogin").style.display = "block";
       }
 
       async function resetarSenha(familia) {
-        if (!confirm('Resetar a senha da família ' + familia + '? Ela precisará cadastrar uma nova senha no próximo acesso.')) return;
-        await sb.from('formatura_votos').update({ senha: null }).eq('familia', familia);
-        alert('Senha resetada com sucesso!');
+        if (
+          !confirm(
+            "Resetar a senha da família " +
+              familia +
+              "? Ela precisará cadastrar uma nova senha no próximo acesso.",
+          )
+        )
+          return;
+        await sb
+          .from("formatura_votos")
+          .update({ senha: null })
+          .eq("familia", familia);
+        alert("Senha resetada com sucesso!");
         loadAdminView();
       }
 
@@ -2039,12 +2816,20 @@
 
       function populateFamily() {
         const opts = families
-          .filter(function(f) { return !f.exclude; })
-          .map(
-            function(f) {
-              return '<option value="' + f.child + '">' + f.child + ' (' + f.parent + ')</option>';
-            }
-          )
+          .filter(function (f) {
+            return !f.exclude;
+          })
+          .map(function (f) {
+            return (
+              '<option value="' +
+              f.child +
+              '">' +
+              f.child +
+              " (" +
+              f.parent +
+              ")</option>"
+            );
+          })
           .join("");
         document.getElementById("familySelect").innerHTML =
           '<option value="">Selecione sua família...</option>' + opts;
@@ -2072,7 +2857,9 @@
           document.getElementById("familySelect").style.display = "block";
           return;
         }
-        const fam = families.find(function(f) { return f.child === sel; });
+        const fam = families.find(function (f) {
+          return f.child === sel;
+        });
         document.getElementById("familySelect").style.display = "none";
         document.getElementById("familyLockedName").textContent =
           "Família: " + fam.parent + " — Criança: " + fam.child;
@@ -2086,23 +2873,23 @@
 
         if (data && data.senha) {
           senhaHash = data.senha;
-          document.getElementById('senhaRegistro').style.display = 'none';
-          document.getElementById('senhaEsqueci').style.display = 'none';
-          document.getElementById('senhaLogin').style.display = 'block';
-          document.getElementById('senhaModal').style.display = 'block';
-          document.getElementById('senhaInput').value = '';
-          document.getElementById('senhaLoginErro').style.display = 'none';
-          document.getElementById('senhaInput').focus();
+          document.getElementById("senhaRegistro").style.display = "none";
+          document.getElementById("senhaEsqueci").style.display = "none";
+          document.getElementById("senhaLogin").style.display = "block";
+          document.getElementById("senhaModal").style.display = "block";
+          document.getElementById("senhaInput").value = "";
+          document.getElementById("senhaLoginErro").style.display = "none";
+          document.getElementById("senhaInput").focus();
         } else {
           senhaHash = null;
-          document.getElementById('senhaLogin').style.display = 'none';
-          document.getElementById('senhaEsqueci').style.display = 'none';
-          document.getElementById('senhaRegistro').style.display = 'block';
-          document.getElementById('senhaModal').style.display = 'block';
-          document.getElementById('senhaNew').value = '';
-          document.getElementById('senhaConfirm').value = '';
-          document.getElementById('senhaRegErro').style.display = 'none';
-          document.getElementById('senhaNew').focus();
+          document.getElementById("senhaLogin").style.display = "none";
+          document.getElementById("senhaEsqueci").style.display = "none";
+          document.getElementById("senhaRegistro").style.display = "block";
+          document.getElementById("senhaModal").style.display = "block";
+          document.getElementById("senhaNew").value = "";
+          document.getElementById("senhaConfirm").value = "";
+          document.getElementById("senhaRegErro").style.display = "none";
+          document.getElementById("senhaNew").focus();
         }
       }
 
@@ -2153,7 +2940,7 @@
           if (data && data.forma_pagamento) {
             formaPagamento = data.forma_pagamento;
             var pgtoBtn = document.querySelector(
-              '[data-cat="pgto"][data-val="' + data.forma_pagamento + '"]'
+              '[data-cat="pgto"][data-val="' + data.forma_pagamento + '"]',
             );
             if (pgtoBtn) pgtoBtn.classList.add("selected");
             var crono = document.getElementById("cronogramaBox");
@@ -2165,217 +2952,338 @@
       }
 
       function buildComposicao(fam) {
-        var h = '<div style="font-size:0.85rem;line-height:1.8;margin-bottom:12px;">';
-        h += '<p>' + fam.adults + ' adulto' + (fam.adults > 1 ? 's' : '') + ' × R$ 103,14 = <strong>' + fmt(fam.adults * 103.14) + '</strong></p>';
+        var h =
+          '<div style="font-size:0.85rem;line-height:1.8;margin-bottom:12px;">';
+        h +=
+          "<p>" +
+          fam.adults +
+          " adulto" +
+          (fam.adults > 1 ? "s" : "") +
+          " × R$ 103,14 = <strong>" +
+          fmt(fam.adults * 103.14) +
+          "</strong></p>";
         if (fam.a47 > 0) {
-          h += '<p>' + fam.a47 + ' criança' + (fam.a47 > 1 ? 's' : '') + ' (4 a 7 anos) × R$ 51,57 = <strong>' + fmt(fam.a47 * 51.57) + '</strong></p>';
+          h +=
+            "<p>" +
+            fam.a47 +
+            " criança" +
+            (fam.a47 > 1 ? "s" : "") +
+            " (4 a 7 anos) × R$ 51,57 = <strong>" +
+            fmt(fam.a47 * 51.57) +
+            "</strong></p>";
         }
         if (fam.o8 > 0) {
-          h += '<p>' + fam.o8 + ' criança' + (fam.o8 > 1 ? 's' : '') + ' (+8 anos) × R$ 103,14 = <strong>' + fmt(fam.o8 * 103.14) + '</strong></p>';
+          h +=
+            "<p>" +
+            fam.o8 +
+            " criança" +
+            (fam.o8 > 1 ? "s" : "") +
+            " (+8 anos) × R$ 103,14 = <strong>" +
+            fmt(fam.o8 * 103.14) +
+            "</strong></p>";
         }
         if (fam.u3 > 0) {
-          h += '<p>' + fam.u3 + ' criança' + (fam.u3 > 1 ? 's' : '') + ' (até 3 anos): <strong>cortesia</strong></p>';
+          h +=
+            "<p>" +
+            fam.u3 +
+            " criança" +
+            (fam.u3 > 1 ? "s" : "") +
+            " (até 3 anos): <strong>cortesia</strong></p>";
         }
-        h += '<p>Rateio equipe escola: <strong>R$ 58,10</strong></p>';
-        h += '<hr style="border:none;border-top:1px dashed #ccc;margin:8px 0;">';
-        h += '<p>Subtotal formatura: <strong>' + fmt(fam.val) + '</strong></p>';
+        h += "<p>Rateio equipe escola: <strong>R$ 58,10</strong></p>";
+        h +=
+          '<hr style="border:none;border-top:1px dashed #ccc;margin:8px 0;">';
+        h += "<p>Subtotal formatura: <strong>" + fmt(fam.val) + "</strong></p>";
         if (fam.extra > 0) {
-          h += '<p>Convidados extras (' + fam.extraQty + ' × R$ 50,00): <strong>' + fmt(fam.extra) + '</strong></p>';
+          h +=
+            "<p>Convidados extras (" +
+            fam.extraQty +
+            " × R$ 50,00): <strong>" +
+            fmt(fam.extra) +
+            "</strong></p>";
         }
-        h += '<p>Fundo de reserva (R$ 10 × 7 meses): <strong>R$ 70,00</strong></p>';
-        h += '<hr style="border:none;border-top:2px solid var(--pri);margin:8px 0;">';
-        h += '<p style="font-weight:700;color:var(--pri);font-size:0.95rem;">Total geral: ' + fmt(fam.totalGeral) + '</p>';
-        h += '</div>';
+        h +=
+          "<p>Fundo de reserva (R$ 10 × 7 meses): <strong>R$ 70,00</strong></p>";
+        h +=
+          '<hr style="border:none;border-top:2px solid var(--pri);margin:8px 0;">';
+        h +=
+          '<p style="font-weight:700;color:var(--pri);font-size:0.95rem;">Total geral: ' +
+          fmt(fam.totalGeral) +
+          "</p>";
+        h += "</div>";
         return h;
       }
 
       function renderExtrato() {
-        var fam = families.find(function(f) { return f.child === currentFamily; });
+        var fam = families.find(function (f) {
+          return f.child === currentFamily;
+        });
         if (!fam) return;
         var pix = getPixInfo(currentFamily);
-        var html = '';
+        var html = "";
 
-        if (fam.pgtoTipo === 'avista' && fam.child === 'Joaquim') {
+        if (fam.pgtoTipo === "avista" && fam.child === "Joaquim") {
           var credito = fam.pagoMai - fam.totalGeral;
           html += '<div class="extrato-card">';
-          html += '<h2>&#128203; Extrato — Família ' + fam.child + '</h2>';
+          html += "<h2>&#128203; Extrato — Família " + fam.child + "</h2>";
           html += buildComposicao(fam);
-          html += '<div class="extrato-line extrato-paid">&#9989; Pago à vista: ' + fmt(fam.pagoMai) + '</div>';
-          html += '<div class="extrato-credito">&#128176; Crédito: ' + fmt(credito) + '</div>';
-          html += '<div class="extrato-quitado"><h3>&#9989; Situação: QUITADO</h3></div>';
-          html += '<p style="font-size:0.8rem;color:var(--muted);margin-top:12px;font-style:italic;">&#8505;&#65039; O crédito será devolvido conforme combinado com a comissão.</p>';
-          html += '</div>';
-        } else if (fam.pgtoTipo === 'avista' && fam.child === 'Marcela') {
+          html +=
+            '<div class="extrato-line extrato-paid">&#9989; Pago à vista: ' +
+            fmt(fam.pagoMai) +
+            "</div>";
+          html +=
+            '<div class="extrato-credito">&#128176; Crédito: ' +
+            fmt(credito) +
+            "</div>";
+          html +=
+            '<div class="extrato-quitado"><h3>&#9989; Situação: QUITADO</h3></div>';
+          html +=
+            '<p style="font-size:0.8rem;color:var(--muted);margin-top:12px;font-style:italic;">&#8505;&#65039; O crédito será devolvido conforme combinado com a comissão.</p>';
+          html += "</div>";
+        } else if (fam.pgtoTipo === "avista" && fam.child === "Marcela") {
           var saldo = fam.totalGeral - fam.pagoMai;
           html += '<div class="extrato-card">';
-          html += '<h2>&#128203; Extrato — Família ' + fam.child + '</h2>';
+          html += "<h2>&#128203; Extrato — Família " + fam.child + "</h2>";
           html += buildComposicao(fam);
-          html += '<div class="extrato-line extrato-paid">&#9989; Pago à vista: ' + fmt(fam.pagoMai) + '</div>';
-          html += '<div class="extrato-next">&#128204; Saldo restante: ' + fmt(saldo) + '</div>';
-          html += '<p style="font-size:0.8rem;color:var(--muted);margin-top:12px;font-style:italic;">&#8505;&#65039; Saldo referente ao fundo de reserva da turma (ajustado com o reajuste).</p>';
-          html += '</div>';
+          html +=
+            '<div class="extrato-line extrato-paid">&#9989; Pago à vista: ' +
+            fmt(fam.pagoMai) +
+            "</div>";
+          html +=
+            '<div class="extrato-next">&#128204; Saldo restante: ' +
+            fmt(saldo) +
+            "</div>";
+          html +=
+            '<p style="font-size:0.8rem;color:var(--muted);margin-top:12px;font-style:italic;">&#8505;&#65039; Saldo referente ao fundo de reserva da turma (ajustado com o reajuste).</p>';
+          html += "</div>";
         } else {
           var remaining = fam.totalGeral - fam.pagoMai;
-          var parcela = Math.floor(remaining / 6 * 100) / 100;
+          var parcela = Math.floor((remaining / 6) * 100) / 100;
           var ultimaParcela = Math.round((remaining - parcela * 5) * 100) / 100;
-          var meses = ['Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov'];
+          var meses = ["Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov"];
 
           html += '<div class="extrato-card">';
-          html += '<h2>&#128203; Extrato — Família ' + fam.child + '</h2>';
+          html += "<h2>&#128203; Extrato — Família " + fam.child + "</h2>";
           html += buildComposicao(fam);
 
           // Mai - paid
-          html += '<div class="extrato-line extrato-paid"><span>Mai &#9989;</span><span>' + fmt(fam.pagoMai) + '</span></div>';
+          html +=
+            '<div class="extrato-line extrato-paid"><span>Mai &#9989;</span><span>' +
+            fmt(fam.pagoMai) +
+            "</span></div>";
           // Jun-Oct
           for (var i = 1; i <= 5; i++) {
-            html += '<div class="extrato-line extrato-pending"><span>' + meses[i] + ' &#9203;</span><span>' + fmt(parcela) + '</span></div>';
+            html +=
+              '<div class="extrato-line extrato-pending"><span>' +
+              meses[i] +
+              " &#9203;</span><span>" +
+              fmt(parcela) +
+              "</span></div>";
           }
           // Nov (last parcela)
-          html += '<div class="extrato-line extrato-pending"><span>Nov &#9203;</span><span>' + fmt(ultimaParcela) + '</span></div>';
+          html +=
+            '<div class="extrato-line extrato-pending"><span>Nov &#9203;</span><span>' +
+            fmt(ultimaParcela) +
+            "</span></div>";
           // Total
-          html += '<div class="extrato-line extrato-total"><span>Total</span><span>' + fmt(fam.totalGeral) + '</span></div>';
+          html +=
+            '<div class="extrato-line extrato-total"><span>Total</span><span>' +
+            fmt(fam.totalGeral) +
+            "</span></div>";
           // Next payment
           html += '<div class="extrato-next">';
-          html += '&#128204; Próxima parcela:<strong>' + fmt(parcela) + '</strong><br>';
-          html += 'Vencimento: <strong>10/06/2026</strong>';
-          html += '</div>';
-          html += '</div>';
+          html +=
+            "&#128204; Próxima parcela:<strong>" +
+            fmt(parcela) +
+            "</strong><br>";
+          html += "Vencimento: <strong>10/06/2026</strong>";
+          html += "</div>";
+          html += "</div>";
         }
 
         document.getElementById("extratoIndividual").innerHTML = html;
 
         // PIX info below extrato
         if (pix) {
-          var pixHtml = '<div style="background:linear-gradient(135deg,#e8f8f5,#d5f5e3);border:1px solid #82e0aa;border-radius:var(--radius);padding:14px 18px;margin:12px 0;">';
-          pixHtml += '<p style="font-size:.82rem;font-weight:600;color:#00755e;margin-bottom:6px;">Dados para PIX da sua família:</p>';
-          pixHtml += '<p style="font-size:.88rem;margin:4px 0;"><strong>Chave PIX:</strong> ' + pix.chave + '</p>';
-          pixHtml += '<p style="font-size:.82rem;color:var(--muted);margin:2px 0;">Titular: ' + pix.titular + '</p>';
-          pixHtml += '<p style="font-size:.82rem;color:var(--muted);margin:2px 0;">Banco: ' + pix.banco + '</p>';
-          pixHtml += '</div>';
+          var pixHtml =
+            '<div style="background:linear-gradient(135deg,#e8f8f5,#d5f5e3);border:1px solid #82e0aa;border-radius:var(--radius);padding:14px 18px;margin:12px 0;">';
+          pixHtml +=
+            '<p style="font-size:.82rem;font-weight:600;color:#00755e;margin-bottom:6px;">Dados para PIX da sua família:</p>';
+          pixHtml +=
+            '<p style="font-size:.88rem;margin:4px 0;"><strong>Chave PIX:</strong> ' +
+            pix.chave +
+            "</p>";
+          pixHtml +=
+            '<p style="font-size:.82rem;color:var(--muted);margin:2px 0;">Titular: ' +
+            pix.titular +
+            "</p>";
+          pixHtml +=
+            '<p style="font-size:.82rem;color:var(--muted);margin:2px 0;">Banco: ' +
+            pix.banco +
+            "</p>";
+          pixHtml += "</div>";
           document.getElementById("extratoPixInfo").innerHTML = pixHtml;
         }
       }
 
       function renderExtratoForReadOnly() {
-        var fam = families.find(function(f) { return f.child === currentFamily; });
-        if (!fam) return '';
-        var html = '';
+        var fam = families.find(function (f) {
+          return f.child === currentFamily;
+        });
+        if (!fam) return "";
+        var html = "";
 
-        if (fam.pgtoTipo === 'avista' && fam.child === 'Joaquim') {
+        if (fam.pgtoTipo === "avista" && fam.child === "Joaquim") {
           var credito = fam.pagoMai - fam.totalGeral;
           html += '<div class="extrato-card">';
-          html += '<h2>&#128203; Extrato — Família ' + fam.child + '</h2>';
+          html += "<h2>&#128203; Extrato — Família " + fam.child + "</h2>";
           html += buildComposicao(fam);
-          html += '<div class="extrato-line extrato-paid">&#9989; Pago à vista: ' + fmt(fam.pagoMai) + '</div>';
-          html += '<div class="extrato-credito">&#128176; Crédito: ' + fmt(credito) + '</div>';
-          html += '<div class="extrato-quitado"><h3>&#9989; Situação: QUITADO</h3></div>';
-          html += '<p style="font-size:0.8rem;color:var(--muted);margin-top:12px;font-style:italic;">&#8505;&#65039; O crédito será devolvido conforme combinado com a comissão.</p>';
-          html += '</div>';
-        } else if (fam.pgtoTipo === 'avista' && fam.child === 'Marcela') {
+          html +=
+            '<div class="extrato-line extrato-paid">&#9989; Pago à vista: ' +
+            fmt(fam.pagoMai) +
+            "</div>";
+          html +=
+            '<div class="extrato-credito">&#128176; Crédito: ' +
+            fmt(credito) +
+            "</div>";
+          html +=
+            '<div class="extrato-quitado"><h3>&#9989; Situação: QUITADO</h3></div>';
+          html +=
+            '<p style="font-size:0.8rem;color:var(--muted);margin-top:12px;font-style:italic;">&#8505;&#65039; O crédito será devolvido conforme combinado com a comissão.</p>';
+          html += "</div>";
+        } else if (fam.pgtoTipo === "avista" && fam.child === "Marcela") {
           var saldo = fam.totalGeral - fam.pagoMai;
           html += '<div class="extrato-card">';
-          html += '<h2>&#128203; Extrato — Família ' + fam.child + '</h2>';
+          html += "<h2>&#128203; Extrato — Família " + fam.child + "</h2>";
           html += buildComposicao(fam);
-          html += '<div class="extrato-line extrato-paid">&#9989; Pago à vista: ' + fmt(fam.pagoMai) + '</div>';
-          html += '<div class="extrato-next">&#128204; Saldo restante: ' + fmt(saldo) + '</div>';
-          html += '<p style="font-size:0.8rem;color:var(--muted);margin-top:12px;font-style:italic;">&#8505;&#65039; Saldo referente ao fundo de reserva da turma (ajustado com o reajuste).</p>';
-          html += '</div>';
+          html +=
+            '<div class="extrato-line extrato-paid">&#9989; Pago à vista: ' +
+            fmt(fam.pagoMai) +
+            "</div>";
+          html +=
+            '<div class="extrato-next">&#128204; Saldo restante: ' +
+            fmt(saldo) +
+            "</div>";
+          html +=
+            '<p style="font-size:0.8rem;color:var(--muted);margin-top:12px;font-style:italic;">&#8505;&#65039; Saldo referente ao fundo de reserva da turma (ajustado com o reajuste).</p>';
+          html += "</div>";
         } else {
           var remaining = fam.totalGeral - fam.pagoMai;
-          var parcela = Math.floor(remaining / 6 * 100) / 100;
+          var parcela = Math.floor((remaining / 6) * 100) / 100;
           var ultimaParcela = Math.round((remaining - parcela * 5) * 100) / 100;
-          var meses = ['Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov'];
+          var meses = ["Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov"];
 
           html += '<div class="extrato-card">';
-          html += '<h2>&#128203; Extrato — Família ' + fam.child + '</h2>';
+          html += "<h2>&#128203; Extrato — Família " + fam.child + "</h2>";
           html += buildComposicao(fam);
-          html += '<div class="extrato-line extrato-paid"><span>Mai &#9989;</span><span>' + fmt(fam.pagoMai) + '</span></div>';
+          html +=
+            '<div class="extrato-line extrato-paid"><span>Mai &#9989;</span><span>' +
+            fmt(fam.pagoMai) +
+            "</span></div>";
           for (var i = 1; i <= 5; i++) {
-            html += '<div class="extrato-line extrato-pending"><span>' + meses[i] + ' &#9203;</span><span>' + fmt(parcela) + '</span></div>';
+            html +=
+              '<div class="extrato-line extrato-pending"><span>' +
+              meses[i] +
+              " &#9203;</span><span>" +
+              fmt(parcela) +
+              "</span></div>";
           }
-          html += '<div class="extrato-line extrato-pending"><span>Nov &#9203;</span><span>' + fmt(ultimaParcela) + '</span></div>';
-          html += '<div class="extrato-line extrato-total"><span>Total</span><span>' + fmt(fam.totalGeral) + '</span></div>';
+          html +=
+            '<div class="extrato-line extrato-pending"><span>Nov &#9203;</span><span>' +
+            fmt(ultimaParcela) +
+            "</span></div>";
+          html +=
+            '<div class="extrato-line extrato-total"><span>Total</span><span>' +
+            fmt(fam.totalGeral) +
+            "</span></div>";
           html += '<div class="extrato-next">';
-          html += '&#128204; Próxima parcela:<strong>' + fmt(parcela) + '</strong><br>';
-          html += 'Vencimento: <strong>10/06/2026</strong>';
-          html += '</div>';
-          html += '</div>';
+          html +=
+            "&#128204; Próxima parcela:<strong>" +
+            fmt(parcela) +
+            "</strong><br>";
+          html += "Vencimento: <strong>10/06/2026</strong>";
+          html += "</div>";
+          html += "</div>";
         }
         return html;
       }
 
       function renderFotos() {
-        var fam = families.find(function(f) { return f.child === currentFamily; });
+        var fam = families.find(function (f) {
+          return f.child === currentFamily;
+        });
         if (!fam) return;
         var container = document.getElementById("fotosContent");
         if (!container) return;
-        container.innerHTML = '<div class="foto-grid">' +
-          '<div>' +
-            '<h3 style="font-size:0.9rem;color:var(--pri);margin-bottom:8px;">Foto Bebê</h3>' +
-            '<div class="foto-upload-box" id="fotoBebeBox" onclick="document.getElementById(\'fotoBebeInput\').click()">' +
-              '<div class="icon">&#128118;</div>' +
-              '<p>Clique para enviar</p>' +
-            '</div>' +
-            '<input type="file" id="fotoBebeInput" accept="image/jpeg,image/png" style="display:none" onchange="uploadFoto(\'bebe\')">' +
-            '<div id="fotoBebePreview"></div>' +
-          '</div>' +
-          '<div>' +
-            '<h3 style="font-size:0.9rem;color:var(--pri);margin-bottom:8px;">Foto Atual</h3>' +
-            '<div class="foto-upload-box" id="fotoAtualBox" onclick="document.getElementById(\'fotoAtualInput\').click()">' +
-              '<div class="icon">&#128103;</div>' +
-              '<p>Clique para enviar</p>' +
-            '</div>' +
-            '<input type="file" id="fotoAtualInput" accept="image/jpeg,image/png" style="display:none" onchange="uploadFoto(\'atual\')">' +
-            '<div id="fotoAtualPreview"></div>' +
-          '</div>' +
-        '</div>';
-        loadFotos('fotosContent');
+        container.innerHTML =
+          '<div class="foto-grid">' +
+          "<div>" +
+          '<h3 style="font-size:0.9rem;color:var(--pri);margin-bottom:8px;">Foto Bebê</h3>' +
+          '<div class="foto-upload-box" id="fotoBebeBox" onclick="document.getElementById(\'fotoBebeInput\').click()">' +
+          '<div class="icon">&#128118;</div>' +
+          "<p>Clique para enviar</p>" +
+          "</div>" +
+          '<input type="file" id="fotoBebeInput" accept="image/jpeg,image/png" style="display:none" onchange="uploadFoto(\'bebe\')">' +
+          '<div id="fotoBebePreview"></div>' +
+          "</div>" +
+          "<div>" +
+          '<h3 style="font-size:0.9rem;color:var(--pri);margin-bottom:8px;">Foto Atual</h3>' +
+          '<div class="foto-upload-box" id="fotoAtualBox" onclick="document.getElementById(\'fotoAtualInput\').click()">' +
+          '<div class="icon">&#128103;</div>' +
+          "<p>Clique para enviar</p>" +
+          "</div>" +
+          '<input type="file" id="fotoAtualInput" accept="image/jpeg,image/png" style="display:none" onchange="uploadFoto(\'atual\')">' +
+          '<div id="fotoAtualPreview"></div>' +
+          "</div>" +
+          "</div>";
+        loadFotos("fotosContent");
       }
 
       function renderFotosReadOnly() {
         var container = document.getElementById("readOnlyFotosContent");
         if (!container) return;
-        container.innerHTML = '<div class="foto-grid">' +
-          '<div>' +
-            '<h3 style="font-size:0.9rem;color:var(--pri);margin-bottom:8px;">Foto Bebê</h3>' +
-            '<div class="foto-upload-box" id="roFotoBebeBox" onclick="document.getElementById(\'roFotoBebeInput\').click()">' +
-              '<div class="icon">&#128118;</div>' +
-              '<p>Clique para enviar</p>' +
-            '</div>' +
-            '<input type="file" id="roFotoBebeInput" accept="image/jpeg,image/png" style="display:none" onchange="uploadFoto(\'bebe\')">' +
-            '<div id="roFotoBebePreview"></div>' +
-          '</div>' +
-          '<div>' +
-            '<h3 style="font-size:0.9rem;color:var(--pri);margin-bottom:8px;">Foto Atual</h3>' +
-            '<div class="foto-upload-box" id="roFotoAtualBox" onclick="document.getElementById(\'roFotoAtualInput\').click()">' +
-              '<div class="icon">&#128103;</div>' +
-              '<p>Clique para enviar</p>' +
-            '</div>' +
-            '<input type="file" id="roFotoAtualInput" accept="image/jpeg,image/png" style="display:none" onchange="uploadFoto(\'atual\')">' +
-            '<div id="roFotoAtualPreview"></div>' +
-          '</div>' +
-        '</div>';
-        loadFotos('readOnlyFotosContent');
+        container.innerHTML =
+          '<div class="foto-grid">' +
+          "<div>" +
+          '<h3 style="font-size:0.9rem;color:var(--pri);margin-bottom:8px;">Foto Bebê</h3>' +
+          '<div class="foto-upload-box" id="roFotoBebeBox" onclick="document.getElementById(\'roFotoBebeInput\').click()">' +
+          '<div class="icon">&#128118;</div>' +
+          "<p>Clique para enviar</p>" +
+          "</div>" +
+          '<input type="file" id="roFotoBebeInput" accept="image/jpeg,image/png" style="display:none" onchange="uploadFoto(\'bebe\')">' +
+          '<div id="roFotoBebePreview"></div>' +
+          "</div>" +
+          "<div>" +
+          '<h3 style="font-size:0.9rem;color:var(--pri);margin-bottom:8px;">Foto Atual</h3>' +
+          '<div class="foto-upload-box" id="roFotoAtualBox" onclick="document.getElementById(\'roFotoAtualInput\').click()">' +
+          '<div class="icon">&#128103;</div>' +
+          "<p>Clique para enviar</p>" +
+          "</div>" +
+          '<input type="file" id="roFotoAtualInput" accept="image/jpeg,image/png" style="display:none" onchange="uploadFoto(\'atual\')">' +
+          '<div id="roFotoAtualPreview"></div>' +
+          "</div>" +
+          "</div>";
+        loadFotos("readOnlyFotosContent");
       }
 
       async function uploadFoto(tipo) {
         var inputId;
         // Determine which input triggered
-        if (tipo === 'bebe') {
-          var mainInput = document.getElementById('fotoBebeInput');
-          var roInput = document.getElementById('roFotoBebeInput');
+        if (tipo === "bebe") {
+          var mainInput = document.getElementById("fotoBebeInput");
+          var roInput = document.getElementById("roFotoBebeInput");
           if (mainInput && mainInput.files && mainInput.files.length > 0) {
-            inputId = 'fotoBebeInput';
+            inputId = "fotoBebeInput";
           } else {
-            inputId = 'roFotoBebeInput';
+            inputId = "roFotoBebeInput";
           }
         } else {
-          var mainInput2 = document.getElementById('fotoAtualInput');
-          var roInput2 = document.getElementById('roFotoAtualInput');
+          var mainInput2 = document.getElementById("fotoAtualInput");
+          var roInput2 = document.getElementById("roFotoAtualInput");
           if (mainInput2 && mainInput2.files && mainInput2.files.length > 0) {
-            inputId = 'fotoAtualInput';
+            inputId = "fotoAtualInput";
           } else {
-            inputId = 'roFotoAtualInput';
+            inputId = "roFotoAtualInput";
           }
         }
         var fileInput = document.getElementById(inputId);
@@ -2390,9 +3298,13 @@
           return;
         }
         var reader = new FileReader();
-        reader.onload = async function() {
+        reader.onload = async function () {
           // Delete existing photo of same type
-          await sb.from("formatura_fotos").delete().eq("familia", currentFamily).eq("tipo", tipo);
+          await sb
+            .from("formatura_fotos")
+            .delete()
+            .eq("familia", currentFamily)
+            .eq("tipo", tipo);
           var result = await sb.from("formatura_fotos").insert({
             familia: currentFamily,
             tipo: tipo,
@@ -2408,10 +3320,12 @@
           fileInput.value = "";
           // Reload fotos in whichever view is active
           if (document.getElementById("mainContent").style.display !== "none") {
-            loadFotos('fotosContent');
+            loadFotos("fotosContent");
           }
-          if (document.getElementById("readOnlyView").style.display !== "none") {
-            loadFotos('readOnlyFotosContent');
+          if (
+            document.getElementById("readOnlyView").style.display !== "none"
+          ) {
+            loadFotos("readOnlyFotosContent");
           }
         };
         reader.readAsDataURL(file);
@@ -2424,30 +3338,52 @@
           .eq("familia", currentFamily);
         var data = result.data;
         if (!data) return;
-        var bebe = data.find(function(d) { return d.tipo === 'bebe'; });
-        var atual = data.find(function(d) { return d.tipo === 'atual'; });
-        var prefix = containerId === 'readOnlyFotosContent' ? 'ro' : '';
+        var bebe = data.find(function (d) {
+          return d.tipo === "bebe";
+        });
+        var atual = data.find(function (d) {
+          return d.tipo === "atual";
+        });
+        var prefix = containerId === "readOnlyFotosContent" ? "ro" : "";
 
-        var bebePreview = document.getElementById(prefix ? 'roFotoBebePreview' : 'fotoBebePreview');
-        var atualPreview = document.getElementById(prefix ? 'roFotoAtualPreview' : 'fotoAtualPreview');
-        var bebeBox = document.getElementById(prefix ? 'roFotoBebeBox' : 'fotoBebeBox');
-        var atualBox = document.getElementById(prefix ? 'roFotoAtualBox' : 'fotoAtualBox');
+        var bebePreview = document.getElementById(
+          prefix ? "roFotoBebePreview" : "fotoBebePreview",
+        );
+        var atualPreview = document.getElementById(
+          prefix ? "roFotoAtualPreview" : "fotoAtualPreview",
+        );
+        var bebeBox = document.getElementById(
+          prefix ? "roFotoBebeBox" : "fotoBebeBox",
+        );
+        var atualBox = document.getElementById(
+          prefix ? "roFotoAtualBox" : "fotoAtualBox",
+        );
 
         if (bebePreview && bebe) {
-          bebePreview.innerHTML = '<img src="' + bebe.arquivo_base64 + '" class="foto-preview" alt="Foto Bebê">' +
-            '<button class="btn btn-secondary" style="width:100%;margin-top:8px;padding:8px;font-size:0.78rem;" onclick="deleteFoto(' + bebe.id + ')">Trocar foto</button>';
-          if (bebeBox) bebeBox.style.display = 'none';
+          bebePreview.innerHTML =
+            '<img src="' +
+            bebe.arquivo_base64 +
+            '" class="foto-preview" alt="Foto Bebê">' +
+            '<button class="btn btn-secondary" style="width:100%;margin-top:8px;padding:8px;font-size:0.78rem;" onclick="deleteFoto(' +
+            bebe.id +
+            ')">Trocar foto</button>';
+          if (bebeBox) bebeBox.style.display = "none";
         } else if (bebePreview) {
-          bebePreview.innerHTML = '';
-          if (bebeBox) bebeBox.style.display = 'flex';
+          bebePreview.innerHTML = "";
+          if (bebeBox) bebeBox.style.display = "flex";
         }
         if (atualPreview && atual) {
-          atualPreview.innerHTML = '<img src="' + atual.arquivo_base64 + '" class="foto-preview" alt="Foto Atual">' +
-            '<button class="btn btn-secondary" style="width:100%;margin-top:8px;padding:8px;font-size:0.78rem;" onclick="deleteFoto(' + atual.id + ')">Trocar foto</button>';
-          if (atualBox) atualBox.style.display = 'none';
+          atualPreview.innerHTML =
+            '<img src="' +
+            atual.arquivo_base64 +
+            '" class="foto-preview" alt="Foto Atual">' +
+            '<button class="btn btn-secondary" style="width:100%;margin-top:8px;padding:8px;font-size:0.78rem;" onclick="deleteFoto(' +
+            atual.id +
+            ')">Trocar foto</button>';
+          if (atualBox) atualBox.style.display = "none";
         } else if (atualPreview) {
-          atualPreview.innerHTML = '';
-          if (atualBox) atualBox.style.display = 'flex';
+          atualPreview.innerHTML = "";
+          if (atualBox) atualBox.style.display = "flex";
         }
       }
 
@@ -2460,10 +3396,10 @@
         }
         toast("Foto excluida!", "success");
         if (document.getElementById("mainContent").style.display !== "none") {
-          loadFotos('fotosContent');
+          loadFotos("fotosContent");
         }
         if (document.getElementById("readOnlyView").style.display !== "none") {
-          loadFotos('readOnlyFotosContent');
+          loadFotos("readOnlyFotosContent");
         }
       }
 
@@ -2474,30 +3410,46 @@
           .select("*")
           .order("created_at", { ascending: false });
         var data = result.data;
-        renderDocumentosPublic(data, 'readOnlyDocumentosContent');
+        loadedDocumentos = data || [];
+        renderDocumentosPublic(data, "readOnlyDocumentosContent");
       }
 
       function renderDocumentosPublic(data, containerId) {
         var el = document.getElementById(containerId);
         if (!el) return;
         if (!data || !data.length) {
-          el.innerHTML = '<p style="font-size:.8rem;color:var(--muted);">Nenhum documento disponível ainda.</p>';
+          el.innerHTML =
+            '<p style="font-size:.8rem;color:var(--muted);">Nenhum documento disponível ainda.</p>';
           return;
         }
-        var html = '';
-        data.forEach(function(doc) {
-          var icon = doc.tipo === 'contrato' ? '&#128196;' : '&#128179;';
-          var tipoLabel = doc.tipo === 'contrato' ? 'Contrato' : 'Extrato Bancário';
-          var dt = doc.created_at ? new Date(doc.created_at).toLocaleDateString('pt-BR') : '';
+        var html = "";
+        data.forEach(function (doc) {
+          var icon = doc.tipo === "contrato" ? "&#128196;" : "&#128179;";
+          var tipoLabel =
+            doc.tipo === "contrato" ? "Contrato" : "Extrato Bancário";
+          var dt = doc.created_at
+            ? new Date(doc.created_at).toLocaleDateString("pt-BR")
+            : "";
           html += '<div class="doc-card">';
-          html += '<div class="doc-icon">' + icon + '</div>';
+          html += '<div class="doc-icon">' + icon + "</div>";
           html += '<div class="doc-info">';
-          html += '<div class="doc-name">' + tipoLabel + ' — ' + doc.arquivo_nome + '</div>';
-          if (doc.legenda) html += '<div class="doc-legend">' + doc.legenda + '</div>';
-          html += '<div class="doc-date">' + dt + '</div>';
-          html += '</div>';
-          html += '<div class="doc-action"><a href="' + doc.arquivo_base64 + '" target="_blank">Visualizar</a></div>';
-          html += '</div>';
+          html +=
+            '<div class="doc-name">' +
+            tipoLabel +
+            " — " +
+            doc.arquivo_nome +
+            "</div>";
+          if (doc.legenda)
+            html += '<div class="doc-legend">' + doc.legenda + "</div>";
+          html += '<div class="doc-date">' + dt + "</div>";
+          html += "</div>";
+          html +=
+            '<div class="doc-action"><a href="javascript:void(0)" onclick="abrirDocumento(\'' +
+            doc.arquivo_tipo +
+            "','" +
+            doc.id +
+            "')\">Visualizar</a></div>";
+          html += "</div>";
         });
         el.innerHTML = html;
       }
@@ -2518,56 +3470,78 @@
           "Validado em " + dt;
 
         // Render extrato in readOnlyView
-        document.getElementById("readOnlyExtrato").innerHTML = renderExtratoForReadOnly();
+        document.getElementById("readOnlyExtrato").innerHTML =
+          renderExtratoForReadOnly();
 
         // Render responsáveis
-        var respHtml = '';
+        var respHtml = "";
         if (data.responsavel_legal_nome || data.responsavel_financeiro_nome) {
           respHtml += '<div class="card" style="margin-top:16px;">';
-          respHtml += '<h2>Responsáveis</h2>';
+          respHtml += "<h2>Responsáveis</h2>";
           if (data.responsavel_legal_nome) {
             respHtml += '<div style="margin-bottom:10px;">';
-            respHtml += '<p style="font-size:.78rem;font-weight:600;color:var(--pri);margin-bottom:2px;">Responsável Legal</p>';
-            respHtml += '<p style="font-size:.85rem;">' + data.responsavel_legal_nome + '</p>';
-            if (data.responsavel_legal_cpf) respHtml += '<p style="font-size:.8rem;color:var(--muted);">CPF: ' + data.responsavel_legal_cpf + '</p>';
-            respHtml += '</div>';
+            respHtml +=
+              '<p style="font-size:.78rem;font-weight:600;color:var(--pri);margin-bottom:2px;">Responsável Legal</p>';
+            respHtml +=
+              '<p style="font-size:.85rem;">' +
+              data.responsavel_legal_nome +
+              "</p>";
+            if (data.responsavel_legal_cpf)
+              respHtml +=
+                '<p style="font-size:.8rem;color:var(--muted);">CPF: ' +
+                data.responsavel_legal_cpf +
+                "</p>";
+            respHtml += "</div>";
           }
           if (data.responsavel_financeiro_nome) {
-            respHtml += '<div>';
-            respHtml += '<p style="font-size:.78rem;font-weight:600;color:var(--pri);margin-bottom:2px;">Responsável Financeiro</p>';
-            respHtml += '<p style="font-size:.85rem;">' + data.responsavel_financeiro_nome + '</p>';
-            if (data.responsavel_financeiro_cpf) respHtml += '<p style="font-size:.8rem;color:var(--muted);">CPF: ' + data.responsavel_financeiro_cpf + '</p>';
-            respHtml += '</div>';
+            respHtml += "<div>";
+            respHtml +=
+              '<p style="font-size:.78rem;font-weight:600;color:var(--pri);margin-bottom:2px;">Responsável Financeiro</p>';
+            respHtml +=
+              '<p style="font-size:.85rem;">' +
+              data.responsavel_financeiro_nome +
+              "</p>";
+            if (data.responsavel_financeiro_cpf)
+              respHtml +=
+                '<p style="font-size:.8rem;color:var(--muted);">CPF: ' +
+                data.responsavel_financeiro_cpf +
+                "</p>";
+            respHtml += "</div>";
           }
-          respHtml += '</div>';
+          respHtml += "</div>";
         }
         document.getElementById("readOnlyResponsaveis").innerHTML = respHtml;
 
-        var fam = families.find(function(f) { return f.child === data.familia; });
-        var html = '';
+        var fam = families.find(function (f) {
+          return f.child === data.familia;
+        });
+        var html = "";
         html += makeSummaryBox("Salgados", data.salgados || [], "10");
         html += makeSummaryBox(
           "Doces Tradicionais",
           data.doces_tradicionais || [],
-          "7"
+          "7",
         );
         html += makeSummaryBox(
           "Doces Especiais",
           data.doces_especiais || [],
-          "4"
+          "4",
         );
         html += makeSummaryBox(
           "Finger Food Principal",
           data.finger_food_principal ? [data.finger_food_principal] : [],
-          "1"
+          "1",
         );
         html += makeSummaryBox(
           "Finger Food Complementar",
           data.finger_food_complementar ? [data.finger_food_complementar] : [],
-          "1"
+          "1",
         );
         if (data.observacoes)
-          html += '<div class="card"><h2>Observações</h2><p style="font-size:.85rem">' + data.observacoes + '</p></div>';
+          html +=
+            '<div class="card"><h2>Observações</h2><p style="font-size:.85rem">' +
+            data.observacoes +
+            "</p></div>";
         document.getElementById("readOnlySummary").innerHTML = html;
         updatePixDisplay();
         loadComprovantes();
@@ -2604,9 +3578,9 @@
         document.getElementById("finNome").value = "";
         document.getElementById("finCpf").value = "";
         formaPagamento = "";
-        document
-          .querySelectorAll('[data-cat="pgto"]')
-          .forEach(function(o) { o.classList.remove("selected"); });
+        document.querySelectorAll('[data-cat="pgto"]').forEach(function (o) {
+          o.classList.remove("selected");
+        });
         var crono = document.getElementById("cronogramaBox");
         if (crono) crono.style.display = "block";
         updateTabStates();
@@ -2615,7 +3589,7 @@
 
       function updateTabStates() {
         var btns = document.querySelectorAll("#tabNav button");
-        btns.forEach(function(btn, i) {
+        btns.forEach(function (btn, i) {
           var tab = btn.dataset.tab;
           btn.classList.remove("locked", "done", "active");
           if (ciente[tab]) {
@@ -2632,18 +3606,27 @@
         var activeSection = document.querySelector("section.active");
         if (activeSection) {
           var activeBtn = document.querySelector(
-            '#tabNav button[data-tab="' + activeSection.id + '"]'
+            '#tabNav button[data-tab="' + activeSection.id + '"]',
           );
           if (activeBtn) activeBtn.classList.add("active");
         }
       }
 
       function showRoTab(id) {
-        document.querySelectorAll('.ro-tab').forEach(function(s) { s.classList.remove('active'); });
-        document.getElementById(id).classList.add('active');
-        document.querySelectorAll('#roTabNav button').forEach(function(b) { b.classList.remove('active'); });
-        document.querySelector('#roTabNav button[data-rotab="' + id + '"]').classList.add('active');
-        window.scrollTo({ top: document.getElementById('roTabNav').offsetTop - 10, behavior: 'smooth' });
+        document.querySelectorAll(".ro-tab").forEach(function (s) {
+          s.classList.remove("active");
+        });
+        document.getElementById(id).classList.add("active");
+        document.querySelectorAll("#roTabNav button").forEach(function (b) {
+          b.classList.remove("active");
+        });
+        document
+          .querySelector('#roTabNav button[data-rotab="' + id + '"]')
+          .classList.add("active");
+        window.scrollTo({
+          top: document.getElementById("roTabNav").offsetTop - 10,
+          behavior: "smooth",
+        });
       }
 
       function tryShowTab(id) {
@@ -2656,9 +3639,9 @@
       }
 
       function forceShowTab(id) {
-        document
-          .querySelectorAll("main section")
-          .forEach(function(s) { s.classList.remove("active"); });
+        document.querySelectorAll("main section").forEach(function (s) {
+          s.classList.remove("active");
+        });
         document.getElementById(id).classList.add("active");
         updateTabStates();
         var bi = document.getElementById("buffetInfo");
@@ -2681,7 +3664,7 @@
           if (!formaPagamento) {
             toast(
               "Selecione a forma de pagamento (À Vista ou Parcelado)",
-              "error"
+              "error",
             );
             return;
           }
@@ -2700,14 +3683,14 @@
           if (lc === fc) {
             toast(
               "O CPF do Responsável Financeiro deve ser diferente do Responsável Legal",
-              "error"
+              "error",
             );
             return;
           }
           if (ln.toLowerCase() === fn.toLowerCase()) {
             toast(
               "O Responsável Financeiro deve ser uma pessoa diferente do Responsável Legal",
-              "error"
+              "error",
             );
             return;
           }
@@ -2724,44 +3707,84 @@
 
       function showFinalSummary() {
         var obs = document.getElementById("obsText").value.trim();
-        var fam = families.find(function(f) { return f.child === currentFamily; });
+        var fam = families.find(function (f) {
+          return f.child === currentFamily;
+        });
         var pix = getPixInfo(currentFamily);
-        var html = '<div class="summary-box"><h4>Família</h4><p style="font-size:.85rem"><strong>' + currentFamily + '</strong> (' + (fam ? fam.parent : '') + ')</p></div>';
-        html += '<div class="summary-box"><h4>Pagamento</h4><p style="font-size:.8rem"><strong>Forma:</strong> ' + (formaPagamento === "avista" ? "À Vista" : "Parcelado 7x") + '</p><p style="font-size:.8rem"><strong>Valor Total:</strong> ' + (fam ? fmt(fam.totalGeral) : '---') + '</p>' + (pix ? '<p style="font-size:.8rem"><strong>PIX:</strong> ' + pix.chave + ' (' + pix.titular + ')</p>' : '') + '</div>';
+        var html =
+          '<div class="summary-box"><h4>Família</h4><p style="font-size:.85rem"><strong>' +
+          currentFamily +
+          "</strong> (" +
+          (fam ? fam.parent : "") +
+          ")</p></div>";
+        html +=
+          '<div class="summary-box"><h4>Pagamento</h4><p style="font-size:.8rem"><strong>Forma:</strong> ' +
+          (formaPagamento === "avista" ? "À Vista" : "Parcelado 7x") +
+          '</p><p style="font-size:.8rem"><strong>Valor Total:</strong> ' +
+          (fam ? fmt(fam.totalGeral) : "---") +
+          "</p>" +
+          (pix
+            ? '<p style="font-size:.8rem"><strong>PIX:</strong> ' +
+              pix.chave +
+              " (" +
+              pix.titular +
+              ")</p>"
+            : "") +
+          "</div>";
         html += makeSummaryBox("Salgados", selected.salgados, "10");
         html += makeSummaryBox("Doces Tradicionais", selected.docesTrad, "7");
         html += makeSummaryBox("Doces Especiais", selected.docesEsp, "4");
         html += makeSummaryBox(
           "Finger Food Principal",
           selected.ffp ? [selected.ffp] : [],
-          "1"
+          "1",
         );
         html += makeSummaryBox(
           "Finger Food Complementar",
           selected.ffc ? [selected.ffc] : [],
-          "1"
+          "1",
         );
         var ln2 = document.getElementById("legalNome").value.trim();
         var lc2 = document.getElementById("legalCpf").value.trim();
         var fn2 = document.getElementById("finNome").value.trim();
         var fc2 = document.getElementById("finCpf").value.trim();
-        html += '<div class="summary-box"><h4>Responsáveis</h4><p style="font-size:.8rem"><strong>Legal:</strong> ' + ln2 + ' — CPF: ' + lc2 + '</p><p style="font-size:.8rem"><strong>Financeiro:</strong> ' + fn2 + ' — CPF: ' + fc2 + '</p></div>';
+        html +=
+          '<div class="summary-box"><h4>Responsáveis</h4><p style="font-size:.8rem"><strong>Legal:</strong> ' +
+          ln2 +
+          " — CPF: " +
+          lc2 +
+          '</p><p style="font-size:.8rem"><strong>Financeiro:</strong> ' +
+          fn2 +
+          " — CPF: " +
+          fc2 +
+          "</p></div>";
         if (obs)
-          html += '<div class="summary-box"><h4>Observações</h4><p style="font-size:.8rem">' + obs + '</p></div>';
-        html += '<div style="background:#FDEDEC;border-radius:10px;padding:14px;margin-top:12px;font-size:.8rem;color:#922B21;text-align:center;font-weight:600">Após validar, não será possível alterar suas escolhas.</div>';
+          html +=
+            '<div class="summary-box"><h4>Observações</h4><p style="font-size:.8rem">' +
+            obs +
+            "</p></div>";
+        html +=
+          '<div style="background:#FDEDEC;border-radius:10px;padding:14px;margin-top:12px;font-size:.8rem;color:#922B21;text-align:center;font-weight:600">Após validar, não será possível alterar suas escolhas.</div>';
         document.getElementById("finalSummary").innerHTML = html;
-        document
-          .querySelectorAll("main section")
-          .forEach(function(s) { s.classList.remove("active"); });
+        document.querySelectorAll("main section").forEach(function (s) {
+          s.classList.remove("active");
+        });
         document.getElementById("resumo").classList.add("active");
-        document
-          .querySelectorAll("#tabNav button")
-          .forEach(function(b) { b.classList.remove("active"); });
+        document.querySelectorAll("#tabNav button").forEach(function (b) {
+          b.classList.remove("active");
+        });
         window.scrollTo({ top: 0, behavior: "smooth" });
       }
 
       function makeSummaryBox(title, items, max) {
-        var wrap = '<div class="summary-box"><h4>' + title + ' (' + items.length + '/' + max + ')</h4>';
+        var wrap =
+          '<div class="summary-box"><h4>' +
+          title +
+          " (" +
+          items.length +
+          "/" +
+          max +
+          ")</h4>";
         if (!items.length)
           return (
             wrap +
@@ -2769,7 +3792,13 @@
           );
         return (
           wrap +
-          '<div class="items">' + items.map(function(i) { return '<span class="item">' + i + '</span>'; }).join("") + '</div></div>'
+          '<div class="items">' +
+          items
+            .map(function (i) {
+              return '<span class="item">' + i + "</span>";
+            })
+            .join("") +
+          "</div></div>"
         );
       }
 
@@ -2823,16 +3852,38 @@
 
       function renderVenues() {
         document.getElementById("venueGrid").innerHTML = venues
-          .map(
-            function(v) { return '<div class="venue ' + (v.winner ? "winner" : "") + '">' +
-      (v.winner ? '<span class="badge">ESCOLHIDO</span>' : "") +
-      '<h3>' + v.name + '</h3><div class="loc">' + v.loc + '</div>' +
-      '<div class="price ' + (v.winner ? "winner-price" : "") + '">' + fmt(v.total) + '</div>' +
-      '<div class="per-person">' + fmt(v.pp) + '/pessoa | Meia: ' + fmt(v.half) + '</div>' +
-      '<div class="includes">' + v.inc + '</div>' +
-      '<div class="note ' + v.noteClass + '">' + v.note + '</div>' +
-    '</div>'; }
-          )
+          .map(function (v) {
+            return (
+              '<div class="venue ' +
+              (v.winner ? "winner" : "") +
+              '">' +
+              (v.winner ? '<span class="badge">ESCOLHIDO</span>' : "") +
+              "<h3>" +
+              v.name +
+              '</h3><div class="loc">' +
+              v.loc +
+              "</div>" +
+              '<div class="price ' +
+              (v.winner ? "winner-price" : "") +
+              '">' +
+              fmt(v.total) +
+              "</div>" +
+              '<div class="per-person">' +
+              fmt(v.pp) +
+              "/pessoa | Meia: " +
+              fmt(v.half) +
+              "</div>" +
+              '<div class="includes">' +
+              v.inc +
+              "</div>" +
+              '<div class="note ' +
+              v.noteClass +
+              '">' +
+              v.note +
+              "</div>" +
+              "</div>"
+            );
+          })
           .join("");
       }
 
@@ -2840,13 +3891,37 @@
         var tableId = targetId || "adminFamilyTable";
         var el = document.getElementById(tableId);
         if (!el) return;
-        var rateioEscola = 58.10;
+        var rateioEscola = 58.1;
         el.innerHTML = families
-          .map(
-            function(f) {
-              return '<tr><td>' + f.ref + '</td><td><strong>' + f.child + '</strong></td><td>' + f.parent + '</td><td>' + f.total + '</td><td>' + f.adults + '</td><td>' + (f.u3 || "-") + '</td><td>' + f.a47 + '</td><td>' + (f.o8 || "-") + '</td><td class="money">' + fmt(rateioEscola) + '</td><td class="money">' + fmt(10) + '</td><td class="money"><strong>' + fmt(f.val) + '</strong></td><td class="money">' + fmt(f.totalGeral) + '</td></tr>';
-            }
-          )
+          .map(function (f) {
+            return (
+              "<tr><td>" +
+              f.ref +
+              "</td><td><strong>" +
+              f.child +
+              "</strong></td><td>" +
+              f.parent +
+              "</td><td>" +
+              f.total +
+              "</td><td>" +
+              f.adults +
+              "</td><td>" +
+              (f.u3 || "-") +
+              "</td><td>" +
+              f.a47 +
+              "</td><td>" +
+              (f.o8 || "-") +
+              '</td><td class="money">' +
+              fmt(rateioEscola) +
+              '</td><td class="money">' +
+              fmt(10) +
+              '</td><td class="money"><strong>' +
+              fmt(f.val) +
+              '</strong></td><td class="money">' +
+              fmt(f.totalGeral) +
+              "</td></tr>"
+            );
+          })
           .join("");
       }
 
@@ -2854,27 +3929,47 @@
         var el = document.getElementById("schoolTeam");
         if (!el) return;
         el.innerHTML = schoolTeam
-          .map(
-            function(m) {
-              return '<div class="team-member"><span class="dot"></span><span>' + m.n + '</span><span class="role">— ' + m.r + '</span></div>';
-            }
-          )
+          .map(function (m) {
+            return (
+              '<div class="team-member"><span class="dot"></span><span>' +
+              m.n +
+              '</span><span class="role">— ' +
+              m.r +
+              "</span></div>"
+            );
+          })
           .join("");
       }
       function renderOptions(containerId, items, category, max, isRadio) {
         document.getElementById(containerId).innerHTML = items
-          .map(
-            function(item) {
-              return '<div class="opt ' + (isRadio ? "radio" : "") + '" data-cat="' + category + '" data-val="' + item + '" onclick="toggleOption(this,\'' + category + '\',' + max + ',' + isRadio + ')"><span class="check">' + (isRadio ? "" : "&#10003;") + '</span><span>' + item + '</span></div>';
-            }
-          )
+          .map(function (item) {
+            return (
+              '<div class="opt ' +
+              (isRadio ? "radio" : "") +
+              '" data-cat="' +
+              category +
+              '" data-val="' +
+              item +
+              '" onclick="toggleOption(this,\'' +
+              category +
+              "'," +
+              max +
+              "," +
+              isRadio +
+              ')"><span class="check">' +
+              (isRadio ? "" : "&#10003;") +
+              "</span><span>" +
+              item +
+              "</span></div>"
+            );
+          })
           .join("");
       }
       function toggleOption(el, category, max, isRadio) {
         if (isRadio) {
-          el.parentElement
-            .querySelectorAll(".opt")
-            .forEach(function(o) { o.classList.remove("selected"); });
+          el.parentElement.querySelectorAll(".opt").forEach(function (o) {
+            o.classList.remove("selected");
+          });
           el.classList.add("selected");
           if (category === "ffp") selected.ffp = el.dataset.val;
           else if (category === "ffc") selected.ffc = el.dataset.val;
@@ -2887,7 +3982,9 @@
             if (idx > -1) arr.splice(idx, 1);
             el.parentElement
               .querySelectorAll(".opt:not(.selected)")
-              .forEach(function(o) { o.classList.remove("disabled"); });
+              .forEach(function (o) {
+                o.classList.remove("disabled");
+              });
           } else {
             if (arr.length >= max) return;
             el.classList.add("selected");
@@ -2895,7 +3992,9 @@
             if (arr.length >= max)
               el.parentElement
                 .querySelectorAll(".opt:not(.selected)")
-                .forEach(function(o) { o.classList.add("disabled"); });
+                .forEach(function (o) {
+                  o.classList.add("disabled");
+                });
           }
         }
         updateCounters();
@@ -2927,24 +4026,32 @@
         updateCounters();
       }
       function applyS(cat, items, max) {
-        document.querySelectorAll('[data-cat="' + cat + '"]').forEach(function(el) {
-          if (items.includes(el.dataset.val)) el.classList.add("selected");
-        });
+        document
+          .querySelectorAll('[data-cat="' + cat + '"]')
+          .forEach(function (el) {
+            if (items.includes(el.dataset.val)) el.classList.add("selected");
+          });
         if (items.length >= max)
           document
             .querySelectorAll('[data-cat="' + cat + '"]:not(.selected)')
-            .forEach(function(o) { o.classList.add("disabled"); });
+            .forEach(function (o) {
+              o.classList.add("disabled");
+            });
       }
       function applyR(cat, val) {
-        document.querySelectorAll('[data-cat="' + cat + '"]').forEach(function(el) {
-          if (el.dataset.val === val) el.classList.add("selected");
-        });
+        document
+          .querySelectorAll('[data-cat="' + cat + '"]')
+          .forEach(function (el) {
+            if (el.dataset.val === val) el.classList.add("selected");
+          });
       }
       function toast(msg, type) {
         var t = document.getElementById("toast");
         t.textContent = msg;
         t.className = "toast show " + (type || "");
-        setTimeout(function() { t.className = "toast"; }, 3500);
+        setTimeout(function () {
+          t.className = "toast";
+        }, 3500);
       }
 
       function maskCpf(el) {
@@ -2960,7 +4067,9 @@
       var formaPagamento = "";
 
       function getPixInfo(familyChild) {
-        var fam = families.find(function(f) { return f.child === familyChild; });
+        var fam = families.find(function (f) {
+          return f.child === familyChild;
+        });
         if (!fam) return null;
         if (fam.ref <= 11) {
           return {
@@ -2979,12 +4088,23 @@
       function updatePixDisplay() {
         var pix = getPixInfo(currentFamily);
         if (!pix) return;
-        var html = '<div style="background:linear-gradient(135deg,#e8f8f5,#d5f5e3);border:1px solid #82e0aa;border-radius:var(--radius);padding:14px 18px;margin:12px 0;">';
-        html += '<p style="font-size:.82rem;font-weight:600;color:#00755e;margin-bottom:6px;">Dados para PIX da sua família:</p>';
-        html += '<p style="font-size:.88rem;margin:4px 0;"><strong>Chave PIX:</strong> ' + pix.chave + '</p>';
-        html += '<p style="font-size:.82rem;color:var(--muted);margin:2px 0;">Titular: ' + pix.titular + '</p>';
-        html += '<p style="font-size:.82rem;color:var(--muted);margin:2px 0;">Banco: ' + pix.banco + '</p>';
-        html += '</div>';
+        var html =
+          '<div style="background:linear-gradient(135deg,#e8f8f5,#d5f5e3);border:1px solid #82e0aa;border-radius:var(--radius);padding:14px 18px;margin:12px 0;">';
+        html +=
+          '<p style="font-size:.82rem;font-weight:600;color:#00755e;margin-bottom:6px;">Dados para PIX da sua família:</p>';
+        html +=
+          '<p style="font-size:.88rem;margin:4px 0;"><strong>Chave PIX:</strong> ' +
+          pix.chave +
+          "</p>";
+        html +=
+          '<p style="font-size:.82rem;color:var(--muted);margin:2px 0;">Titular: ' +
+          pix.titular +
+          "</p>";
+        html +=
+          '<p style="font-size:.82rem;color:var(--muted);margin:2px 0;">Banco: ' +
+          pix.banco +
+          "</p>";
+        html += "</div>";
         var el1 = document.getElementById("pixInfoDisplay");
         var el2 = document.getElementById("readOnlyPixInfo");
         if (el1) el1.innerHTML = html;
@@ -2993,9 +4113,9 @@
 
       function selectFormaPgto(el) {
         formaPagamento = el.dataset.val;
-        el.parentElement
-          .querySelectorAll(".opt")
-          .forEach(function(o) { o.classList.remove("selected"); });
+        el.parentElement.querySelectorAll(".opt").forEach(function (o) {
+          o.classList.remove("selected");
+        });
         el.classList.add("selected");
         var crono = document.getElementById("cronogramaBox");
         if (crono)
@@ -3057,11 +4177,17 @@
         el.innerHTML =
           '<p style="font-size:.82rem;font-weight:600;color:var(--pri);margin-bottom:8px;">Comprovantes enviados:</p>' +
           data
-            .map(
-              function(c) {
-                return '<div style="background:#f8f9fa;border-radius:8px;padding:8px 12px;margin-bottom:6px;font-size:.78rem;display:flex;justify-content:space-between;align-items:center;"><span>' + c.mes_referencia + ' — ' + c.arquivo_nome + '</span><div><span style="color:var(--ok);font-weight:600;margin-right:10px;">Enviado</span><button onclick="deleteComprovante(' + c.id + ')" style="background:#e53935;color:#fff;border:none;border-radius:6px;padding:3px 10px;font-size:.72rem;cursor:pointer;">Excluir</button></div></div>';
-              }
-            )
+            .map(function (c) {
+              return (
+                '<div style="background:#f8f9fa;border-radius:8px;padding:8px 12px;margin-bottom:6px;font-size:.78rem;display:flex;justify-content:space-between;align-items:center;"><span>' +
+                c.mes_referencia +
+                " — " +
+                c.arquivo_nome +
+                '</span><div><span style="color:var(--ok);font-weight:600;margin-right:10px;">Enviado</span><button onclick="deleteComprovante(' +
+                c.id +
+                ')" style="background:#e53935;color:#fff;border:none;border-radius:6px;padding:3px 10px;font-size:.72rem;cursor:pointer;">Excluir</button></div></div>'
+              );
+            })
             .join("");
       }
 
@@ -3086,11 +4212,20 @@
         var legenda = document.getElementById("adminDocLegenda").value.trim();
         var fileInput = document.getElementById("adminDocFile");
         var file = fileInput.files[0];
-        if (!tipo) { toast("Selecione o tipo do documento", "error"); return; }
-        if (!file) { toast("Selecione um arquivo", "error"); return; }
-        if (file.size > 10 * 1024 * 1024) { toast("Arquivo deve ter no máximo 10MB", "error"); return; }
+        if (!tipo) {
+          toast("Selecione o tipo do documento", "error");
+          return;
+        }
+        if (!file) {
+          toast("Selecione um arquivo", "error");
+          return;
+        }
+        if (file.size > 10 * 1024 * 1024) {
+          toast("Arquivo deve ter no máximo 10MB", "error");
+          return;
+        }
         var reader = new FileReader();
-        reader.onload = async function() {
+        reader.onload = async function () {
           var result = await sb.from("formatura_documentos").insert({
             tipo: tipo,
             legenda: legenda,
@@ -3127,18 +4262,25 @@
         var comprovantes = compRes.data;
         var fotosRes = await sb.from("formatura_fotos").select("familia,tipo");
         var fotosData = fotosRes.data || [];
-        var docsRes = await sb.from("formatura_documentos").select("*").order("created_at", { ascending: false });
+        var docsRes = await sb
+          .from("formatura_documentos")
+          .select("*")
+          .order("created_at", { ascending: false });
         var docsData = docsRes.data || [];
 
-        var familiasValidas = families.filter(function(f) { return !f.exclude; });
+        var familiasValidas = families.filter(function (f) {
+          return !f.exclude;
+        });
         var totalFamilias = familiasValidas.length;
         var respondidas = votos
-          ? votos.filter(
-              function(v) {
-                return v.confirmado &&
-                familiasValidas.some(function(f) { return f.child === v.familia; });
-              }
-            ).length
+          ? votos.filter(function (v) {
+              return (
+                v.confirmado &&
+                familiasValidas.some(function (f) {
+                  return f.child === v.familia;
+                })
+              );
+            }).length
           : 0;
         var pendentes = totalFamilias - respondidas;
         var totalComps = comprovantes ? comprovantes.length : 0;
@@ -3146,104 +4288,226 @@
 
         // Calculate total collected
         var totalArrecadado = 0;
-        families.forEach(function(f) { totalArrecadado += f.pagoMai; });
+        families.forEach(function (f) {
+          totalArrecadado += f.pagoMai;
+        });
         var totalGeral = 0;
-        families.forEach(function(f) { totalGeral += f.totalGeral; });
+        families.forEach(function (f) {
+          totalGeral += f.totalGeral;
+        });
         var totalAArrecadar = totalGeral - totalArrecadado;
 
-        var html = '<div class="card" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);border:2px solid #43a047;padding:20px;margin-bottom:16px;">';
-        html += '<h2 style="color:#2e7d32;font-size:1.15rem;margin-bottom:12px;text-align:center;">Painel de Respostas</h2>';
-        html += '<div style="display:flex;justify-content:space-around;text-align:center;flex-wrap:wrap;gap:10px;">';
-        html += '<div><p style="font-size:2rem;font-weight:800;color:#2e7d32;">' + respondidas + '</p><p style="font-size:.75rem;color:#558b2f;">Respondidas</p></div>';
-        html += '<div><p style="font-size:2rem;font-weight:800;color:#e65100;">' + pendentes + '</p><p style="font-size:.75rem;color:#bf360c;">Pendentes</p></div>';
-        html += '<div><p style="font-size:2rem;font-weight:800;color:#1565c0;">' + totalComps + '</p><p style="font-size:.75rem;color:#0d47a1;">Comprovantes</p></div>';
-        html += '</div>';
-        html += '<div style="background:#fff;border-radius:10px;height:18px;margin-top:14px;overflow:hidden;">';
-        html += '<div style="background:linear-gradient(90deg,#43a047,#66bb6a);height:100%;width:' + pct + '%;border-radius:10px;transition:width .3s;"></div>';
-        html += '</div>';
-        html += '<p style="text-align:center;font-size:.78rem;color:#2e7d32;margin-top:6px;font-weight:600;">' + pct + '% concluído (' + respondidas + ' de ' + totalFamilias + ')</p>';
-        html += '</div>';
+        var html =
+          '<div class="card" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);border:2px solid #43a047;padding:20px;margin-bottom:16px;">';
+        html +=
+          '<h2 style="color:#2e7d32;font-size:1.15rem;margin-bottom:12px;text-align:center;">Painel de Respostas</h2>';
+        html +=
+          '<div style="display:flex;justify-content:space-around;text-align:center;flex-wrap:wrap;gap:10px;">';
+        html +=
+          '<div><p style="font-size:2rem;font-weight:800;color:#2e7d32;">' +
+          respondidas +
+          '</p><p style="font-size:.75rem;color:#558b2f;">Respondidas</p></div>';
+        html +=
+          '<div><p style="font-size:2rem;font-weight:800;color:#e65100;">' +
+          pendentes +
+          '</p><p style="font-size:.75rem;color:#bf360c;">Pendentes</p></div>';
+        html +=
+          '<div><p style="font-size:2rem;font-weight:800;color:#1565c0;">' +
+          totalComps +
+          '</p><p style="font-size:.75rem;color:#0d47a1;">Comprovantes</p></div>';
+        html += "</div>";
+        html +=
+          '<div style="background:#fff;border-radius:10px;height:18px;margin-top:14px;overflow:hidden;">';
+        html +=
+          '<div style="background:linear-gradient(90deg,#43a047,#66bb6a);height:100%;width:' +
+          pct +
+          '%;border-radius:10px;transition:width .3s;"></div>';
+        html += "</div>";
+        html +=
+          '<p style="text-align:center;font-size:.78rem;color:#2e7d32;margin-top:6px;font-weight:600;">' +
+          pct +
+          "% concluído (" +
+          respondidas +
+          " de " +
+          totalFamilias +
+          ")</p>";
+        html += "</div>";
 
         // Financial summary
         html += '<div class="card" style="margin-bottom:16px;">';
-        html += '<h2>Resumo Financeiro</h2>';
-        html += '<div style="display:flex;justify-content:space-around;text-align:center;flex-wrap:wrap;gap:10px;">';
-        html += '<div><p style="font-size:1.3rem;font-weight:800;color:var(--ok);">' + fmt(totalArrecadado) + '</p><p style="font-size:.75rem;color:var(--muted);">Total Arrecadado (Mai)</p></div>';
-        html += '<div><p style="font-size:1.3rem;font-weight:800;color:#e65100;">' + fmt(totalAArrecadar) + '</p><p style="font-size:.75rem;color:var(--muted);">A Arrecadar</p></div>';
-        html += '<div><p style="font-size:1.3rem;font-weight:800;color:var(--pri);">' + fmt(totalGeral) + '</p><p style="font-size:.75rem;color:var(--muted);">Total Geral</p></div>';
-        html += '</div></div>';
+        html += "<h2>Resumo Financeiro</h2>";
+        html +=
+          '<div style="display:flex;justify-content:space-around;text-align:center;flex-wrap:wrap;gap:10px;">';
+        html +=
+          '<div><p style="font-size:1.3rem;font-weight:800;color:var(--ok);">' +
+          fmt(totalArrecadado) +
+          '</p><p style="font-size:.75rem;color:var(--muted);">Total Arrecadado (Mai)</p></div>';
+        html +=
+          '<div><p style="font-size:1.3rem;font-weight:800;color:#e65100;">' +
+          fmt(totalAArrecadar) +
+          '</p><p style="font-size:.75rem;color:var(--muted);">A Arrecadar</p></div>';
+        html +=
+          '<div><p style="font-size:1.3rem;font-weight:800;color:var(--pri);">' +
+          fmt(totalGeral) +
+          '</p><p style="font-size:.75rem;color:var(--muted);">Total Geral</p></div>';
+        html += "</div></div>";
 
         // Document upload form (admin only)
         html += '<div class="card" style="margin-bottom:16px;">';
-        html += '<h2>Upload de Documentos</h2>';
-        html += '<p style="font-size:.8rem;color:var(--muted);margin-bottom:12px;">Envie extratos bancários ou contratos. Todas as famílias poderão visualizar.</p>';
-        html += '<select id="adminDocTipo" class="family-select" style="margin-bottom:8px;">';
+        html += "<h2>Upload de Documentos</h2>";
+        html +=
+          '<p style="font-size:.8rem;color:var(--muted);margin-bottom:12px;">Envie extratos bancários ou contratos. Todas as famílias poderão visualizar.</p>';
+        html +=
+          '<select id="adminDocTipo" class="family-select" style="margin-bottom:8px;">';
         html += '<option value="">Tipo do documento...</option>';
         html += '<option value="extrato_bancario">Extrato Bancário</option>';
         html += '<option value="contrato">Contrato</option>';
-        html += '</select>';
-        html += '<input type="text" id="adminDocLegenda" class="form-input" placeholder="Legenda (opcional, max 100 caracteres)" maxlength="100" style="margin-bottom:8px;">';
-        html += '<input type="file" id="adminDocFile" accept="image/*,.pdf" class="form-input" style="margin-bottom:8px;">';
-        html += '<button class="btn btn-primary btn-block" onclick="uploadDocumento()">Enviar Documento</button>';
+        html += "</select>";
+        html +=
+          '<input type="text" id="adminDocLegenda" class="form-input" placeholder="Legenda (opcional, max 100 caracteres)" maxlength="100" style="margin-bottom:8px;">';
+        html +=
+          '<input type="file" id="adminDocFile" accept="image/*,.pdf" class="form-input" style="margin-bottom:8px;">';
+        html +=
+          '<button class="btn btn-primary btn-block" onclick="uploadDocumento()">Enviar Documento</button>';
         if (docsData.length) {
           html += '<div style="margin-top:16px;">';
-          html += '<p style="font-size:.82rem;font-weight:600;color:var(--pri);margin-bottom:8px;">Documentos enviados:</p>';
-          docsData.forEach(function(doc) {
-            var tipoLabel = doc.tipo === 'contrato' ? 'Contrato' : 'Extrato Bancário';
-            html += '<div style="background:#f8f9fa;border-radius:8px;padding:8px 12px;margin-bottom:6px;font-size:.78rem;display:flex;justify-content:space-between;align-items:center;">';
-            html += '<span>' + tipoLabel + ' — ' + doc.arquivo_nome + (doc.legenda ? ' (' + doc.legenda + ')' : '') + '</span>';
-            html += '<button onclick="deleteDocumento(' + doc.id + ')" style="background:#e53935;color:#fff;border:none;border-radius:6px;padding:3px 10px;font-size:.72rem;cursor:pointer;">Excluir</button>';
-            html += '</div>';
+          html +=
+            '<p style="font-size:.82rem;font-weight:600;color:var(--pri);margin-bottom:8px;">Documentos enviados:</p>';
+          docsData.forEach(function (doc) {
+            var tipoLabel =
+              doc.tipo === "contrato" ? "Contrato" : "Extrato Bancário";
+            html +=
+              '<div style="background:#f8f9fa;border-radius:8px;padding:8px 12px;margin-bottom:6px;font-size:.78rem;display:flex;justify-content:space-between;align-items:center;">';
+            html +=
+              "<span>" +
+              tipoLabel +
+              " — " +
+              doc.arquivo_nome +
+              (doc.legenda ? " (" + doc.legenda + ")" : "") +
+              "</span>";
+            html +=
+              '<button onclick="deleteDocumento(' +
+              doc.id +
+              ')" style="background:#e53935;color:#fff;border:none;border-radius:6px;padding:3px 10px;font-size:.72rem;cursor:pointer;">Excluir</button>';
+            html += "</div>";
           });
-          html += '</div>';
+          html += "</div>";
         }
-        html += '</div>';
+        html += "</div>";
 
         // Family table (moved from public Valores tab)
         html += '<div class="card" style="margin-bottom:16px;">';
-        html += '<h2>Quantitativo por Família</h2>';
-        html += '<p style="font-size:0.78rem;color:var(--muted);margin-bottom:4px;">Valor por pessoa: <strong>R$ 103,14</strong> (adulto) | <strong>R$ 51,57</strong> (4 a 7 anos = meia) | <strong>Grátis</strong> (menores de 3 anos)</p>';
+        html += "<h2>Quantitativo por Família</h2>";
+        html +=
+          '<p style="font-size:0.78rem;color:var(--muted);margin-bottom:4px;">Valor por pessoa: <strong>R$ 103,14</strong> (adulto) | <strong>R$ 51,57</strong> (4 a 7 anos = meia) | <strong>Grátis</strong> (menores de 3 anos)</p>';
         html += '<div class="table-wrap"><table><thead><tr>';
-        html += '<th>#</th><th>Criança</th><th>Responsável</th><th>Pessoas</th><th>Adultos</th><th>&lt;3</th><th>4-7</th><th>&gt;8</th><th>Rateio Escola*</th><th>Fundo Reserva**</th><th>Valor Buffet</th><th>Total Geral</th>';
+        html +=
+          "<th>#</th><th>Criança</th><th>Responsável</th><th>Pessoas</th><th>Adultos</th><th>&lt;3</th><th>4-7</th><th>&gt;8</th><th>Rateio Escola*</th><th>Fundo Reserva**</th><th>Valor Buffet</th><th>Total Geral</th>";
         html += '</tr></thead><tbody id="adminFamilyTable"></tbody>';
-        html += '<tfoot><tr style="background:var(--pri);color:#fff;font-weight:700;">';
-        html += '<td colspan="3">TOTAL</td><td>120</td><td>96</td><td>2</td><td>26</td><td>2</td><td></td><td class="money">R$ 10,00/mês</td><td class="money">R$ 12.376,40</td><td></td>';
-        html += '</tr></tfoot></table></div>';
+        html +=
+          '<tfoot><tr style="background:var(--pri);color:#fff;font-weight:700;">';
+        html +=
+          '<td colspan="3">TOTAL</td><td>120</td><td>96</td><td>2</td><td>26</td><td>2</td><td></td><td class="money">R$ 10,00/mês</td><td class="money">R$ 12.376,40</td><td></td>';
+        html += "</tr></tfoot></table></div>";
 
         // School team info
         html += '<div style="margin-top:12px;">';
-        html += '<h3 style="font-size:.9rem;color:var(--pri);margin-bottom:8px;">Equipe da Escola (convidados)</h3>';
-        html += '<p style="font-size:0.82rem;color:var(--muted);margin-bottom:8px;">16 colaboradores da escola — 9 no contrato + 7 como convidados extras. Total: R$ 1.278,23 | Rateio por família: R$ 58,10</p>';
-        html += '</div>';
-        html += '</div>';
+        html +=
+          '<h3 style="font-size:.9rem;color:var(--pri);margin-bottom:8px;">Equipe da Escola (convidados)</h3>';
+        html +=
+          '<p style="font-size:0.82rem;color:var(--muted);margin-bottom:8px;">16 colaboradores da escola — 9 no contrato + 7 como convidados extras. Total: R$ 1.278,23 | Rateio por família: R$ 58,10</p>';
+        html += "</div>";
+        html += "</div>";
 
         // Per-family details
-        families.forEach(function(f) {
-          var voto = votos ? votos.find(function(v) { return v.familia === f.child; }) : null;
-          var comps = comprovantes ? comprovantes.filter(function(c) { return c.familia === f.child; }) : [];
+        families.forEach(function (f) {
+          var voto = votos
+            ? votos.find(function (v) {
+                return v.familia === f.child;
+              })
+            : null;
+          var comps = comprovantes
+            ? comprovantes.filter(function (c) {
+                return c.familia === f.child;
+              })
+            : [];
           var pix = getPixInfo(f.child);
-          var fotosBebe = fotosData.filter(function(ft) { return ft.familia === f.child && ft.tipo === 'bebe'; });
-          var fotosAtual = fotosData.filter(function(ft) { return ft.familia === f.child && ft.tipo === 'atual'; });
-          var status = (voto && voto.confirmado)
-            ? '<span style="color:var(--ok);font-weight:600;">Validado</span>'
-            : '<span style="color:var(--danger);">Pendente</span>';
+          var fotosBebe = fotosData.filter(function (ft) {
+            return ft.familia === f.child && ft.tipo === "bebe";
+          });
+          var fotosAtual = fotosData.filter(function (ft) {
+            return ft.familia === f.child && ft.tipo === "atual";
+          });
+          var status =
+            voto && voto.confirmado
+              ? '<span style="color:var(--ok);font-weight:600;">Validado</span>'
+              : '<span style="color:var(--danger);">Pendente</span>';
           var pgto =
             voto && voto.forma_pagamento === "avista"
               ? "À Vista"
               : voto && voto.forma_pagamento === "parcelado"
                 ? "Parcelado 7x"
                 : "---";
-          html += '<div class="card" style="margin-bottom:12px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><h3 style="font-size:.95rem;margin:0;">' + f.child + ' <span style="font-weight:400;color:var(--muted);">(' + f.parent + ')</span></h3>' + status + '</div>';
-          html += '<p style="font-size:.78rem;color:var(--muted);">PIX: ' + pix.chave + ' | Forma: ' + pgto + ' | Total: ' + fmt(f.totalGeral) + ' | Pago Mai: ' + fmt(f.pagoMai) + '</p>';
+          html +=
+            '<div class="card" style="margin-bottom:12px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><h3 style="font-size:.95rem;margin:0;">' +
+            f.child +
+            ' <span style="font-weight:400;color:var(--muted);">(' +
+            f.parent +
+            ")</span></h3>" +
+            status +
+            "</div>";
+          html +=
+            '<p style="font-size:.78rem;color:var(--muted);">PIX: ' +
+            pix.chave +
+            " | Forma: " +
+            pgto +
+            " | Total: " +
+            fmt(f.totalGeral) +
+            " | Pago Mai: " +
+            fmt(f.pagoMai) +
+            "</p>";
           // Photo status
           var temSenha = voto && voto.senha;
-          html += '<p style="font-size:.75rem;margin-top:4px;">Fotos: Bebê' + (fotosBebe.length > 0 ? '<span style="color:var(--ok);">&#9989;</span>' : '<span style="color:var(--danger);">&#10060;</span>') + ' | Atual ' + (fotosAtual.length > 0 ? '<span style="color:var(--ok);">&#9989;</span>' : '<span style="color:var(--danger);">&#10060;</span>') + ' | Senha: ' + (temSenha ? '<span style="color:var(--ok);">Cadastrada</span> <button onclick="resetarSenha(\'' + f.child.replace(/'/g,"\\'") + '\')" style="background:#e53935;color:#fff;border:none;border-radius:4px;padding:2px 8px;font-size:.7rem;cursor:pointer;margin-left:4px;">Resetar</button>' : '<span style="color:var(--muted);">Não cadastrada</span>') + '</p>';
+          html +=
+            '<p style="font-size:.75rem;margin-top:4px;">Fotos: Bebê' +
+            (fotosBebe.length > 0
+              ? '<span style="color:var(--ok);">&#9989;</span>'
+              : '<span style="color:var(--danger);">&#10060;</span>') +
+            " | Atual " +
+            (fotosAtual.length > 0
+              ? '<span style="color:var(--ok);">&#9989;</span>'
+              : '<span style="color:var(--danger);">&#10060;</span>') +
+            " | Senha: " +
+            (temSenha
+              ? '<span style="color:var(--ok);">Cadastrada</span> <button onclick="resetarSenha(\'' +
+                f.child.replace(/'/g, "\\'") +
+                '\')" style="background:#e53935;color:#fff;border:none;border-radius:4px;padding:2px 8px;font-size:.7rem;cursor:pointer;margin-left:4px;">Resetar</button>'
+              : '<span style="color:var(--muted);">Não cadastrada</span>') +
+            "</p>";
           if (voto && voto.responsavel_legal_nome)
-            html += '<p style="font-size:.78rem;margin-top:4px;"><strong>Legal:</strong> ' + voto.responsavel_legal_nome + ' — ' + voto.responsavel_legal_cpf + ' | <strong>Financeiro:</strong> ' + voto.responsavel_financeiro_nome + ' — ' + voto.responsavel_financeiro_cpf + '</p>';
+            html +=
+              '<p style="font-size:.78rem;margin-top:4px;"><strong>Legal:</strong> ' +
+              voto.responsavel_legal_nome +
+              " — " +
+              voto.responsavel_legal_cpf +
+              " | <strong>Financeiro:</strong> " +
+              voto.responsavel_financeiro_nome +
+              " — " +
+              voto.responsavel_financeiro_cpf +
+              "</p>";
           if (comps.length) {
             html += '<div style="margin-top:8px;">';
-            comps.forEach(function(c) {
-              html += '<div style="background:#f8f9fa;border-radius:6px;padding:6px 10px;margin-bottom:4px;font-size:.75rem;display:flex;justify-content:space-between;align-items:center;"><span><strong>' + c.mes_referencia + '</strong> — ' + c.arquivo_nome + '</span><a href="' + c.arquivo_base64 + '" download="' + c.arquivo_nome + '" style="color:var(--pri);font-weight:600;text-decoration:none;">Baixar</a></div>';
+            comps.forEach(function (c) {
+              html +=
+                '<div style="background:#f8f9fa;border-radius:6px;padding:6px 10px;margin-bottom:4px;font-size:.75rem;display:flex;justify-content:space-between;align-items:center;"><span><strong>' +
+                c.mes_referencia +
+                "</strong> — " +
+                c.arquivo_nome +
+                '</span><a href="' +
+                c.arquivo_base64 +
+                '" download="' +
+                c.arquivo_nome +
+                '" style="color:var(--pri);font-weight:600;text-decoration:none;">Baixar</a></div>';
             });
             html += "</div>";
           } else {
@@ -3269,6 +4533,107 @@
         document.getElementById("familyGate").style.display = "none";
         loadAdminView();
       }
+      function abrirDocumento(tipo, docId) {
+        var doc = loadedDocumentos.find(function (d) {
+          return d.id == docId;
+        });
+        if (!doc) return;
+        var overlay = document.getElementById("docOverlay");
+        var content = document.getElementById("docOverlayContent");
+        if (doc.arquivo_tipo && doc.arquivo_tipo.indexOf("image") > -1) {
+          content.innerHTML =
+            '<img src="' +
+            doc.arquivo_base64 +
+            '" style="max-width:100%;max-height:80vh;border-radius:8px;" />';
+        } else if (doc.arquivo_tipo && doc.arquivo_tipo.indexOf("pdf") > -1) {
+          content.innerHTML =
+            '<iframe src="' +
+            doc.arquivo_base64 +
+            '" style="width:100%;height:80vh;border:none;border-radius:8px;"></iframe>';
+        } else {
+          content.innerHTML =
+            '<p style="color:#fff;text-align:center;">Formato não suportado para visualização inline.</p><a href="' +
+            doc.arquivo_base64 +
+            '" download="' +
+            doc.arquivo_nome +
+            '" style="color:#fff;text-decoration:underline;">Baixar arquivo</a>';
+        }
+        overlay.style.display = "flex";
+      }
+
+      function fecharDocumento() {
+        document.getElementById("docOverlay").style.display = "none";
+        document.getElementById("docOverlayContent").innerHTML = "";
+      }
     </script>
+
+    <!-- Overlay para visualizar documentos -->
+    <div
+      id="docOverlay"
+      style="
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        z-index: 9999;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+        box-sizing: border-box;
+      "
+    >
+      <button
+        onclick="fecharDocumento()"
+        style="
+          position: absolute;
+          top: 12px;
+          right: 16px;
+          background: #fff;
+          color: #333;
+          border: none;
+          border-radius: 50%;
+          width: 40px;
+          height: 40px;
+          font-size: 1.3rem;
+          cursor: pointer;
+          z-index: 10000;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        "
+      >
+        &#10005;
+      </button>
+      <button
+        onclick="fecharDocumento()"
+        style="
+          position: absolute;
+          top: 12px;
+          left: 16px;
+          background: #fff;
+          color: #333;
+          border: none;
+          border-radius: 8px;
+          padding: 8px 16px;
+          font-size: 0.85rem;
+          cursor: pointer;
+          z-index: 10000;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        "
+      >
+        &#8592; Voltar
+      </button>
+      <div
+        id="docOverlayContent"
+        style="
+          max-width: 100%;
+          max-height: 90vh;
+          overflow: auto;
+          margin-top: 50px;
+        "
+      ></div>
+    </div>
   </body>
 </html>
