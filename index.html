@@ -4204,6 +4204,20 @@
           toast("Selecione o mês de referência", "error");
           return;
         }
+        var dupCheck = await sb
+          .from("formatura_comprovantes")
+          .select("id")
+          .eq("familia", currentFamily)
+          .eq("mes_referencia", mes);
+        if (dupCheck.data && dupCheck.data.length > 0) {
+          toast(
+            "Já existe um comprovante para " +
+              mes +
+              ". Exclua o anterior antes de enviar um novo.",
+            "error",
+          );
+          return;
+        }
         if (file.size > 5 * 1024 * 1024) {
           toast("Arquivo deve ter no máximo 5MB", "error");
           return;
