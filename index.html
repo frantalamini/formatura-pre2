@@ -837,7 +837,8 @@
 
       #readOnlyView,
       #roTabContent,
-      #mainContent {
+      #mainContent,
+      #paymentSection {
         max-width: 100%;
         overflow-x: hidden;
       }
@@ -1164,6 +1165,36 @@
       </div>
     </div>
 
+    <!-- ENVIO DE COMPROVANTE — bloco fixo, sempre visível após o login
+         (independe de ter confirmado o cardápio) -->
+    <div id="paymentSection" style="display: none" class="gate">
+      <div class="card">
+        <h2>Envio de Comprovante PIX</h2>
+        <div id="readOnlyPixInfo"></div>
+        <select id="mesRef" class="family-select" style="margin: 12px 0">
+          <option value="">Selecione o mês de referência...</option>
+          <option value="05/2026">Maio/2026 (1a parcela)</option>
+          <option value="06/2026">Junho/2026 (2a parcela)</option>
+          <option value="07/2026">Julho/2026 (3a parcela)</option>
+          <option value="08/2026">Agosto/2026 (4a parcela)</option>
+          <option value="09/2026">Setembro/2026 (5a parcela)</option>
+          <option value="10/2026">Outubro/2026 (6a parcela)</option>
+          <option value="11/2026">Novembro/2026 (7a parcela)</option>
+        </select>
+        <input
+          type="file"
+          id="comprovanteFile"
+          accept="image/*,.pdf"
+          class="form-input"
+          style="margin-bottom: 12px"
+        />
+        <button class="btn btn-primary btn-block" onclick="uploadComprovante()">
+          Enviar Comprovante
+        </button>
+        <div id="comprovantesEnviados" style="margin-top: 16px"></div>
+      </div>
+    </div>
+
     <!-- LEITURA SOMENTE (família já validou) -->
     <div id="readOnlyView" style="display: none" class="gate">
       <div
@@ -1326,6 +1357,8 @@
           </div>
           <div id="readOnlyExtrato"></div>
           <div id="readOnlyResponsaveis"></div>
+          <!-- O card "Envio de Comprovante PIX" foi movido para #paymentSection
+               (bloco fixo acima das abas, sempre visível após o login) -->
           <div class="alert-card" style="margin-top: 16px">
             <h2>ATENÇÃO — ITENS NÃO INCLUSOS NO PACOTE</h2>
             <p>
@@ -1341,34 +1374,6 @@
                 breve.</em
               >
             </p>
-          </div>
-          <div class="card" style="margin-top: 16px">
-            <h2>Envio de Comprovante PIX</h2>
-            <div id="readOnlyPixInfo"></div>
-            <select id="mesRef" class="family-select" style="margin: 12px 0">
-              <option value="">Selecione o mês de referência...</option>
-              <option value="05/2026">Maio/2026 (1a parcela)</option>
-              <option value="06/2026">Junho/2026 (2a parcela)</option>
-              <option value="07/2026">Julho/2026 (3a parcela)</option>
-              <option value="08/2026">Agosto/2026 (4a parcela)</option>
-              <option value="09/2026">Setembro/2026 (5a parcela)</option>
-              <option value="10/2026">Outubro/2026 (6a parcela)</option>
-              <option value="11/2026">Novembro/2026 (7a parcela)</option>
-            </select>
-            <input
-              type="file"
-              id="comprovanteFile"
-              accept="image/*,.pdf"
-              class="form-input"
-              style="margin-bottom: 12px"
-            />
-            <button
-              class="btn btn-primary btn-block"
-              onclick="uploadComprovante()"
-            >
-              Enviar Comprovante
-            </button>
-            <div id="comprovantesEnviados" style="margin-top: 16px"></div>
           </div>
         </section>
 
@@ -2909,6 +2914,7 @@
         document.getElementById("familyLocked").style.display = "none";
         document.getElementById("mainContent").style.display = "none";
         document.getElementById("readOnlyView").style.display = "none";
+        document.getElementById("paymentSection").style.display = "none";
         document.getElementById("senhaModal").style.display = "none";
         currentFamily = "";
         senhaHash = null;
@@ -2920,6 +2926,7 @@
         if (!sel) {
           document.getElementById("mainContent").style.display = "none";
           document.getElementById("readOnlyView").style.display = "none";
+          document.getElementById("paymentSection").style.display = "none";
           document.getElementById("senhaModal").style.display = "none";
           document.getElementById("familyLocked").style.display = "none";
           document.getElementById("familySelect").style.display = "block";
@@ -2961,9 +2968,26 @@
         }
       }
 
+      // Bloco de comprovante fica sempre visível após o login — não depende
+      // de a família ter confirmado o cardápio.
+      function renderPaymentSection() {
+        document.getElementById("paymentSection").style.display = "block";
+        updatePixDisplay();
+        loadComprovantes();
+        var mesRef = document.getElementById("mesRef");
+        if (existingVote && existingVote.forma_pagamento === "avista") {
+          mesRef.innerHTML =
+            '<option value="">Selecione...</option><option value="Pagamento Integral">Pagamento Integral (À Vista)</option>';
+        } else {
+          mesRef.innerHTML =
+            '<option value="">Selecione o mês de referência...</option><option value="05/2026">Maio/2026 (1a parcela)</option><option value="06/2026">Junho/2026 (2a parcela)</option><option value="07/2026">Julho/2026 (3a parcela)</option><option value="08/2026">Agosto/2026 (4a parcela)</option><option value="09/2026">Setembro/2026 (5a parcela)</option><option value="10/2026">Outubro/2026 (6a parcela)</option><option value="11/2026">Novembro/2026 (7a parcela)</option>';
+        }
+      }
+
       function mostrarConteudoFamilia() {
         salvarSessao();
         var data = existingVote;
+        renderPaymentSection();
         if (data && data.confirmado) {
           showReadOnly(data);
         } else {
