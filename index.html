@@ -2838,9 +2838,31 @@
         }
       }
 
-      function esqueciSenha() {
+      async function esqueciSenha() {
+        if (!currentFamily) return;
+        if (
+          !confirm(
+            "Redefinir sua senha? Você vai criar uma nova senha agora. " +
+              "Seus dados (votos, comprovantes e fotos) continuam salvos.",
+          )
+        )
+          return;
+        const { error } = await sb
+          .from("formatura_votos")
+          .update({ senha: null })
+          .eq("familia", currentFamily);
+        if (error) {
+          alert("Não foi possível redefinir agora. Tente novamente.");
+          return;
+        }
+        senhaHash = null;
         document.getElementById("senhaLogin").style.display = "none";
-        document.getElementById("senhaEsqueci").style.display = "block";
+        document.getElementById("senhaEsqueci").style.display = "none";
+        document.getElementById("senhaRegistro").style.display = "block";
+        document.getElementById("senhaNew").value = "";
+        document.getElementById("senhaConfirm").value = "";
+        document.getElementById("senhaRegErro").style.display = "none";
+        document.getElementById("senhaNew").focus();
       }
 
       function toggleSenha(inputId, icon) {
