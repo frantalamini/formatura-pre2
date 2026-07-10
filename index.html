@@ -2717,6 +2717,11 @@
       let senhaHash = null;
       let loadedDocumentos = [];
 
+      // Meses cujo comprovante já foi enviado pela família atual.
+      // Regra: comprovante enviado => parcela do mês vira PAGA no extrato.
+      // Chaves no formato "05/2026".."11/2026" (mes_referencia dos comprovantes).
+      var mesesPagos = {};
+
       var arquivosCache = {};
 
       function dataURLtoBlob(dataURL) {
@@ -3129,6 +3134,83 @@
         return h;
       }
 
+      // Re-renderiza o extrato que estiver na tela (votação ou leitura),
+      // usado após os comprovantes carregarem para refletir meses pagos.
+      function refreshExtrato() {
+        var indiv = document.getElementById("extratoIndividual");
+        if (indiv) renderExtrato();
+        var ro = document.getElementById("readOnlyExtrato");
+        if (ro) ro.innerHTML = renderExtratoForReadOnly();
+      }
+
+      // Meses do parcelamento em ordem: rótulo, código do comprovante e vencimento.
+      var PARCELA_MESES = [
+        { label: "Mai", cod: "05/2026", venc: "10/05/2026" },
+        { label: "Jun", cod: "06/2026", venc: "10/06/2026" },
+        { label: "Jul", cod: "07/2026", venc: "10/07/2026" },
+        { label: "Ago", cod: "08/2026", venc: "10/08/2026" },
+        { label: "Set", cod: "09/2026", venc: "10/09/2026" },
+        { label: "Out", cod: "10/2026", venc: "10/10/2026" },
+        { label: "Nov", cod: "11/2026", venc: "10/11/2026" },
+      ];
+
+      // Monta as linhas de parcelas do extrato parcelado.
+      // Mai já é paga (registro inicial fam.pagoMai). Jun–Nov ficam PAGAS
+      // assim que há comprovante do mês (mesesPagos); senão, pendentes.
+      // A "próxima parcela" aponta para o primeiro mês ainda pendente.
+      function buildParcelasHtml(fam) {
+        var remaining = fam.totalGeral - fam.pagoMai;
+        var parcela = Math.floor((remaining / 6) * 100) / 100;
+        var ultimaParcela = Math.round((remaining - parcela * 5) * 100) / 100;
+        var html = "";
+        var proximaValor = null;
+        var proximaVenc = null;
+
+        for (var i = 0; i < PARCELA_MESES.length; i++) {
+          var m = PARCELA_MESES[i];
+          var valor = i === 0 ? fam.pagoMai : i === 6 ? ultimaParcela : parcela;
+          var paga = i === 0 || mesesPagos[m.cod];
+          if (paga) {
+            html +=
+              '<div class="extrato-line extrato-paid"><span>' +
+              m.label +
+              " &#9989;</span><span>" +
+              fmt(valor) +
+              "</span></div>";
+          } else {
+            html +=
+              '<div class="extrato-line extrato-pending"><span>' +
+              m.label +
+              " &#9203;</span><span>" +
+              fmt(valor) +
+              "</span></div>";
+            if (proximaValor === null) {
+              proximaValor = valor;
+              proximaVenc = m.venc;
+            }
+          }
+        }
+
+        html +=
+          '<div class="extrato-line extrato-total"><span>Total</span><span>' +
+          fmt(fam.totalGeral) +
+          "</span></div>";
+
+        if (proximaValor !== null) {
+          html += '<div class="extrato-next">';
+          html +=
+            "&#128204; Próxima parcela:<strong>" +
+            fmt(proximaValor) +
+            "</strong><br>";
+          html += "Vencimento: <strong>" + proximaVenc + "</strong>";
+          html += "</div>";
+        } else {
+          html +=
+            '<div class="extrato-quitado"><h3>&#9989; Situação: QUITADO</h3></div>';
+        }
+        return html;
+      }
+
       function renderExtrato() {
         var fam = families.find(function (f) {
           return f.child === currentFamily;
@@ -3172,47 +3254,10 @@
             '<p style="font-size:0.8rem;color:var(--muted);margin-top:12px;font-style:italic;">&#8505;&#65039; Saldo referente ao fundo de reserva da turma (ajustado com o reajuste).</p>';
           html += "</div>";
         } else {
-          var remaining = fam.totalGeral - fam.pagoMai;
-          var parcela = Math.floor((remaining / 6) * 100) / 100;
-          var ultimaParcela = Math.round((remaining - parcela * 5) * 100) / 100;
-          var meses = ["Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov"];
-
           html += '<div class="extrato-card">';
           html += "<h2>&#128203; Extrato — Família " + fam.child + "</h2>";
           html += buildComposicao(fam);
-
-          // Mai - paid
-          html +=
-            '<div class="extrato-line extrato-paid"><span>Mai &#9989;</span><span>' +
-            fmt(fam.pagoMai) +
-            "</span></div>";
-          // Jun-Oct
-          for (var i = 1; i <= 5; i++) {
-            html +=
-              '<div class="extrato-line extrato-pending"><span>' +
-              meses[i] +
-              " &#9203;</span><span>" +
-              fmt(parcela) +
-              "</span></div>";
-          }
-          // Nov (last parcela)
-          html +=
-            '<div class="extrato-line extrato-pending"><span>Nov &#9203;</span><span>' +
-            fmt(ultimaParcela) +
-            "</span></div>";
-          // Total
-          html +=
-            '<div class="extrato-line extrato-total"><span>Total</span><span>' +
-            fmt(fam.totalGeral) +
-            "</span></div>";
-          // Next payment
-          html += '<div class="extrato-next">';
-          html +=
-            "&#128204; Próxima parcela:<strong>" +
-            fmt(parcela) +
-            "</strong><br>";
-          html += "Vencimento: <strong>10/06/2026</strong>";
-          html += "</div>";
+          html += buildParcelasHtml(fam);
           html += "</div>";
         }
 
@@ -3283,41 +3328,10 @@
             '<p style="font-size:0.8rem;color:var(--muted);margin-top:12px;font-style:italic;">&#8505;&#65039; Saldo referente ao fundo de reserva da turma (ajustado com o reajuste).</p>';
           html += "</div>";
         } else {
-          var remaining = fam.totalGeral - fam.pagoMai;
-          var parcela = Math.floor((remaining / 6) * 100) / 100;
-          var ultimaParcela = Math.round((remaining - parcela * 5) * 100) / 100;
-          var meses = ["Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov"];
-
           html += '<div class="extrato-card">';
           html += "<h2>&#128203; Extrato — Família " + fam.child + "</h2>";
           html += buildComposicao(fam);
-          html +=
-            '<div class="extrato-line extrato-paid"><span>Mai &#9989;</span><span>' +
-            fmt(fam.pagoMai) +
-            "</span></div>";
-          for (var i = 1; i <= 5; i++) {
-            html +=
-              '<div class="extrato-line extrato-pending"><span>' +
-              meses[i] +
-              " &#9203;</span><span>" +
-              fmt(parcela) +
-              "</span></div>";
-          }
-          html +=
-            '<div class="extrato-line extrato-pending"><span>Nov &#9203;</span><span>' +
-            fmt(ultimaParcela) +
-            "</span></div>";
-          html +=
-            '<div class="extrato-line extrato-total"><span>Total</span><span>' +
-            fmt(fam.totalGeral) +
-            "</span></div>";
-          html += '<div class="extrato-next">';
-          html +=
-            "&#128204; Próxima parcela:<strong>" +
-            fmt(parcela) +
-            "</strong><br>";
-          html += "Vencimento: <strong>10/06/2026</strong>";
-          html += "</div>";
+          html += buildParcelasHtml(fam);
           html += "</div>";
         }
         return html;
@@ -4297,6 +4311,16 @@
           .eq("familia", currentFamily)
           .order("created_at", { ascending: false });
         var data = result.data;
+
+        // Regra de negócio: comprovante enviado => parcela do mês fica PAGA.
+        // Reconstrói o mapa de meses pagos e atualiza o extrato visível.
+        mesesPagos = {};
+        if (data)
+          data.forEach(function (c) {
+            if (c.mes_referencia) mesesPagos[c.mes_referencia] = true;
+          });
+        refreshExtrato();
+
         var el = document.getElementById("comprovantesEnviados");
         if (!el) return;
         if (!data || !data.length) {
